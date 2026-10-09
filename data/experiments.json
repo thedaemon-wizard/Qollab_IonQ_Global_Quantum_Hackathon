@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "note": "Values quoted from the cited papers and data records. S and Q are as published; error bars are one standard deviation unless stated. Rates computed by this project are not stored here; bellkit.experiments computes them.",
+  "sources": {
+    "nadlinger2022": {
+      "citation": "D. P. Nadlinger et al., Nature 607, 682-686 (2022)",
+      "doi": "10.1038/s41586-022-04941-5",
+      "arxiv": "2109.14600"
+    },
+    "zhang2022": {
+      "citation": "W. Zhang et al., Nature 607, 687-691 (2022)",
+      "doi": "10.1038/s41586-022-04891-y",
+      "arxiv": "2110.00575"
+    },
+    "liu2026": {
+      "citation": "W.-Z. Liu et al., Nature 652, 51-57 (2026)",
+      "doi": "10.1038/s41586-026-10177-4",
+      "arxiv": "2602.08472",
+      "data_doi": "10.5281/zenodo.18218281",
+      "data_license": "CC BY 4.0"
+    },
+    "lu2026": {
+      "citation": "B.-W. Lu et al., Science 391, 592-597 (2026)",
+      "doi": "10.1126/science.aec6243",
+      "arxiv": "2602.09596",
+      "data_doi": "10.5281/zenodo.17958512",
+      "data_license": "CC BY 4.0"
+    },
+    "meiers2026": {
+      "citation": "J. Meiers et al., arXiv:2609.25795 (2026), unrefereed preprint",
+      "arxiv": "2609.25795"
+    }
+  },
+  "points": [
+    {
+      "id": "nadlinger2022",
+      "source": "nadlinger2022",
+      "label": "Nadlinger 2022 (Sr+ ions, nodes about 2 m apart)",
+      "distance_km": 0.002,
+      "S": 2.677,
+      "S_err": 0.006,
+      "Q": 0.0144,
+      "Q_err": 0.0002,
+      "regime": "finite-size key, general attacks",
+      "caveat": "S and Q come from a separate characterisation run, not from the key run."
+    },
+    {
+      "id": "zhang2022",
+      "source": "zhang2022",
+      "label": "Zhang 2022 (Rb atoms, 700 m fibre)",
+      "distance_km": 0.7,
+      "S": 2.578,
+      "S_err": 0.075,
+      "Q": 0.078,
+      "Q_err": 0.009,
+      "regime": "asymptotic; no key extracted",
+      "caveat": "Asymptotic rate only."
+    },
+    {
+      "id": "liu2026_10km",
+      "source": "liu2026",
+      "label": "Liu 2026 (Ca+ ions, 10 km spooled)",
+      "distance_km": 10,
+      "S": 2.5758,
+      "S_err": 0.0059,
+      "Q": 0.036,
+      "Q_err": 0.0006,
+      "regime": "finite-size key",
+      "caveat": "Spooled fibre; the paper makes no locality claim. Values from arXiv v1."
+    },
+    {
+      "id": "liu2026_101km",
+      "source": "liu2026",
+      "label": "Liu 2026 (Ca+ ions, 101 km spooled)",
+      "distance_km": 101,
+      "S": 2.494,
+      "S_err": 0.0751,
+      "Q": 0.0692,
+      "Q_err": 0.0113,
+      "regime": "asymptotic, 2,799 rounds",
+      "caveat": "Source data file Fig_4d.xlsx (Zenodo); arXiv v1 prints S = 2.504 +- 0.075 and Q = 0.069 +- 0.011."
+    },
+    {
+      "id": "meiers2026",
+      "source": "meiers2026",
+      "label": "Meiers 2026 (ion-photon, 25 km spooled)",
+      "distance_km": 25,
+      "S": 2.75,
+      "S_err": 0.155,
+      "Q": null,
+      "Q_err": null,
+      "regime": "no device-independent claim by the authors",
+      "caveat": "Asymmetric error (+0.16/-0.15) shown here as 0.155; the time window was chosen on the same data; detection loophole open."
+    }
+  ],
+  "published_rates": {
+    "source": "lu2026",
+    "file": "Data.zip -> Data/Fig_5/Fig_5.xlsx (Sheet1)",
+    "test_round_fraction": 0.001,
+    "regime": "asymptotic, protocol without sifting, spooled fibre in one laboratory",
+    "rows": [
+      {
+        "distance_km": 11,
+        "S": 2.612,
+        "S_err": 0.031,
+        "Q": 0.0285,
+        "Q_err": 0.0002,
+        "rate": 0.409846
+      },
+      {
+        "distance_km": 20,
+        "S": 2.558,
+        "S_err": 0.047,
+        "Q": 0.0386,
+        "Q_err": 0.00291,
+        "rate": 0.289889
+      },
+      {
+        "distance_km": 50,
+        "S": 2.522,
+        "S_err": 0.09,
+        "Q": 0.0582996,
+        "Q_err": 0.00667,
+        "rate": 0.160374
+      },
+      {
+        "distance_km": 70,
+        "S": 2.494,
+        "S_err": 0.091,
+        "Q": 0.0727,
+        "Q_err": 0.00755,
+        "rate": 0.072313
+      },
+      {
+        "distance_km": 100,
+        "S": 2.495,
+        "S_err": 0.103,
+        "Q": 0.0716,
+        "Q_err": 0.00894,
+        "rate": 0.077211
+      }
+    ]
+  }
+}

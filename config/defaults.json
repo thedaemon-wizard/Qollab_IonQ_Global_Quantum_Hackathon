@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "seed": 20261010,
+  "confidence": {
+    "delta": 0.05,
+    "note": "Bonferroni: S-based certificates use S_low at delta/2, QBERs use upper ends at delta/2."
+  },
+  "angles_deg": {
+    "alice": {
+      "key": 0,
+      "x": 90,
+      "chsh0": 45,
+      "chsh1": -45
+    },
+    "bob": {
+      "z": 0,
+      "x": 90
+    }
+  },
+  "settings": [
+    {
+      "id": "key_z",
+      "alice": "key",
+      "bob": "z",
+      "roles": [
+        "key",
+        "bbm92_z"
+      ]
+    },
+    {
+      "id": "x_x",
+      "alice": "x",
+      "bob": "x",
+      "roles": [
+        "bbm92_x"
+      ]
+    },
+    {
+      "id": "c00",
+      "alice": "chsh0",
+      "bob": "z",
+      "roles": [
+        "chsh"
+      ],
+      "chsh_sign": 1
+    },
+    {
+      "id": "c01",
+      "alice": "chsh0",
+      "bob": "x",
+      "roles": [
+        "chsh"
+      ],
+      "chsh_sign": 1
+    },
+    {
+      "id": "c10",
+      "alice": "chsh1",
+      "bob": "z",
+      "roles": [
+        "chsh"
+      ],
+      "chsh_sign": 1
+    },
+    {
+      "id": "c11",
+      "alice": "chsh1",
+      "bob": "x",
+      "roles": [
+        "chsh"
+      ],
+      "chsh_sign": -1
+    }
+  ],
+  "optional_settings": [
+    {
+      "id": "y_y",
+      "alice_basis": "y",
+      "bob_basis": "y",
+      "roles": [
+        "witness_yy"
+      ]
+    }
+  ],
+  "channels": {
+    "types": [
+      "none",
+      "depolarizing",
+      "dephasing",
+      "bit_flip",
+      "y_flip",
+      "custom"
+    ],
+    "strength": {
+      "min": 0.0,
+      "max": 0.5,
+      "step": 0.01,
+      "default": 0.05
+    }
+  },
+  "eve": {
+    "phi_deg": {
+      "min": 0,
+      "max": 180,
+      "step": 15,
+      "default": 180
+    }
+  },
+  "chain": {
+    "hops": {
+      "min": 1,
+      "max": 4,
+      "default": 2
+    }
+  },
+  "purification": {
+    "rotations": [
+      "none",
+      "dejmps"
+    ],
+    "default_rotation": "none"
+  },
+  "canary": {
+    "expected": "01",
+    "min_majority_fraction": 0.5
+  },
+  "profiles": [
+    {
+      "id": "qpu",
+      "label": "Quantum hardware (spends credits)",
+      "match": [
+        "qpu"
+      ],
+      "refuse": true,
+      "refuse_reason": "This lab never submits to quantum hardware. Choose a simulator in the Run dialog."
+    },
+    {
+      "id": "ionq_sim",
+      "label": "IonQ cloud noise-model simulator",
+      "match": [
+        "ionq_simulator"
+      ],
+      "shots": 200,
+      "opt_level": 1,
+      "layout": "packed_single_circuit",
+      "max_qubits": 25,
+      "transpile": "basis",
+      "basis_gates": [
+        "rx",
+        "ry",
+        "rz",
+        "cx",
+        "h",
+        "x",
+        "measure"
+      ],
+      "seed_option": null,
+      "one_job_per_run": true
+    },
+    {
+      "id": "ibm_noise",
+      "label": "IBM noise model (Aer)",
+      "match": [
+        "fake_"
+      ],
+      "shots": 2000,
+      "opt_level": 1,
+      "layout": "multi_circuit",
+      "max_qubits": 24,
+      "transpile": "backend",
+      "seed_option": "seed_simulator"
+    },
+    {
+      "id": "ideal",
+      "label": "Ideal local simulator",
+      "match": [
+        "basic_simulator",
+        "statevector",
+        "braket",
+        "aer_simulator"
+      ],
+      "shots": 10000,
+      "opt_level": 1,
+      "layout": "multi_circuit",
+      "max_qubits": 24,
+      "transpile": "backend",
+      "seed_option": "seed_simulator"
+    }
+  ],
+  "default_profile": {
+    "id": "unknown_backend",
+    "label": "Unrecognised backend (conservative settings)",
+    "shots": 1000,
+    "opt_level": 1,
+    "layout": "packed_single_circuit",
+    "max_qubits": 24,
+    "transpile": "backend",
+    "seed_option": null,
+    "one_job_per_run": true
+  },
+  "theory_grid": {
+    "points": 121
+  },
+  "rosenfeld": {
+    "events_per_state": 5000,
+    "running_points": 100
+  }
+}
