@@ -1,4 +1,7 @@
-# Decisions (recorded 2026-10-09, before the build window)
+# Decisions
+
+D1–D7 were recorded on 2026-10-09, before the build window; D4 was updated and D8–D9 added
+during the window (2026-10-10).
 
 Each entry states the decision, the evidence it rests on (checked on the date given), and what
 would make us revisit it. Sources are in [references.md](references.md) unless linked here.
@@ -38,15 +41,24 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
   browser storage and a same-origin frame (neither is available), nested frames to github.io are
   outside Qollab's `frame-src`, and public Pyodide has no Qiskit.
 
-## D4 — IonQ path: all circuits in one `backend.run`, no dynamic circuits
+## D4 — IonQ path: one packed circuit per run, no dynamic circuits
 
-- **Decision.** Every circuit a run needs is passed to a single `backend.run` call, results are
-  read by circuit name, and all measurements are terminal. Corrections (for example after
-  entanglement swapping) are applied as a Pauli frame in classical post-processing.
-- **Evidence.** Qollab's docs: IonQ backends accept one job per run, and every circuit the run
-  needs may go into that single call. IonQ's OpenQASM 3 documentation: dynamic circuit execution
-  is not supported on any IonQ target, including the simulator. On IonQ, Qiskit's Sampler wrapper
-  returns all-zero shots silently, so counts are read with `backend.run(...).result().get_counts()`.
+- **Decision.** On IonQ backends, every measurement setting of a run is placed side by side in
+  ONE circuit, each with its own classical register, plus a one-qubit "canary" register whose
+  expected outcome checks the bit order. Local and IBM noise-model runs submit one circuit per
+  setting in a single `backend.run` call and read results by circuit name. All measurements are
+  terminal; corrections (for example after entanglement swapping) are applied as a Pauli frame in
+  classical post-processing.
+- **Evidence.** Qollab's docs say IonQ backends accept one job per run and that the run's circuits
+  may go into that single call; on 2026-10-09 a test project on Qollab found that a job with
+  several circuits is rejected by the IonQ simulator ("Only job type ionq.circuit.v1 is
+  supported"), while one circuit with several registers runs (counts keys are space-separated,
+  last register leftmost). IonQ's OpenQASM 3 documentation: dynamic circuit execution is not
+  supported on any IonQ target, including the simulator. On IonQ, Qiskit's Sampler wrapper returns
+  all-zero shots silently, so counts are read with `backend.run(...).result().get_counts()`.
+- **Consequence.** The packed circuit grows with the number of settings, so the IonQ profile has a
+  qubit limit (`config/defaults.json`); a run that would exceed it is refused with a message
+  before anything is submitted.
 
 ## D5 — Pin `qiskit==2.5.2`
 
@@ -54,6 +66,7 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
 - **Evidence.** Qollab installs `qiskit>=2.5.2,<3.0.0` when requirements.txt does not pin it, and
   Qiskit 2.6.0 is scheduled for 2026-10-15, during judging. Pinning keeps the judged run identical
   to the submitted one.
+- **Revisit if.** Qollab removes the 2.5.2 wheel from its package index.
 
 ## D6 — The local environment mirrors Qollab's versions
 
@@ -70,3 +83,21 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
 - **Evidence (2026-10-09).** WebGL context creation failed in two software-rendered desktop
   browsers we tried, while headless Chrome provided WebGL 2 through SwiftShader. Judges' browsers
   will usually have WebGL 2, but the project must stay usable without it.
+
+## D8 — Vendored subsets instead of git submodules
+
+- **Decision.** Third-party assets are copied in as small, licensed subsets (the Tabler icons the
+  UI uses, the two Munich event files), not added as git submodules.
+- **Evidence.** A Qollab project allows at most 100 files of at most 2 MB each, and the upload is
+  a flat zip; a submodule would bring whole repositories that the app does not use.
+  `THIRD_PARTY_NOTICES.md` lists every copied item with its licence.
+
+## D9 — Run profiles are matched from the backend name, most specific first
+
+- **Decision.** `config/defaults.json` lists run profiles (quantum hardware: refuse; IonQ
+  simulator; IBM noise models; ideal simulators) and the first profile whose pattern occurs in the
+  injected backend's name is used. Unknown names get a conservative default profile, and the UI
+  shows which profile was chosen.
+- **Evidence.** Qollab names the IBM noise-model backend `fake_fez` and so on, while a local
+  `AerSimulator.from_backend(FakeFez)` is named `aer_simulator_from(fake_fez)`; with the ideal
+  profile listed first the latter matched "aer_simulator" (found by a test on 2026-10-10).
