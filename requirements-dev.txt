@@ -1,0 +1,19 @@
+# Local development environment (CPython 3.14).
+#
+# The project itself runs on Qollab.xyz (Python 3.14 in Pyodide). The pins below follow
+# what that runtime provides, so that local runs and Qollab runs use the same library
+# versions:
+#   - qiskit 2.5.2: Qollab installs qiskit>=2.5.2,<3 when requirements.txt does not pin it.
+#   - qiskit-aer / qiskit-ibm-runtime / qiskit-ionq: the versions listed in Qollab's docs.
+#   - numpy / scipy / matplotlib: the versions bundled with Pyodide 314.0.7.
+# Everything below the second block is tooling for tests and figures only.
+qiskit==2.5.2
+qiskit-aer==0.17.2
+qiskit-ibm-runtime==0.50.0
+qiskit-ionq==1.0.2
+numpy==2.4.6
+scipy==1.18.0
+matplotlib==3.10.8
+
+pytest==9.1.1
+ruff==0.16.10

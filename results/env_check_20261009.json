@@ -1,0 +1,86 @@
+{
+  "bell_runs": {
+    "Aer(FakeFez)": {
+      "counts": {
+        "00": 490,
+        "01": 17,
+        "10": 15,
+        "11": 478
+      },
+      "shots": 1000,
+      "two_qubit_ops": 1
+    },
+    "BasicSimulator": {
+      "counts": {
+        "00": 486,
+        "11": 514
+      },
+      "shots": 1000
+    }
+  },
+  "created_utc": "2026-10-09T09:54:38Z",
+  "ibm_fake_backends": {
+    "Aachen": {
+      "available": true,
+      "class": "FakeAachen",
+      "num_qubits": 156
+    },
+    "Berlin": {
+      "available": true,
+      "class": "FakeBerlin",
+      "num_qubits": 120
+    },
+    "Boston": {
+      "available": true,
+      "class": "FakeBoston",
+      "num_qubits": 156
+    },
+    "Fez": {
+      "available": true,
+      "class": "FakeFez",
+      "num_qubits": 156
+    },
+    "Kingston": {
+      "available": true,
+      "class": "FakeKingston",
+      "num_qubits": 156
+    },
+    "Marrakesh": {
+      "available": true,
+      "class": "FakeMarrakesh",
+      "num_qubits": 156
+    },
+    "Miami": {
+      "available": true,
+      "class": "FakeMiami",
+      "num_qubits": 120
+    },
+    "Pittsburgh": {
+      "available": true,
+      "class": "FakePittsburgh",
+      "num_qubits": 156
+    }
+  },
+  "ionq_provider_without_token": {
+    "backend": "ionq_simulator",
+    "constructed": true,
+    "transpiled_ops": {
+      "cx": 1,
+      "h": 1,
+      "measure": 2
+    }
+  },
+  "packages": {
+    "matplotlib": "3.10.8",
+    "numpy": "2.4.6",
+    "qiskit": "2.5.2",
+    "qiskit-aer": "0.17.2",
+    "qiskit-ibm-runtime": "0.50.0",
+    "qiskit-ionq": "1.0.2",
+    "rustworkx": "0.18.1",
+    "scipy": "1.18.0"
+  },
+  "platform": "Linux-5.14.0-611.5.1.el9_7.x86_64-x86_64-with-glibc2.34",
+  "python": "3.14.7",
+  "schema": "env_check/1"
+}
