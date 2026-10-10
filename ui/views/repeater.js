@@ -4,6 +4,7 @@ import { h, setDisabled } from '../core/dom.js';
 import { int, num, pct } from '../core/format.js';
 import { icon } from '../core/icons.js';
 import { viewFrame } from '../core/router.js';
+import { tm } from '../core/tex.js';
 import { lineChart } from '../widgets/chart.js';
 import { button, errorNote, note, select, slider } from '../widgets/controls.js';
 import { flowDiagram } from '../widgets/diagram.js';
@@ -177,7 +178,7 @@ export default {
         const rec = recordedChains.filter(same);
         const recMarksS = rec.map((m, i) => ({ x: m.hops - 0.06, y: m.S, ylo: m.S_low, yhi: m.S_high, color: 'var(--c3)', shape: 'diamond', legend: i === 0 ? 'recorded runs (noise-model backends)' : null }));
         const recMarksQ = rec.map((m, i) => ({ x: m.hops - 0.06, y: m.Q_Z, ylo: m.Q_Z_low, yhi: m.Q_Z_high, color: 'var(--c3)', shape: 'diamond', legend: i === 0 ? 'recorded Q_Z' : null }));
-        recordedBox.replaceChildren(rec.length ? note('', `Recorded runs for this noise setting: ${rec.map((m) => `${m.label}, ${m.hops} links, S = ${num(m.S)} [${num(m.S_low)}, ${num(m.S_high)}]`).join('; ')}.`) : '');
+        recordedBox.replaceChildren(rec.length ? note('', tm`Recorded runs for this noise setting: ${rec.map((m) => `${m.label}, ${m.hops} links, $S$ = ${num(m.S)} [${num(m.S_low)}, ${num(m.S_high)}]`).join('; ')}.`) : '');
         chartS.update({
           title: 'CHSH value against number of links', desc: 'Predicted S for 1 to 4 links, with measured runs as points.', width: 480, height: 260,
           x: { min: 0.8, max: cfg.chain.hops.max + 0.2, label: 'links', ticks: [1, 2, 3, 4], format: (v) => String(v) },

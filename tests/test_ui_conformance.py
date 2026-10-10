@@ -125,3 +125,31 @@ def test_endless_animations_only_while_playing_or_busy():
     ], selectors
     reduced = css[css.index("@media (prefers-reduced-motion: reduce)") :]
     assert "animation-iteration-count: 1 !important" in reduced.split("}")[0] + "}"
+
+
+def test_formula_typesetting_has_one_source_and_a_font():
+    """Temml (pinned) is imported only by ui/core/tex.js; main.css declares Latin Modern Math from
+    a commit-pinned jsDelivr path and sets it on <math>; no font is inlined as a data: URL."""
+    importers = [p.relative_to(ROOT).as_posix() for p in JS if "temml@" in p.read_text(encoding="utf-8")]
+    assert importers == ["ui/core/tex.js"]
+    css = (ROOT / "main.css").read_text(encoding="utf-8")
+    face = re.search(r"@font-face\s*\{[^}]*Latin Modern Math[^}]*\}", css)
+    assert face and re.search(
+        r"gh/ronkok/Temml@[0-9a-f]{40}/site/assets/latinmodernmath\.woff2", face.group(0)
+    )
+    assert re.search(r"\.bk-root math\s*\{[^}]*font-family:\s*'Latin Modern Math'", css)
+    assert not re.search(r"url\(\s*['\"]?data:", css)
+
+
+def test_hand_built_mathml_uses_one_identifier_per_letter():
+    src = (ROOT / "ui" / "views" / "method.js").read_text(encoding="utf-8")
+    assert "<mi>xy</mi>" not in src and "<mo>*</mo>" not in src
+
+
+@pytest.mark.parametrize("path", JS, ids=lambda p: p.relative_to(ROOT).as_posix())
+def test_tex_sits_only_in_raw_templates(path):
+    """TeX with a backslash must be inside tm`...` or String.raw`...` (raw strings); in an
+    ordinary JS string the backslash would silently disappear."""
+    for n, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        outside = re.sub(r"(?:\btm|String\.raw)`[^`]*`", "", line)
+        assert not re.search(r"\$\\[A-Za-z]", outside), f"line {n}"

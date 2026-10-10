@@ -43,3 +43,17 @@ change on the local harness:
 | Motion (2.2.2 Pause, Stop, Hide; 2.3.3) | The highlight moves only while the replay plays (about 5.5 s); paused or done, no animation runs; with reduced motion all stages are shown done at once |
 | Text alternative | The SVG has a title and a description that names the current stage and its numbers (S with its interval, Q_Z, Q_X, the certificates that hold); the stepper and the status line give the same in text |
 | 320 px | No horizontal page scroll; the diagram scrolls inside a box that becomes focusable (`role="region"`, "Protocol diagram") |
+
+## Fourth check (2026-10-11): formulas typeset as math
+
+The formulas in the views are native MathML now (Temml 0.14.0 from jsDelivr, Latin Modern Math;
+the seven hand-built Method formulas use the same font).
+
+| Check | Result |
+|---|---|
+| Formulas rendered (local harness, all 8 views, then a Bell Lab run) | 113 MathML formulas over the views, 0 Temml errors, no TeX left visible (`math_checks_20261011.json`); after a run the Bell Lab view holds 23 (ladder, error rates, correlators). |
+| jsDelivr blocked | The same views show the formulas as Unicode text; only the 7 hand-built MathML formulas stay MathML; no errors besides the blocked requests. |
+| axe-core 4.14.0, all 8 views, dark and light | 0 violations in all 16 combinations (`axe_20261011_math.json`). |
+| 320 px wide viewport | No horizontal page scroll on any view. Two spots were fixed: term lists go to one column below 480 px (a formula cannot break inside), and the Repeater's rotation menu now shrinks with its column (it was 35 px too wide before this round). |
+| Guided tour | Every step renders; steps 2–5, 7 and 8 contain typeset formulas, none shows a raw `$`. |
+| Plain text kept | SVG text and titles, `<option>`, ARIA labels, live messages and exports. |

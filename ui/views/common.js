@@ -3,6 +3,7 @@
 import { h, scrollableWhenNeeded } from '../core/dom.js';
 import { num, pct } from '../core/format.js';
 import { icon } from '../core/icons.js';
+import { tm } from '../core/tex.js';
 import { checkbox, select, slider } from '../widgets/controls.js';
 
 export const CHANNELS = [
@@ -17,7 +18,7 @@ export function channelControls(cfg, onChange, { kind = 'depolarizing', strength
   const r = cfg.channels.strength;
   const kindSel = select({ label: 'Link noise on Bob’s qubit', options: CHANNELS, value: kind, onChange: () => { sync(); onChange(); } });
   const str = slider({
-    label: 'Noise strength (error probability; λ for depolarizing)',
+    label: tm`Noise strength (error probability; $\lambda$ for depolarizing)`,
     min: r.min, max: r.max, step: r.step, value: strength ?? r.default,
     format: (v) => v.toFixed(2), onInput: onChange,
   });
@@ -37,8 +38,8 @@ export function channelControls(cfg, onChange, { kind = 'depolarizing', strength
 export function eveControls(cfg, onChange) {
   const r = cfg.eve.phi_deg;
   const on = checkbox({ label: 'Eavesdropper on Bob’s link', onChange: () => { phi.disable(!on.checked); onChange(); },
-    hint: 'Eve entangles a probe with Bob’s qubit (controlled-Ry). 180° copies the Z value: intercept-resend.' });
-  const phi = slider({ label: 'Eve’s coupling angle φ', min: r.min, max: r.max, step: r.step, value: r.default, format: (v) => `${v}°`, onInput: onChange });
+    hint: tm`Eve entangles a probe with Bob’s qubit (controlled-$R_y$). $\varphi = 180^\circ$ copies the Z value: intercept-resend.` });
+  const phi = slider({ label: tm`Eve’s coupling angle $\varphi$`, min: r.min, max: r.max, step: r.step, value: r.default, format: (v) => `${v}°`, onInput: onChange });
   phi.disable(true);
   return {
     elements: [on.element, phi.element],
@@ -97,12 +98,12 @@ export function sizeNote(ctx, circuits) {
 }
 
 export const RUNG_INFO = [
-  { key: 'bell', icon: 'chart-dots', title: 'Bell violation', assumes: 'none about the devices', show: (l) => `S ${num(l.S)}`, ok: (l) => l.bell_violation },
-  { key: 'witness', icon: 'eye', title: 'Entanglement (witness)', assumes: 'trusted, calibrated measurements', show: (l) => `F ≥ ${num(l.witness_fidelity_low)}`, ok: (l) => l.entangled_trusted },
-  { key: 'bbm92', icon: 'key', title: 'BBM92 key rate', assumes: 'trusted measurements (qubits)', show: (l) => `${num(l.rate_bbm92)} bit/round`, ok: (l) => l.rate_bbm92 > 0 },
-  { key: 'self', icon: 'fingerprint', title: 'Self-test (Kaniewski)', assumes: 'none; i.i.d. rounds', show: (l) => `extractability ≥ ${num(l.kaniewski_extractability)}`, ok: (l) => l.self_test_nontrivial },
-  { key: 'rnd', icon: 'dice-5', title: 'DI randomness (Pironio)', assumes: 'none; i.i.d. rounds', show: (l) => `H_min ≥ ${num(l.min_entropy_pironio)} bit`, ok: (l) => l.min_entropy_pironio > 0 },
-  { key: 'di', icon: 'shield-lock', title: 'DI key rate (Acín 2007)', assumes: 'none; collective attacks, asymptotic', show: (l) => (l.rate_di_acin === null ? 'S ≤ 2' : `${num(l.rate_di_acin)} bit/round`), ok: (l) => l.di_certified },
+  { key: 'bell', icon: 'chart-dots', title: 'Bell violation', assumes: 'none about the devices', show: (l) => `S ${num(l.S)}`, tex: (l) => `$S$ ${num(l.S)}`, ok: (l) => l.bell_violation },
+  { key: 'witness', icon: 'eye', title: 'Entanglement (witness)', assumes: 'trusted, calibrated measurements', show: (l) => `F ≥ ${num(l.witness_fidelity_low)}`, tex: (l) => String.raw`$F \ge$ ${num(l.witness_fidelity_low)}`, ok: (l) => l.entangled_trusted },
+  { key: 'bbm92', icon: 'key', title: 'BBM92 key rate', assumes: 'trusted measurements (qubits)', show: (l) => `${num(l.rate_bbm92)} bit/round`, tex: (l) => `${num(l.rate_bbm92)} bit/round`, ok: (l) => l.rate_bbm92 > 0 },
+  { key: 'self', icon: 'fingerprint', title: 'Self-test (Kaniewski)', assumes: 'none; i.i.d. rounds', show: (l) => `extractability ≥ ${num(l.kaniewski_extractability)}`, tex: (l) => String.raw`extractability $\ge$ ${num(l.kaniewski_extractability)}`, ok: (l) => l.self_test_nontrivial },
+  { key: 'rnd', icon: 'dice-5', title: 'DI randomness (Pironio)', assumes: 'none; i.i.d. rounds', show: (l) => `H_min ≥ ${num(l.min_entropy_pironio)} bit`, tex: (l) => String.raw`$H_\text{min} \ge$ ${num(l.min_entropy_pironio)} bit`, ok: (l) => l.min_entropy_pironio > 0 },
+  { key: 'di', icon: 'shield-lock', title: 'DI key rate (Acín 2007)', assumes: 'none; collective attacks, asymptotic', show: (l) => (l.rate_di_acin === null ? 'S ≤ 2' : `${num(l.rate_di_acin)} bit/round`), tex: (l) => (l.rate_di_acin === null ? String.raw`$S \le 2$` : `${num(l.rate_di_acin)} bit/round`), ok: (l) => l.di_certified },
 ];
 
 /** Inputs of each certificate at the point estimate and at the conservative end. */
@@ -123,14 +124,14 @@ export function rungOutcome(rung, analysis) {
 export function ladderTable(analysis) {
   const { point, cons } = ladderEnds(analysis);
   return scrollableWhenNeeded(h('div', { class: 'table-wrap' }, h('table', null,
-    h('caption', null, `Same counts, six claims. Conservative = S at the lower end of its interval, error rates at the upper end; each interval is at ${(100 * (1 - analysis.delta / 2)).toFixed(1)}%, so each claim, which combines at most two of them, holds at ${Math.round(100 * (1 - analysis.delta))}% (i.i.d. rounds).`),
+    h('caption', null, tm`Same counts, six claims. Conservative = $S$ at the lower end of its interval, error rates at the upper end; each interval is at ${(100 * (1 - analysis.delta / 2)).toFixed(1)}%, so each claim, which combines at most two of them, holds at ${Math.round(100 * (1 - analysis.delta))}% (i.i.d. rounds).`),
     h('thead', null, h('tr', null, h('th', { scope: 'col', class: 'text' }, 'Certificate'), h('th', { scope: 'col', class: 'text' }, 'Assumes'),
       h('th', { scope: 'col' }, 'Point estimate'), h('th', { scope: 'col' }, 'Conservative'), h('th', { scope: 'col' }, 'Holds?'))),
     h('tbody', null, RUNG_INFO.map((r) => h('tr', null,
       h('th', { scope: 'row', class: 'text' }, h('span', { style: { display: 'inline-flex', gap: '0.35rem', alignItems: 'center' } }, icon(r.icon, { size: 16 }), r.title)),
       h('td', { class: 'text muted' }, r.assumes),
-      h('td', null, r.show(point)),
-      h('td', null, r.show(cons)),
+      h('td', null, tm`${r.tex(point)}`),
+      h('td', null, tm`${r.tex(cons)}`),
       h('td', null, r.ok(cons) ? h('span', { style: { color: 'var(--good)' } }, icon('check', { size: 16, label: 'holds' }), ' yes')
         : r.ok(point) ? h('span', { style: { color: 'var(--warn)' } }, icon('alert-triangle', { size: 16, label: 'only at the point estimate' }), ' point only')
           : h('span', { class: 'muted' }, icon('x', { size: 16, label: 'does not hold' }), ' no'))))))), 'Table: certificates from these counts');
@@ -138,7 +139,7 @@ export function ladderTable(analysis) {
 
 export function qberList(analysis) {
   const row = (name, q) => [h('dt', null, name), h('dd', null, `${pct(q.point)}  [${pct(q.low)}, ${pct(q.high)}]  (N = ${q.N})`)];
-  return h('dl', { class: 'kv' }, row('Q_Z (key basis)', analysis.Q_Z), row('Q_X', analysis.Q_X),
-    h('dt', null, 'Witness (XX+ZZ)/2'), h('dd', null, `${num(analysis.witness.point)} (low ${num(analysis.witness.low)})`),
+  return h('dl', { class: 'kv' }, row(tm`$Q_Z$ (key basis)`, analysis.Q_Z), row(tm`$Q_X$`, analysis.Q_X),
+    h('dt', null, tm`Witness $(\langle XX\rangle + \langle ZZ\rangle)/2$`), h('dd', null, `${num(analysis.witness.point)} (low ${num(analysis.witness.low)})`),
     analysis.fidelity_with_yy !== null ? [h('dt', null, 'Fidelity with YY'), h('dd', null, num(analysis.fidelity_with_yy))] : null);
 }

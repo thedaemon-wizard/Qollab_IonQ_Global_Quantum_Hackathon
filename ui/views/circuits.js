@@ -4,6 +4,7 @@ import { h } from '../core/dom.js';
 import { int, num, pct } from '../core/format.js';
 import { icon } from '../core/icons.js';
 import { viewFrame } from '../core/router.js';
+import { tm } from '../core/tex.js';
 import { lineChart } from '../widgets/chart.js';
 import { circuitFigure } from '../widgets/circuit_svg.js';
 import { checkbox, errorNote, note, select, slider } from '../widgets/controls.js';
@@ -167,7 +168,7 @@ export default {
           ...rows.map((r, k) => ({ x: r.i, y: r.S, ylo: r.low, yhi: r.high, color: 'var(--c1)', shape: 'circle', legend: k === 0 ? `measured S (${(100 * (1 - cfg.confidence.delta / 2)).toFixed(1)}% interval)` : null })),
           ...rows.map((r, k) => ({ x: r.i + 0.15, y: r.pred, color: 'var(--c2)', shape: 'square', hollow: true, legend: k === 0 ? 'prediction without device noise' : null })),
         ],
-        caption: 'Device noise models (IBM, IonQ) lower S below the channel-only prediction; how much depends on the transpiled circuit.',
+        caption: tm`Device noise models (IBM, IonQ) lower $S$ below the channel-only prediction; how much depends on the transpiled circuit.`,
       });
       compareBox.replaceChildren(chart.element, dataTable({
         caption: 'Bell runs',

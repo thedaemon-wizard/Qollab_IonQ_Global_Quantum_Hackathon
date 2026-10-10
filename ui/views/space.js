@@ -5,6 +5,7 @@ import { h, s as svgEl } from '../core/dom.js';
 import { num } from '../core/format.js';
 import { icon } from '../core/icons.js';
 import { viewFrame } from '../core/router.js';
+import { tm } from '../core/tex.js';
 import { cssVar } from '../core/theme.js';
 import { lineChart, markerShape } from '../widgets/chart.js';
 import { button, checkbox, errorNote, note } from '../widgets/controls.js';
@@ -30,7 +31,7 @@ export default {
   icon: 'cube-3d-sphere',
   create(ctx) {
     const { element, body } = viewFrame('space', 'Where do the correlations live?', 'cube-3d-sphere',
-      'Four correlators (E00, E01, E10, E11) describe a CHSH experiment. Local (classical) models fill a polytope, quantum mechanics a larger convex set with a curved boundary, and anything that does not signal fits in the cube. Measured points show where your run and the Munich data fall.');
+      tm`Four correlators ($E_{00}$, $E_{01}$, $E_{10}$, $E_{11}$) describe a CHSH experiment. Local (classical) models fill a polytope, quantum mechanics a larger convex set with a curved boundary, and anything that does not signal fits in the cube. Measured points show where your run and the Munich data fall.`);
     const stage = h('div', { class: 'space3d', id: 'space-3d' });
     const legend3d = h('div', { class: 'legend', 'aria-hidden': 'true' });
     const status = h('p', { class: 'muted small', role: 'status' });
@@ -43,8 +44,8 @@ export default {
       h('div', { class: 'grid two' },
         h('div', { class: 'card' }, h('h3', null, icon('cube'), '3D: the symmetric section'),
           stage, legend3d, tools, toggles, status,
-          h('p', { class: 'muted small' }, 'Axes: E00, E11 and m = (E01 + E10)/2. Grey: local polytope. Blue surfaces: boundary of the quantum set. Dashed: Werner states from the centre to the Tsirelson point. Drag to rotate, or use the buttons.')),
-        h('div', { class: 'card', id: 'space-slice' }, h('h3', null, icon('chart-dots'), '2D: the slice E11 = −E00'), sliceBox)),
+          h('p', { class: 'muted small' }, tm`Axes: $E_{00}$, $E_{11}$ and $m = (E_{01} + E_{10})/2$. Grey: local polytope. Blue surfaces: boundary of the quantum set. Dashed: Werner states from the centre to the Tsirelson point. Drag to rotate, or use the buttons.`)),
+        h('div', { class: 'card', id: 'space-slice' }, h('h3', null, icon('chart-dots'), tm`2D: the slice $E_{11} = -E_{00}$`), sliceBox)),
       h('div', { class: 'card wide' }, h('h3', null, icon('table'), 'Membership of each point (full four-dimensional test)'), tableBox,
         note('', 'Membership in the quantum set uses the Tsirelson–Landau–Masanes inequalities on all four correlators; it is exact for correlators with unbiased marginals, which is the case here. A finite-shot estimate can land outside the quantum set: that is sampling noise, not super-quantum physics.'),
         exportStatus),
@@ -88,6 +89,7 @@ export default {
       geometry = await ctx.api.geometry(Object.fromEntries(pts.map((p) => [p.name, p.e])));
       tableBox.replaceChildren(dataTable({
         caption: 'S = E00 + E01 + E10 − E11; max over the eight CHSH forms; the TLM (Tsirelson–Landau–Masanes) value uses arcsin of each correlator (quantum if ≤ π)',
+        captionNode: tm`$S = E_{00} + E_{01} + E_{10} - E_{11}$; max over the eight CHSH forms; the TLM (Tsirelson–Landau–Masanes) value uses $\arcsin$ of each correlator (quantum if $\le \pi$)`,
         columns: [
           { key: 'name', label: 'Point' },
           { key: 'e', label: 'E00, E01, E10, E11', align: 'text', format: (v) => v.map((x) => num(x, 3)).join(', ') },
@@ -130,7 +132,7 @@ export default {
           const y = (p.e[1] + p.e[2]) / 2;
           return { x, y, color: p.color, shape: p.shape, legend: p.name, hollow: Boolean(p.hollow), size: 5.5 };
         }),
-        caption: 'Exact for points with E11 = −E00 (the lab’s Werner runs); other points are shown at their projection, so use the table for their membership.',
+        caption: tm`Exact for points with $E_{11} = -E_{00}$ (the lab’s Werner runs); other points are shown at their projection, so use the table for their membership.`,
       });
       sliceBox.replaceChildren(chart.element);
     }

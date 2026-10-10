@@ -4,6 +4,7 @@ import { announce, h, prefersReducedMotion, setDisabled } from '../core/dom.js';
 import { int, num, pct } from '../core/format.js';
 import { icon } from '../core/icons.js';
 import { viewFrame } from '../core/router.js';
+import { tm } from '../core/tex.js';
 import { createMachine } from '../core/statemachine.js';
 import { countsChart } from '../widgets/bars.js';
 import { button, checkbox, errorNote, note } from '../widgets/controls.js';
@@ -30,7 +31,7 @@ export default {
   create(ctx) {
     const cfg = ctx.config;
     const { element, body } = viewFrame('lab', 'Bell Lab', 'flask',
-      'Prepare |Φ+⟩ pairs, add link noise or an eavesdropper, and measure the six settings in one job. The same counts give the CHSH value S, the error rates of the BBM92 key and every certificate.');
+      tm`Prepare $\lvert\Phi^+\rangle$ pairs, add link noise or an eavesdropper, and measure the six settings in one job. The same counts give the CHSH value $S$, the error rates of the BBM92 key and every certificate.`);
 
     // ---------- controls ----------
     let previewTimer = null;
@@ -41,7 +42,7 @@ export default {
     const channel = channelControls(cfg, schedulePreview, { kind: 'depolarizing', strength: cfg.channels.strength.default });
     const eve = eveControls(cfg, schedulePreview);
     const yy = checkbox({ label: 'Also measure YY (direct fidelity)', onChange: schedulePreview,
-      hint: 'Adds a seventh setting; with it the fidelity with |Φ+⟩ is measured, not bracketed.' });
+      hint: tm`Adds a seventh setting; with it the fidelity with $\lvert\Phi^+\rangle$ is measured, not bracketed.` });
     const shotsInput = h('input', { type: 'number', min: cfg.shots.min, max: cfg.shots.max, step: 100, value: ctx.backend.profile.shots ?? cfg.shots.min, id: 'lab-shots' });
     const seedInput = h('input', { type: 'number', min: 0, step: 1, value: cfg.seed, id: 'lab-seed' });
     const request = () => ({
@@ -132,9 +133,9 @@ export default {
         const [th, circ] = [await ctx.api.theory(req), await ctx.api.circuits(req)];
         const p = th.prediction;
         predictionBox.replaceChildren(h('dl', { class: 'kv' },
-          h('dt', null, 'S (these settings)'), h('dd', null, num(p.S_fixed)),
-          h('dt', null, 'Q_Z / Q_X'), h('dd', null, `${pct(p.Q_Z)} / ${pct(p.Q_X)}`),
-          h('dt', null, 'Fidelity with |Φ+⟩'), h('dd', null, num(p.fidelity)),
+          h('dt', null, tm`$S$ (these settings)`), h('dd', null, num(p.S_fixed)),
+          h('dt', null, tm`$Q_Z$ / $Q_X$`), h('dd', null, `${pct(p.Q_Z)} / ${pct(p.Q_X)}`),
+          h('dt', null, tm`Fidelity with $\lvert\Phi^+\rangle$`), h('dd', null, num(p.fidelity)),
           p.eve_guess_helstrom !== undefined && p.eve_guess_helstrom !== null
             ? [h('dt', null, 'Eve guesses Z key bit'), h('dd', null, pct(p.eve_guess_helstrom))] : null));
         const size = sizeNote(ctx, circ);
@@ -205,7 +206,7 @@ export default {
       if (i >= 4) {
         ladderCard.hidden = false;
         ladderCard.replaceChildren(h('h3', null, icon('certificate'), 'Certificates from these counts'), ladderTable(a),
-          a.S.outside_quantum_set ? note('warn', 'The estimate of S is above 2√2. No quantum system can do that: it is sampling noise, and the bounds use S capped at 2√2.') : '');
+          a.S.outside_quantum_set ? note('warn', tm`The estimate of $S$ is above $2\sqrt{2}$. No quantum system can do that: it is sampling noise, and the bounds use $S$ capped at $2\sqrt{2}$.`) : '');
         detail(4, `${a.ladder_conservative.di_certified ? 'DI key certified' : 'no DI key'} at the conservative end`);
         announce(`Done. S equals ${num(a.S.point)}; ${a.S.above_classical ? 'Bell violation confirmed at the conservative end' : 'no conclusive Bell violation'}.`);
       }
@@ -222,15 +223,16 @@ export default {
       const rows = Object.entries(rep.analysis.settings).map(([id, st]) => ({ id, ...st, pred: rep.prediction.E[id] }));
       return dataTable({
         caption: 'E = (agreements − disagreements) / N per setting; prediction from the exact channel model.',
+        captionNode: tm`$E = (N_\text{same} - N_\text{diff})/N$ per setting; prediction from the exact channel model.`,
         columns: [
           { key: 'id', label: 'Setting' },
           { key: 'roles', label: 'Used for', align: 'text', format: (r) => r.join(', ') },
           { key: 'alice_deg', label: 'Alice', format: (v) => (v === null ? 'Y' : `${v}°`) },
           { key: 'bob_deg', label: 'Bob', format: (v) => (v === null ? 'Y' : `${v}°`) },
           { key: 'N', label: 'N', format: int },
-          { key: 'E', label: 'E measured', format: (v) => num(v) },
+          { key: 'E', label: tm`$E$ measured`, format: (v) => num(v) },
           { key: 'SE', label: '± SE', format: (v) => num(v) },
-          { key: 'pred', label: 'E predicted', format: (v) => num(v) },
+          { key: 'pred', label: tm`$E$ predicted`, format: (v) => num(v) },
         ],
         rows,
       });

@@ -61,7 +61,8 @@ export function createTour(ctx) {
     unhighlight();
     progress.textContent = `Step ${i + 1} of ${STEPS.length}`;
     title.textContent = step.title;
-    body.replaceChildren(...[].concat(step.body).map((t) => h('p', null, t)));
+    // a body may be a function, so formulas are typeset when the step is shown
+    body.replaceChildren(...[].concat(typeof step.body === 'function' ? step.body() : step.body).map((t) => h('p', null, t)));
     back.disabled = i === 0;
     next.replaceChildren(i === STEPS.length - 1 ? 'Finish' : 'Next', icon(i === STEPS.length - 1 ? 'check' : 'arrow-right'));
     box.hidden = false;

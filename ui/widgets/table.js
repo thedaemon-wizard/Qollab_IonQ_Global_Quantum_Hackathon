@@ -1,7 +1,8 @@
-// Accessible data table. columns: [{key, label, align?: 'text', format?: fn}]
+// Accessible data table. columns: [{key, label, align?: 'text', format?: fn}]. `caption` is plain
+// text (it also names the scroll region); `captionNode`, if given, is shown instead (formulas).
 import { h, scrollableWhenNeeded } from '../core/dom.js';
 
-export function dataTable({ caption, columns, rows, rowHeader = true }) {
+export function dataTable({ caption, captionNode, columns, rows, rowHeader = true }) {
   const head = h('tr', null, columns.map((c) => h('th', { scope: 'col', class: c.align === 'text' ? 'text' : null }, c.label)));
   const body = rows.map((row) =>
     h('tr', null, columns.map((c, i) => {
@@ -11,7 +12,7 @@ export function dataTable({ caption, columns, rows, rowHeader = true }) {
     })),
   );
   const wrap = h('div', { class: 'table-wrap' },
-    h('table', null, caption ? h('caption', null, caption) : null, h('thead', null, head), h('tbody', null, body)));
+    h('table', null, caption ? h('caption', null, captionNode ?? caption) : null, h('thead', null, head), h('tbody', null, body)));
   return scrollableWhenNeeded(wrap, caption ? `Table: ${caption.slice(0, 80)}` : 'Table');
 }
 

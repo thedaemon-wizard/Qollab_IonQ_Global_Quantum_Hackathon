@@ -36,6 +36,8 @@ Tabler Icons licence text (MIT):
 | qiskit-aer 0.17.2, qiskit-ibm-runtime 0.50.0, qiskit-ionq 1.0.2 | Apache-2.0 | Backends provided by Qollab's runtime |
 | NumPy, SciPy (Pyodide builds) | BSD-3-Clause | Provided by Pyodide |
 | three.js r186 (0.186.1) and its examples (OrbitControls, ConvexGeometry, CSS2DRenderer) | MIT | Loaded through Qollab's import map (local harness: jsDelivr) |
+| Temml 0.14.0 (Ron Kok) | MIT | Turns the TeX formulas of the views into MathML; imported at start-up from `https://cdn.jsdelivr.net/npm/temml@0.14.0/dist/temml.mjs` by `ui/core/tex.js`. Without it the formulas are shown as Unicode text. |
+| Latin Modern Math 1.959 (GUST e-foundry) | GUST Font License | Math font for the formulas, from the Temml repository on jsDelivr (pinned commit), after any locally installed copy; declared in `main.css`. |
 
 ## Used only for development
 

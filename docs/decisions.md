@@ -1,7 +1,7 @@
 # Decisions
 
 D1–D7 were recorded on 2026-10-09, before the build window; D3 and D4 were updated and D8–D11
-added during the window (2026-10-10).
+added during the window (2026-10-10), D12 on 2026-10-11.
 
 Each entry states the decision, the evidence it rests on (checked on the date given), and what
 would make us revisit it. Sources are in [references.md](references.md) unless linked here.
@@ -141,3 +141,19 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
     ([results/a11y/](../results/a11y/README.md)).
 - **Revisit if** Qollab lets a project read intermediate results while its job runs, or allows
   several jobs in one IonQ run.
+
+## D12 — Formulas typeset as math in the docs, the write-up and the app
+
+- **Decision** (2026-10-11). Markdown sources use GitHub math: `` $`…`$ `` inline (it keeps
+  backslashes and `*` intact) and top-level ```` ```math ```` blocks. `scripts/make_writeup.py`
+  turns both into the `$…$` and `$$…$$` that Qollab's write-up renders with KaTeX, and stops on
+  an unpaired delimiter. In the app, `ui/core/tex.js` turns TeX in view text into native MathML
+  with Temml 0.14.0 (imported at start-up from jsDelivr) in Latin Modern Math; the seven
+  hand-built Method formulas use the same font. SVG text, `<option>`, ARIA labels, live messages
+  and exports stay plain Unicode. The README figures use matplotlib mathtext.
+- **Evidence.** Plain `$…$` on GitHub drops a backslash before punctuation (`\,`, `\%`), which
+  changes formulas; Qollab's renderer does not understand the backtick form or math fences. The
+  project frame's CSP allows scripts and fonts from cdn.jsdelivr.net and blocks `data:` fonts.
+  With jsDelivr blocked the views show the same formulas as Unicode text (checked in the local
+  harness); on Qollab the import and the font load (checked with the built-in simulator).
+- **Revisit if** the app must run offline: vendor Temml and the font with their licences.

@@ -8,6 +8,7 @@ import { icon } from './ui/core/icons.js';
 import { createRouter } from './ui/core/router.js';
 import { createStore } from './ui/core/store.js';
 import { themeToggle } from './ui/core/theme.js';
+import { mathReady } from './ui/core/tex.js';
 import { createTour } from './ui/core/tour.js';
 import { VIEWS } from './ui/views/index.js';
 
@@ -16,7 +17,9 @@ const loading = document.getElementById('bk-loading');
 
 async function start() {
   init(app, backend);
+  const formulas = mathReady(); // Temml from jsDelivr; plain Unicode formulas if it cannot load
   const [config, backendInfo] = [await api.config(), await api.describeBackend()];
+  await formulas;
 
   const store = createStore({
     runs: [], // every run of this session, newest last

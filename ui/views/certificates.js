@@ -3,6 +3,7 @@ import { h } from '../core/dom.js';
 import { num, pct } from '../core/format.js';
 import { icon } from '../core/icons.js';
 import { viewFrame } from '../core/router.js';
+import { tm } from '../core/tex.js';
 import { lineChart } from '../widgets/chart.js';
 import { errorNote, note } from '../widgets/controls.js';
 import { dataTable } from '../widgets/table.js';
@@ -18,7 +19,7 @@ export default {
     const cfg = ctx.config;
     const th = cfg.thresholds;
     const { element, body } = viewFrame('certificates', 'What the counts certify', 'certificate',
-      'Each certificate is a formula of S and the error rates (QBER: the share of rounds where Alice’s and Bob’s bits differ in the same basis). The curves show where each one switches on; the markers show your latest Bell Lab run, at its point estimate (filled) and at the conservative end of its confidence interval (hollow).');
+      tm`Each certificate is a formula of $S$ and the error rates (QBER: the share of rounds where Alice’s and Bob’s bits differ in the same basis). The curves show where each one switches on; the markers show your latest Bell Lab run, at its point estimate (filled) and at the conservative end of its confidence interval (hollow).`);
 
     const rateChart = lineChart({ title: 'Key rate', x: { min: 0, max: 0.16, label: 'QBER Q' }, y: { min: 0, max: 1, label: 'bits per round' } });
     const entropyChart = lineChart({ title: 'Entropy', x: { min: 2, max: 2.84, label: 'S' }, y: { min: 0, max: 1, label: 'value' } });
@@ -33,17 +34,17 @@ export default {
       caption: 'Where each certificate starts to hold for Werner states (depolarizing noise), computed from the formulas',
       columns: [
         { key: 'name', label: 'Certificate', align: 'text' },
-        { key: 'S', label: 'S above', format: (v) => num(v, 4) },
+        { key: 'S', label: tm`$S$ above`, format: (v) => num(v, 4) },
         { key: 'Q', label: 'QBER below', format: (v) => pct(v, 2) },
         { key: 'v', label: 'visibility above', format: (v) => num(v, 4) },
-        { key: 'src', label: 'Formula', align: 'text' },
+        { key: 'src', label: 'Formula', align: 'text', format: (v) => tm`${v}` },
       ],
       rows: [
-        { name: 'Bell violation (CHSH)', S: th.chsh.S, Q: th.chsh.Q_werner, v: th.chsh.v_werner, src: 'S > 2 (Clauser et al. 1969)' },
-        { name: 'Self-test, non-trivial', S: th.kaniewski.S, Q: th.kaniewski.Q_werner, v: th.kaniewski.v_werner, src: 'Kaniewski 2016, β* = (16+14√2)/17' },
-        { name: 'DI key (Acín 2007)', S: th.acin.S_werner, Q: th.acin.Q_werner, v: th.acin.v_werner, src: '1 − h(Q) − h((1+√((S/2)²−1))/2) > 0' },
-        { name: 'BBM92 key', S: th.bbm92.S_werner, Q: th.bbm92.Q, v: th.bbm92.v_werner, src: '1 − h(Q_Z) − h(Q_X) > 0' },
-        { name: 'Entanglement witness', S: null, Q: null, v: th.witness.v_werner, src: '(⟨XX⟩+⟨ZZ⟩)/2 > 1/2 (trusted devices)' },
+        { name: 'Bell violation (CHSH)', S: th.chsh.S, Q: th.chsh.Q_werner, v: th.chsh.v_werner, src: String.raw`$S > 2$ (Clauser et al. 1969)` },
+        { name: 'Self-test, non-trivial', S: th.kaniewski.S, Q: th.kaniewski.Q_werner, v: th.kaniewski.v_werner, src: String.raw`Kaniewski 2016, $\beta^{\ast} = (16 + 14\sqrt{2})/17$` },
+        { name: 'DI key (Acín 2007)', S: th.acin.S_werner, Q: th.acin.Q_werner, v: th.acin.v_werner, src: String.raw`$1 - h(Q) - h\bigl((1 + \sqrt{(S/2)^2 - 1})/2\bigr) > 0$` },
+        { name: 'BBM92 key', S: th.bbm92.S_werner, Q: th.bbm92.Q, v: th.bbm92.v_werner, src: String.raw`$1 - h(Q_Z) - h(Q_X) > 0$` },
+        { name: 'Entanglement witness', S: null, Q: null, v: th.witness.v_werner, src: String.raw`$(\langle XX\rangle + \langle ZZ\rangle)/2 > 1/2$ (trusted devices)` },
       ],
     });
 
@@ -51,9 +52,9 @@ export default {
       runNote,
       h('div', { class: 'grid two' },
         h('div', { class: 'card', id: 'cert-rates' }, h('h3', null, icon('key'), 'Key rate against error rate'), rateChart.element),
-        h('div', { class: 'card' }, h('h3', null, icon('dice-5'), 'What S alone certifies'), entropyChart.element)),
+        h('div', { class: 'card' }, h('h3', null, icon('dice-5'), tm`What $S$ alone certifies`), entropyChart.element)),
       h('div', { class: 'card wide' }, h('h3', null, icon('wave-sine'), 'Noise sweep'),
-        h('p', { class: 'muted' }, 'Exact predictions for the lab’s fixed settings as the noise grows. Different noise types hurt different certificates: dephasing leaves Q_Z untouched but raises Q_X, so it costs the BBM92 key less than the DI key.'),
+        h('p', { class: 'muted' }, tm`Exact predictions for the lab’s fixed settings as the noise grows. Different noise types hurt different certificates: dephasing leaves $Q_Z$ untouched but raises $Q_X$, so it costs the BBM92 key less than the DI key.`),
         h('div', { class: 'grid' }, h('div', null, channel.elements[0]), h('div', null, sweepBox))),
       h('div', { class: 'card wide' }, h('h3', null, icon('table'), 'Thresholds'), thresholdTable,
         note('', 'These are asymptotic formulas (infinitely many rounds, collective attacks for the DI key). The lab evaluates them at the ends of finite-sample confidence intervals; that is a teaching device, not a finite-size security proof.')),
@@ -88,7 +89,7 @@ export default {
       const w = base.werner_rates;
       const rep = ctx.store.get().last.bell;
       runNote.replaceChildren(rep
-        ? note('', `Markers show the latest Bell Lab run on ${rep.backend.name}: S = ${num(rep.analysis.S.point)} (low ${num(rep.analysis.S.low)}), Q_Z = ${pct(rep.analysis.Q_Z.point)} (high ${pct(rep.analysis.Q_Z.high)}).`)
+        ? note('', tm`Markers show the latest Bell Lab run on ${rep.backend.name}: $S$ = ${num(rep.analysis.S.point)} (low ${num(rep.analysis.S.low)}), $Q_Z$ = ${pct(rep.analysis.Q_Z.point)} (high ${pct(rep.analysis.Q_Z.high)}).`)
         : note('', 'Run the Bell Lab to place your own measurement on these curves.'));
       rateChart.update({
         title: 'Asymptotic key rate against QBER for Werner states',

@@ -4,6 +4,7 @@ import { h } from '../core/dom.js';
 import { int, num, pct, pm } from '../core/format.js';
 import { icon } from '../core/icons.js';
 import { viewFrame } from '../core/router.js';
+import { tm } from '../core/tex.js';
 import { lineChart } from '../widgets/chart.js';
 import { errorNote, note } from '../widgets/controls.js';
 import { dataTable } from '../widgets/table.js';
@@ -14,18 +15,18 @@ const COLORS = ['var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)', 'var(--c6)']
 function rosenfeldCard(run, index) {
   const p = run.pooled;
   const verdict = run.conservative.bell_violation
-    ? note('good', `At ${Math.round(100 * (1 - run.delta))}% confidence (Hoeffding, i.i.d.), S ≥ ${num(run.S_low)} > 2: a Bell violation.`, 'check')
-    : note('warn', `At ${Math.round(100 * (1 - run.delta))}% confidence (Hoeffding, i.i.d.), the lower end is S = ${num(run.S_low)}, which does not clear 2. The paper’s own tests (without the i.i.d. assumption) are different; this is our conservative reading.`);
+    ? note('good', tm`At ${Math.round(100 * (1 - run.delta))}% confidence (Hoeffding, i.i.d.), $S \ge$ ${num(run.S_low)} $> 2$: a Bell violation.`, 'check')
+    : note('warn', tm`At ${Math.round(100 * (1 - run.delta))}% confidence (Hoeffding, i.i.d.), the lower end is $S$ = ${num(run.S_low)}, which does not clear 2. The paper’s own tests (without the i.i.d. assumption) are different; this is our conservative reading.`);
   return h('div', { class: 'card', id: index === 0 ? 'exp-rosenfeld' : null },
     h('h3', null, icon('microscope'), run.label),
     h('dl', { class: 'kv' },
       h('dt', null, 'Events used'), h('dd', null, `${int(run.events_per_state)} per heralded state (first in file order)`),
-      h('dt', null, 'S, Ψ⁻ events'), h('dd', null, pm(run.per_state['Psi-'].S, run.per_state['Psi-'].se, 4)),
-      h('dt', null, 'S, Ψ⁺ events'), h('dd', null, pm(run.per_state['Psi+'].S, run.per_state['Psi+'].se, 4)),
-      h('dt', null, 'S, pooled'), h('dd', null, pm(p.S, p.se, 4)),
+      h('dt', null, tm`$S$, $\Psi^-$ events`), h('dd', null, pm(run.per_state['Psi-'].S, run.per_state['Psi-'].se, 4)),
+      h('dt', null, tm`$S$, $\Psi^+$ events`), h('dd', null, pm(run.per_state['Psi+'].S, run.per_state['Psi+'].se, 4)),
+      h('dt', null, tm`$S$, pooled`), h('dd', null, pm(p.S, p.se, 4)),
       h('dt', null, 'Hoeffding lower end'), h('dd', null, num(run.S_low, 4)),
       h('dt', null, 'Self-test bound (point / low)'), h('dd', null, `${num(run.point.kaniewski_F)} / ${num(run.conservative.kaniewski_F)}`),
-      h('dt', null, 'H_min (point / low)'), h('dd', null, `${num(run.point.pironio_Hmin)} / ${num(run.conservative.pironio_Hmin)} bit`),
+      h('dt', null, tm`$H_\text{min}$ (point / low)`), h('dd', null, `${num(run.point.pironio_Hmin)} / ${num(run.conservative.pironio_Hmin)} bit`),
       h('dt', null, 'In the quantum set (Tsirelson–Landau–Masanes test)'), h('dd', null, run.geometry.in_quantum ? 'yes' : 'no')),
     verdict);
 }
@@ -59,7 +60,7 @@ export default {
         series: runs.map((r, i) => ({ name: r.label, color: COLORS[i], dash: i ? '7 4' : 'none', points: r.running.map((p) => [p.events, p.S]) })),
         bands: runs.map((r, i) => ({ x0: 0, x1: 10000, y0: r.S_low, y1: r.pooled.S + r.hoeffding_halfwidth, fill: i ? 'rgba(230,159,0,0.10)' : 'rgba(86,180,233,0.12)', legend: `${r.label}: Hoeffding interval` })),
         hlines: [{ y: 2, label: 'local bound S = 2' }, { y: 2 * Math.SQRT2, label: '2√2' }],
-        caption: 'Lines: S after k events. Bands: the final Hoeffding interval at 95% confidence. Early values swing widely; this is why the number of rounds matters for every certificate.',
+        caption: tm`Lines: $S$ after $k$ events. Bands: the final Hoeffding interval at 95% confidence. Early values swing widely; this is why the number of rounds matters for every certificate.`,
         table: {
           summary: 'Data table (every fifth point)',
           caption: 'Running S',
@@ -100,6 +101,7 @@ export default {
       });
       const table = dataTable({
         caption: 'Published S and Q, and the asymptotic bounds this lab computes from them',
+        captionNode: tm`Published $S$ and $Q$, and the asymptotic bounds this lab computes from them`,
         columns: [
           { key: 'label', label: 'Experiment', align: 'text' },
           { key: 'S', label: 'S', format: (v, r) => pm(v, r.S_err, 3) },
@@ -140,7 +142,7 @@ export default {
       });
       pubBox.replaceChildren(sq.element, table, h('details', null, h('summary', null, 'Caveats for each experiment'), caveats),
         h('h4', null, 'A distance series: Lu et al. 2026'), luChart.element,
-        note('warn', 'Quoted S and Q are the authors’; the rates in this view are our asymptotic recomputation (collective attacks), not the authors’ finite-size keys. Settings, protocols and loophole status differ between experiments.'));
+        note('warn', tm`Quoted $S$ and $Q$ are the authors’; the rates in this view are our asymptotic recomputation (collective attacks), not the authors’ finite-size keys. Settings, protocols and loophole status differ between experiments.`));
     }
 
     let first = true;

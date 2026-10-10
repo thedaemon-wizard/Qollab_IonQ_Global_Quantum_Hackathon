@@ -89,7 +89,7 @@ open the Bell Lab. Notes:
 
 ```bash
 python3.14 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
-.venv/bin/python -m pytest -q          # 240+ tests
+.venv/bin/python -m pytest -q          # 300+ tests
 .venv/bin/python tools/devserver/server.py   # then open the printed URL
 ```
 
@@ -231,7 +231,7 @@ its exact formula, so the lab reports the difference rather than claiming a repr
 
 ## How it was verified
 
-- **More than 240 tests** (`pytest`): every circuit family is checked against the exact channel model
+- **More than 300 tests** (`pytest`): every circuit family is checked against the exact channel model
   to $`10^{-9}`$ using exact output distributions (Bell with each channel and the eavesdropper,
   1–3-hop chains with and without the Pauli frame, purification with both rotations, the packed
   IonQ layout); bounds and thresholds against published values; Hoeffding and Wilson
@@ -257,6 +257,9 @@ The terms ask for UI accessibility best practice, so it was tested, not assumed
 - **Keyboard**: skip link, visible focus, every control reachable; the guided tour works with
   Enter/→/←/Esc and keeps focus while a step runs; the 3D view turns with buttons; sideways
   scroll boxes are focusable.
+- **Formulas**: native MathML (Temml, Latin Modern Math), which screen readers read; if the
+  formula library cannot load, the same formulas appear as Unicode text. ARIA labels, SVG text
+  and status messages stay plain text.
 - **Text alternatives**: every chart is an SVG with a title, a description and a data table;
   the 3D view has a 2D slice and a membership table with the same information; points differ by
   shape as well as colour.

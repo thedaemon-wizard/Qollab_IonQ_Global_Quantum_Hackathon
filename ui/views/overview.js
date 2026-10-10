@@ -2,6 +2,7 @@
 import { h } from '../core/dom.js';
 import { icon } from '../core/icons.js';
 import { viewFrame } from '../core/router.js';
+import { tm } from '../core/tex.js';
 import { button, note } from '../widgets/controls.js';
 import { flowDiagram } from '../widgets/diagram.js';
 import { dataTable } from '../widgets/table.js';
@@ -109,8 +110,8 @@ export default {
       columns: [{ key: 'what', label: 'Item', align: 'text' }, { key: 'kind', label: 'Kind', align: 'text' }, { key: 'note', label: 'Notes', align: 'text' }],
       rows: [
         { what: 'Every run in the Bell Lab and Repeater', kind: 'Simulation', note: 'Qiskit simulators or noise models chosen in Qollab; counts are sampled, so they fluctuate.' },
-        { what: 'Munich 2017 Bell-test events', kind: 'Experimental data', note: 'Open event files (Rosenfeld et al., CC BY 4.0) re-analysed here; reproduces the paper’s S = 2.221.' },
-        { what: 'Published S and Q of DI-QKD experiments', kind: 'Quoted values', note: 'From the papers and their data records; the rates shown next to them are our recomputation.' },
+        { what: 'Munich 2017 Bell-test events', kind: 'Experimental data', note: tm`Open event files (Rosenfeld et al., CC BY 4.0) re-analysed here; reproduces the paper’s $S = 2.221$.` },
+        { what: tm`Published $S$ and $Q$ of DI-QKD experiments`, kind: 'Quoted values', note: 'From the papers and their data records; the rates shown next to them are our recomputation.' },
         { what: 'Keys, randomness, self-test values', kind: 'Asymptotic bounds', note: 'Formulas evaluated at the estimate and at the conservative end of its interval; not a security proof.' },
         { what: 'Random numbers used by the simulators', kind: 'Pseudo-random', note: 'Not a quantum random number generator.' },
       ],

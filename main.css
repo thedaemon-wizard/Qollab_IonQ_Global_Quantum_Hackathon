@@ -332,8 +332,32 @@ figcaption { font-size: 0.84rem; color: var(--muted); margin-top: 0.3rem; }
 .grid > *, .stack > * { min-width: 0; }
 .field .row input[type='range'] { min-width: 0; flex: 1; }
 .math-wrap { overflow-x: auto; max-width: 100%; padding: 0.2rem 0; }
+
+/* Formulas (MathML, from method.js and ui/core/tex.js) in Latin Modern Math: a local copy if
+   installed, otherwise the pinned file on jsDelivr. The project frame's CSP (font-src *) does
+   not accept fonts as data: URLs, so the font is fetched over the network. */
+@font-face {
+  font-family: 'Latin Modern Math';
+  font-display: swap;
+  src: local('Latin Modern Math'), local('LatinModernMath-Regular'),
+    url('https://cdn.jsdelivr.net/gh/ronkok/Temml@4ffdf0e56577c426375d0b2818f8895edb5e5030/site/assets/latinmodernmath.woff2') format('woff2');
+}
+.bk-root math {
+  font-family: 'Latin Modern Math', 'STIX Two Math', 'Cambria Math', math;
+  font-size: 1.1em;
+  font-style: normal;
+  font-weight: normal;
+  line-height: normal;
+  font-feature-settings: 'dtls' off;
+}
+.bk-root math[display='block'] { margin: 0.3rem 0; }
 .kv dd { overflow-wrap: anywhere; }
 input[type='number'] { width: 100%; min-width: 0; }
+select { max-width: 100%; }
+.field { min-width: 0; grid-template-columns: minmax(0, 1fr); }
 @media (max-width: 480px) {
   .legend span { white-space: normal; }
+  /* one column for term lists, so a formula that cannot break still fits at 320 px */
+  .kv { grid-template-columns: minmax(0, 1fr); }
+  .kv dd { margin-bottom: 0.35rem; }
 }
