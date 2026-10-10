@@ -6,7 +6,8 @@
 #   - qiskit 2.5.2: Qollab installs qiskit>=2.5.2,<3 when requirements.txt does not pin it.
 #   - qiskit-aer / qiskit-ibm-runtime / qiskit-ionq: the versions listed in Qollab's docs.
 #   - numpy / scipy / matplotlib: the versions bundled with Pyodide 314.0.7.
-# The second block (pytest, ruff) is tooling for tests and linting only.
+# The second block is tooling only: pytest and ruff for tests and linting, and the
+# notebook packages for scripts/make_notebook.py.
 qiskit==2.5.2
 qiskit-aer==0.17.2
 qiskit-ibm-runtime==0.50.0
@@ -17,3 +18,6 @@ matplotlib==3.10.8
 
 pytest==9.1.1
 ruff==0.16.10
+ipykernel==7.4.0
+nbclient==0.11.0
+nbformat==5.10.4

@@ -35,7 +35,8 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
 ## D3 — No JupyterLite; a guided tour inside the app instead
 
 - **Decision.** The walkthrough is part of the app (a keyboard-accessible guided tour that runs the
-  real circuits). A pre-executed notebook may be added to this repository for reading on GitHub.
+  real circuits). An executed notebook (`notebooks/walkthrough.ipynb`, 2026-10-10) is in the repository for
+  reading on GitHub; it is not part of the Qollab upload.
 - **Evidence (2026-10-09).** JupyterLite kernels run in Web Workers (blocked by `worker-src
   'none'`), the app is several hundred files (Qollab allows 100 files of ≤ 2 MB), it expects
   browser storage and a same-origin frame (neither is available), nested frames to github.io are

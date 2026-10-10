@@ -80,6 +80,11 @@ python3.14 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 The local harness serves the same `index.html`/`main.js` and answers the Python calls with
 a real simulator (`?backend=basic_simulator` or `?backend=fake_fez`); IonQ needs Qollab.
 
+**Without running anything:** [`notebooks/walkthrough.ipynb`](notebooks/walkthrough.ipynb) is
+an executed notebook that calls the same `bellkit` package (one Bell run, the certificate
+ladder, a circuit, thresholds, a noise sweep, the swap chain, the Munich data and the packed
+IonQ layout). Rebuild it with `.venv/bin/python scripts/make_notebook.py`.
+
 ## How it works
 
 ![Software architecture](docs/img/architecture.png)
@@ -255,7 +260,8 @@ from it is used here.
 | `config/defaults.json` | All defaults and run profiles |
 | `data/` | Munich event files (CC BY 4.0, with NOTICE), published values, recorded runs |
 | `tests/` | Unit, exact-distribution, golden-value and conformance tests |
-| `scripts/` | Upload bundle, recorded-run rebuild, README figures |
+| `scripts/` | Upload bundle, recorded-run rebuild, README figures, write-up and notebook builders |
+| `notebooks/` | Executed walkthrough notebook (repository only) |
 | `tools/` | Local harness, icon vendoring, screenshots, environment check |
 | `docs/` | References and fact-check notes, design decisions, diagrams and figures |
 | `results/` | Captured runs from Qollab and locally, environment check |
