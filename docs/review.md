@@ -58,7 +58,7 @@ correctness, R = rules, A = accessibility, D = documentation.
 
 | # | Severity | Finding | What was done |
 |---|---|---|---|
-| R1 | HIGH | Demo video not linked yet | Open until submission: the README and write-up get the public link before the final version. |
+| R1 | HIGH | Demo video not linked yet | Fixed: unlisted YouTube video linked in the README and write-up (opens without sign-in). |
 | R2 | HIGH | Repository private; the write-up links a tag that does not exist yet | Open until submission: tag `v1.0-submission`, make the repository public, regenerate the write-up with images, check every link signed out. |
 | A1 | HIGH | Tour box cut off at 400 % zoom (Reflow) | Fixed: box limited to the viewport and scrolls inside; checked at 320 × 256 px. |
 | A2 | HIGH | Input borders 1.5:1 (non-text contrast) | Fixed: separate control-border colour, 3.4–4.0:1. |
