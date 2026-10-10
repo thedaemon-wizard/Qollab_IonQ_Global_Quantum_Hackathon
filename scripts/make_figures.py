@@ -39,6 +39,7 @@ def short_name(label: str) -> str:
         ("BasicSimulator", "Local ideal"),
         ("Braket", "Braket local"),
         ("Aria 1", "IonQ Aria 1"),
+        ("Forte Enterprise 1", "IonQ Forte Ent. 1"),
         ("Forte 1", "IonQ Forte 1"),
         ("Fez", "IBM Fez"),
     ):
@@ -90,7 +91,7 @@ def backends_figure() -> None:
     ax.set_ylabel("CHSH value S")
     ax.set_ylim(1.8, 3.05)
     ax.set_title(
-        "Runs on Qollab's simulators: S with 95% Hoeffding interval\n"
+        "Runs on Qollab's simulators: S with its 97.5% Hoeffding interval\n"
         "(grey bar: exact prediction without device noise)",
         fontsize=10,
     )

@@ -1164,6 +1164,277 @@
     "profile_label": "IonQ cloud noise-model simulator"
    },
    "request": {
+    "module": "bell",
+    "channel": {
+     "kind": "depolarizing",
+     "strength": 0.05
+    },
+    "eve": {
+     "enabled": false,
+     "phi_deg": 180
+    },
+    "include_yy": false,
+    "shots": 200,
+    "seed": 20261010
+   },
+   "experiment": {
+    "module": "bell",
+    "channel": {
+     "p_i": 0.9625,
+     "p_x": 0.0125,
+     "p_y": 0.0125,
+     "p_z": 0.0125
+    },
+    "eve_phi_deg": null,
+    "hops": 1,
+    "rotation": "none",
+    "include_yy": false
+   },
+   "layout": "packed_single_circuit",
+   "shots": 200,
+   "seed": null,
+   "seconds": 22.903,
+   "canary_fraction": 1,
+   "circuits": {
+    "logical": [],
+    "compiled": [
+     {
+      "num_qubits": 25,
+      "depth": 10,
+      "two_qubit_gates": 30,
+      "name": "",
+      "ops": {
+       "cx": 30,
+       "ry": 26,
+       "h": 15,
+       "measure": 13,
+       "rz": 3,
+       "x": 1
+      }
+     }
+    ]
+   },
+   "selection": {
+    "key_z": {
+     "kept": 200,
+     "total": 200
+    },
+    "x_x": {
+     "kept": 200,
+     "total": 200
+    },
+    "c00": {
+     "kept": 200,
+     "total": 200
+    },
+    "c01": {
+     "kept": 200,
+     "total": 200
+    },
+    "c10": {
+     "kept": 200,
+     "total": 200
+    },
+    "c11": {
+     "kept": 200,
+     "total": 200
+    }
+   },
+   "analysis": {
+    "settings": {
+     "key_z": {
+      "n00": 97,
+      "n01": 13,
+      "n10": 8,
+      "n11": 82,
+      "N": 200,
+      "E": 0.79,
+      "SE": 0.04335320057389073,
+      "alice_deg": 0.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "key",
+       "bbm92_z"
+      ]
+     },
+     "x_x": {
+      "n00": 77,
+      "n01": 8,
+      "n10": 5,
+      "n11": 110,
+      "N": 200,
+      "E": 0.87,
+      "SE": 0.034864021569520634,
+      "alice_deg": 90.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "bbm92_x"
+      ]
+     },
+     "c00": {
+      "n00": 89,
+      "n01": 23,
+      "n10": 19,
+      "n11": 69,
+      "N": 200,
+      "E": 0.58,
+      "SE": 0.05760208329565867,
+      "alice_deg": 45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c01": {
+      "n00": 76,
+      "n01": 19,
+      "n10": 28,
+      "n11": 77,
+      "N": 200,
+      "E": 0.53,
+      "SE": 0.059962488273920055,
+      "alice_deg": 45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c10": {
+      "n00": 83,
+      "n01": 17,
+      "n10": 19,
+      "n11": 81,
+      "N": 200,
+      "E": 0.64,
+      "SE": 0.054332310828824504,
+      "alice_deg": -45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c11": {
+      "n00": 25,
+      "n01": 79,
+      "n10": 78,
+      "n11": 18,
+      "N": 200,
+      "E": -0.57,
+      "SE": 0.05809905334857015,
+      "alice_deg": -45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     }
+    },
+    "S": {
+     "point": 2.32,
+     "se": 0.11506954418958998,
+     "low": 1.9013341841194156,
+     "high": 2.738665815880584,
+     "halfwidth_hoeffding": 0.4186658158805842,
+     "above_classical": false,
+     "inconclusive": true,
+     "outside_quantum_set": false
+    },
+    "Q_Z": {
+     "point": 0.105,
+     "low": 0.06572561107989423,
+     "high": 0.16363247524743596,
+     "N": 200
+    },
+    "Q_X": {
+     "point": 0.065,
+     "low": 0.03562367189979138,
+     "high": 0.11569472696701533,
+     "N": 200
+    },
+    "E_ZZ": 0.79,
+    "E_XX": 0.87,
+    "witness": {
+     "point": 0.8300000000000001,
+     "low": 0.6819792812699202
+    },
+    "fidelity_with_yy": null,
+    "ladder_point": {
+     "witness_fidelity_low": 0.8300000000000001,
+     "witness_fidelity_high": 0.895,
+     "entangled_trusted": true,
+     "bell_violation": true,
+     "kaniewski_extractability": 0.648198051533946,
+     "self_test_nontrivial": true,
+     "min_entropy_pironio": 0.1448475186033633,
+     "von_neumann_local": 0.2661138414483587,
+     "rate_bbm92": 0.16837097216794128,
+     "rate_di_acin": -0.21853389828308667,
+     "di_certified": false
+    },
+    "ladder_conservative": {
+     "witness_fidelity_low": 0.6819792812699202,
+     "witness_fidelity_high": null,
+     "entangled_trusted": true,
+     "bell_violation": false,
+     "kaniewski_extractability": 0.5,
+     "self_test_nontrivial": false,
+     "min_entropy_pironio": 0.0,
+     "von_neumann_local": 0.0,
+     "rate_bbm92": -0.15978674272997306,
+     "rate_di_acin": null,
+     "di_certified": false
+    },
+    "delta": 0.05,
+    "method": "Hoeffding (S, delta/2) and Wilson (QBER, delta/2); asymptotic formulas at confidence ends"
+   },
+   "prediction": {
+    "T": {
+     "xx": 0.95,
+     "yy": -0.95,
+     "zz": 0.95
+    },
+    "E": {
+     "key_z": 0.95,
+     "x_x": 0.95,
+     "c00": 0.6717514421272202,
+     "c01": 0.67175144212722,
+     "c10": 0.6717514421272202,
+     "c11": -0.67175144212722
+    },
+    "S_fixed": 2.6870057685088806,
+    "S_max_horodecki": 2.6870057685088806,
+    "Q_Z": 0.025000000000000022,
+    "Q_X": 0.025000000000000022,
+    "fidelity": 0.9624999999999999
+   },
+   "geometry": {
+    "S": 2.32,
+    "max_chsh": 2.32,
+    "max_tlm": 2.4783333768546947,
+    "in_no_signalling": true,
+    "in_local": false,
+    "in_quantum": true,
+    "symmetric": [
+     0.58,
+     -0.57,
+     0.585
+    ]
+   },
+   "origin": {
+    "where": "Qollab",
+    "device_label": "IonQ Forte Enterprise 1 simulator (29q), noise model",
+    "captured_utc": "20261010T0354Z",
+    "source_file": "results/qollab/bell_ionq_forteent1_20261010T0354Z.json",
+    "S_as_reported_by_the_app": 2.32
+   }
+  },
+  {
+   "schema": "bellkit.run/1",
+   "backend": {
+    "name": "ionq_simulator",
+    "profile": "ionq_sim",
+    "profile_label": "IonQ cloud noise-model simulator"
+   },
+   "request": {
     "module": "chain",
     "hops": 2,
     "channel": {

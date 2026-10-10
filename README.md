@@ -30,10 +30,10 @@ different amount of evidence:
 | DI key (Acín et al. 2007, collective attacks) | nothing; i.i.d. rounds | S > 2.424, QBER < 7.15 % |
 
 The lab makes this ladder visible. Every run shows each certificate twice: at the **point
-estimate**, and at the **conservative end** of a 95 % confidence interval (S at its lower end,
-error rates at their upper ends). With 10,000 shots per setting most claims survive; with the
-200 shots of an IonQ noise-model run, the device-independent key does not — finite statistics
-are part of the lesson, not a footnote.
+estimate**, and at the **conservative end** (S at the lower end of its interval, error rates at
+the upper ends of theirs; each interval is at 97.5 %, so every claim holds at 95 %). With 10,000
+shots per setting most claims survive; with the 200 shots of an IonQ noise-model run, the
+device-independent key does not — finite statistics are part of the lesson, not a footnote.
 
 ## What you can do
 
@@ -147,7 +147,7 @@ captured counts by `scripts/record_runs.py`, with the same code the app runs).
 
 ![S on each simulator, with intervals and the exact prediction](docs/img/backends.png)
 
-| Backend (Qollab) | Experiment | Shots / setting | S [95 % interval] | Exact prediction | Q_Z | DI key rate, point → conservative |
+| Backend (Qollab) | Experiment | Shots / setting | S [97.5 % interval] | Exact prediction | Q_Z | DI key rate, point → conservative |
 |---|---|---:|---|---:|---:|---|
 | Qiskit BasicSimulator (local reference run) | Bell, 5 % depolarizing | 10,000 | 2.708 [2.649, 2.767] | 2.687 | 2.36 % | 0.580 → 0.469 |
 | AWS Braket local (ideal) | Bell, 5 % depolarizing | 2,000 | 2.670 [2.538, 2.802] | 2.687 | 1.55 % | 0.566 → 0.343 |
@@ -155,6 +155,7 @@ captured counts by `scripts/record_runs.py`, with the same code the app runs).
 | IBM Fez noise model | Bell, no added noise | 2,000 | 2.670 [2.538, 2.802] | 2.828 | 2.90 % | 0.492 → 0.265 |
 | IonQ Aria 1 noise model | Bell, 5 % depolarizing | 200 | 2.570 [2.151, 2.989] | 2.687 | 4.00 % | 0.300 → none |
 | IonQ Forte 1 noise model | Bell, 5 % depolarizing | 200 | 2.570 [2.151, 2.989] | 2.687 | 4.50 % | 0.277 → none |
+| IonQ Forte Enterprise 1 noise model | Bell, 5 % depolarizing | 200 | 2.320 [1.901, 2.739] | 2.687 | 10.50 % | none |
 | IonQ Aria 1 noise model | 2-link swap, no added noise | 200 | 2.520 [2.101, 2.939] | 2.828 | 2.00 % | 0.339 → none |
 | IBM Fez noise model | 2-link swap, 5 % depolarizing | 2,000 | 2.264 [2.132, 2.396] | 2.553 | 9.25 % | none |
 | IBM Fez noise model | Bell, Eve at φ = 180° | 2,000 | 1.322 [1.190, 1.454] | 1.414 | 2.70 % | none (Q_X = 51.1 %) |
@@ -163,9 +164,12 @@ What the table shows:
 
 - **Device noise adds to the channel noise.** On the noise-model backends S falls below the
   channel-only prediction, more so for the swap, whose circuits have more two-qubit gates.
-- **Finite statistics decide the stronger claims.** With 200 shots per setting (IonQ), every
-  run keeps S above 2 at the conservative end, but the asymptotic DI-key bound turns negative
-  there: the interval on S is about ±0.42. With 2,000–10,000 shots the same bound stays
+- **Finite statistics decide the stronger claims.** With 200 shots per setting (IonQ) the
+  interval on S is about ±0.42. The Aria 1 and Forte 1 runs keep S above 2 at the conservative
+  end, but the asymptotic DI-key bound turns negative there; the Forte Enterprise 1 run shows a
+  Bell violation only at its point estimate (S = 2.320, lower end 1.901). One 200-shot run per
+  model cannot rank the models: its S differs from the Forte 1 run's by 0.25, about 1.6 combined
+  standard errors. With 2,000–10,000 shots the DI-key bound for the same experiment stays
   positive at the conservative end. (These are simulated counts; see Limits.)
 - **The eavesdropper is caught by the second basis**: the key basis looks clean (Q_Z ≈ 2.7 %,
   device noise only) while Q_X ≈ 51 % and S < 2.
@@ -207,7 +211,8 @@ its exact formula, so the lab reports the difference rather than claiming a repr
   recomputation; and static checks of the Qollab rules (no Sampler/Estimator, no dynamic
   circuits, literal data paths, upload limits, a single Python bridge in the browser code).
 - **On Qollab**: the full guided tour on the IBM Fez noise model; Bell runs on the built-in,
-  Braket, IBM Fez, IonQ Aria 1 and IonQ Forte 1 simulators; a two-link swap on IonQ Aria 1.
+  Braket, IBM Fez, IonQ Aria 1, IonQ Forte 1 and IonQ Forte Enterprise 1 simulators; a two-link
+  swap on IonQ Aria 1.
 - Problems found on Qollab and fixed: a module-level name clashing with the injected
   `backend`; the Braket backend's name (`default`) and its loss of circuit names; a 25-qubit
   packed circuit too slow for Braket's state-vector simulator (now one circuit per setting).
