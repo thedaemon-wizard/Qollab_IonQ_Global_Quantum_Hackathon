@@ -1,0 +1,31 @@
+{
+ "lighthouse_desktop_dark": {
+  "lighthouse_version": "13.4.1",
+  "fetch_time": "2026-10-10T01:26:51.528Z",
+  "form_factor": "desktop",
+  "scores": {
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 90
+  },
+  "failed_audits": [
+   "meta-description"
+  ],
+  "accessibility_audits_passed": 30
+ },
+ "lighthouse_mobile_light": {
+  "lighthouse_version": "13.4.1",
+  "fetch_time": "2026-10-10T01:26:55.604Z",
+  "form_factor": "mobile",
+  "scores": {
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 90
+  },
+  "failed_audits": [
+   "cumulative-layout-shift",
+   "meta-description"
+  ],
+  "accessibility_audits_passed": 30
+ }
+}
