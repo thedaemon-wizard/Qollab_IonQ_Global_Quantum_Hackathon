@@ -301,8 +301,9 @@ In the terms' categories, it is meant as "an original analytical or educational 
 (comparative benchmarking across ideal, IBM and IonQ noise-model simulators, with finite
 statistics).
 
-The author previously showed an E91/CHSH Werner-state model in a separate public demo; no code
-from it is used here.
+The author previously showed an E91/CHSH Werner-state model in a separate public demo
+(<https://qsmpc-qkd-qhe-ai-hybrid.daemons.jp/orchestration>, Parameters → QKD protocol
+"E91 (CHSH)"); no code from it is used here.
 
 ## Extending it
 

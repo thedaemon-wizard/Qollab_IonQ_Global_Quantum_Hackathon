@@ -90,7 +90,7 @@ correctness, R = rules, A = accessibility, D = documentation.
 | C13 | LOW | Notebook intro overstated what the app shows | Fixed. |
 | R8 | LOW | License section did not mention CC BY data | Fixed. |
 | R9 | LOW | Pre-window table missed in-window edits to the requirements files | Fixed. |
-| R10 | LOW | The earlier public demo is not linked | Open: the author's decision. |
+| R10 | LOW | The earlier public demo is not linked | Fixed: linked after checking that its E91/CHSH option runs (author's decision). |
 | R11 | LOW | "Use of AI" may not cover the AI-assisted review | Fixed: one sentence added (author's decision). |
 | R12 | LOW | The "beyond tutorial" category is not named | Fixed: named in "Prior work and what is new here". |
 | R13 | LOW | Uploaded README links break in Qollab's file view | Not changed: the Project Card uses the converted write-up with absolute links. |
