@@ -1,0 +1,22 @@
+flowchart LR
+  subgraph Browser["Qollab project frame (browser)"]
+    UI["UI: 8 views + guided tour<br/>ES modules, SVG, three.js"]
+    API["ui/core/api.js<br/>only bridge to Python<br/>JSON strings in and out"]
+  end
+  subgraph Py["Python in Pyodide (bellkit)"]
+    APP["bellkit.app<br/>run / theory / circuits / data"]
+    CIR["circuits + plan<br/>settings as units,<br/>multi-circuit or packed"]
+    EXE["execution<br/>one backend.run per run<br/>canary bit-order check"]
+    ANA["decode + analysis + bounds<br/>Pauli frame, post-selection,<br/>Hoeffding / Wilson, certificates"]
+    DATA[("config/defaults.json<br/>data/: Munich 2017 events,<br/>published S and Q,<br/>recorded runs")]
+  end
+  subgraph BE["Backend injected by Qollab"]
+    B1["Built-in / Braket local<br/>(ideal)"]
+    B2["IBM noise models<br/>(Aer)"]
+    B3["IonQ noise models<br/>(cloud, one job per run)"]
+  end
+  UI --> API -->|callPromising| APP
+  APP --> CIR --> EXE
+  EXE --> B1 & B2 & B3
+  EXE --> ANA --> APP
+  DATA --> APP

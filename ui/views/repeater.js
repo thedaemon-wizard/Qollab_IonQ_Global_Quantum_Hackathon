@@ -94,6 +94,7 @@ export default {
     chainRun.id = 'rep-run';
     const purRun = button('Run purification', 'player-play', () => runPurify(), { primary: true });
     const measured = [];
+    const recordedBox = h('div');
 
     body.append(
       h('div', { class: 'grid' },
@@ -106,6 +107,7 @@ export default {
       h('div', { class: 'grid two' },
         h('div', { class: 'card' }, h('h3', null, icon('chart-line'), 'CHSH value against links'), chartS.element),
         h('div', { class: 'card' }, h('h3', null, icon('chart-line'), 'Error rates against links'), chartQ.element)),
+      recordedBox,
       chainResult,
       h('div', { class: 'card wide', id: 'rep-purify' }, h('h3', null, icon('filter'), 'One round of purification'),
         h('p', null, 'Two noisy pairs go in. Alice and Bob apply CNOTs between them, measure the second pair in Z and keep the first pair only when their two results agree. With the DEJMPS rotation the step also handles phase errors.'),
@@ -114,7 +116,23 @@ export default {
         purResult),
     );
 
+    let recordedChains = null;
+    async function loadRecorded() {
+      if (recordedChains) return;
+      try {
+        const data = await ctx.api.recorded();
+        recordedChains = (data.runs || []).filter((r) => r.experiment.module === 'chain').map((r) => {
+          const a = r.analysis;
+          const ch = r.request.channel || { kind: 'none', strength: 0 };
+          return { kind: ch.kind, strength: ch.kind === 'none' ? 0 : ch.strength, hops: r.experiment.hops, S: a.S.point, S_low: a.S.low, S_high: a.S.high, Q_Z: a.Q_Z.point, Q_Z_low: a.Q_Z.low, Q_Z_high: a.Q_Z.high, label: r.origin ? r.origin.device_label : r.backend.name };
+        });
+      } catch {
+        recordedChains = [];
+      }
+    }
+
     async function refresh() {
+      await loadRecorded();
       const n = hops.value;
       topoBox.replaceChildren(topology(n).element);
       timeBox.replaceChildren(timeline(n));
@@ -135,7 +153,7 @@ export default {
         if (blocker) { chainStatus.textContent = blocker; purStatus.textContent = blocker; }
         const hc = t.hops_curve;
         budgetBox.replaceChildren(dataTable({
-          caption: `Predicted for ${channel.value().kind.replace('_', ' ')} noise of strength ${num(channel.value().strength, 2)} per link`,
+          caption: channel.value().kind === 'none' ? 'Predicted with no added link noise (a noise-model backend adds its own)' : `Predicted for ${channel.value().kind.replace('_', ' ')} noise of strength ${num(channel.value().strength, 2)} per link`,
           columns: [
             { key: 'hops', label: 'Links' }, { key: 'S', label: 'S', format: (v) => num(v) },
             { key: 'Q_Z', label: 'Q_Z', format: (v) => pct(v) }, { key: 'Q_X', label: 'Q_X', format: (v) => pct(v) },
@@ -145,14 +163,19 @@ export default {
           ],
           rows: hc,
         }));
-        const marks = measured.filter((m) => m.kind === channel.value().kind && Math.abs(m.strength - channel.value().strength) < 1e-9);
+        const same = (m) => m.kind === channel.value().kind && Math.abs(m.strength - (channel.value().strength || 0)) < 1e-9;
+        const marks = measured.filter(same);
+        const rec = recordedChains.filter(same);
+        const recMarksS = rec.map((m, i) => ({ x: m.hops - 0.06, y: m.S, ylo: m.S_low, yhi: m.S_high, color: 'var(--c3)', shape: 'diamond', legend: i === 0 ? 'recorded runs (noise-model backends)' : null }));
+        const recMarksQ = rec.map((m, i) => ({ x: m.hops - 0.06, y: m.Q_Z, ylo: m.Q_Z_low, yhi: m.Q_Z_high, color: 'var(--c3)', shape: 'diamond', legend: i === 0 ? 'recorded Q_Z' : null }));
+        recordedBox.replaceChildren(rec.length ? note('', `Recorded runs for this noise setting: ${rec.map((m) => `${m.label}, ${m.hops} links, S = ${num(m.S)} [${num(m.S_low)}, ${num(m.S_high)}]`).join('; ')}.`) : '');
         chartS.update({
           title: 'CHSH value against number of links', desc: 'Predicted S for 1 to 4 links, with measured runs as points.', width: 480, height: 260,
           x: { min: 0.8, max: cfg.chain.hops.max + 0.2, label: 'links', ticks: [1, 2, 3, 4], format: (v) => String(v) },
           y: { min: 0, max: 2.9, label: 'S', ticks: [0, 1, 2, 2.83], format: (v) => v.toFixed(2) },
           series: [{ name: 'predicted', color: 'var(--c1)', marker: 'circle', markEvery: 1, points: hc.map((p) => [p.hops, p.S]) }],
           hlines: [{ y: 2, label: 'local bound' }, { y: th.acin.S_werner, label: 'DI key (Werner)', color: 'var(--c3)' }],
-          markers: marks.map((m, i) => ({ x: m.hops + 0.06, y: m.S, ylo: m.S_low, yhi: m.S_high, color: 'var(--c2)', shape: 'square', legend: i === 0 ? 'measured (95% interval)' : null })),
+          markers: [...marks.map((m, i) => ({ x: m.hops + 0.06, y: m.S, ylo: m.S_low, yhi: m.S_high, color: 'var(--c2)', shape: 'square', legend: i === 0 ? 'this session (95% interval)' : null })), ...recMarksS],
         });
         chartQ.update({
           title: 'Error rates against number of links', desc: 'Predicted Q_Z and Q_X for 1 to 4 links, with measured runs.', width: 480, height: 260,
@@ -163,7 +186,7 @@ export default {
             { name: 'Q_X predicted', color: 'var(--c4)', dash: '7 4', marker: 'triangle', markEvery: 1, points: hc.map((p) => [p.hops, p.Q_X]) },
           ],
           hlines: [{ y: th.bbm92.Q, label: 'BBM92 limit (Werner)', color: 'var(--c1)' }],
-          markers: marks.map((m, i) => ({ x: m.hops + 0.06, y: m.Q_Z, ylo: m.Q_Z_low, yhi: m.Q_Z_high, color: 'var(--c2)', shape: 'square', hollow: true, legend: i === 0 ? 'measured Q_Z' : null })),
+          markers: [...marks.map((m, i) => ({ x: m.hops + 0.06, y: m.Q_Z, ylo: m.Q_Z_low, yhi: m.Q_Z_high, color: 'var(--c2)', shape: 'square', hollow: true, legend: i === 0 ? 'this session Q_Z' : null })), ...recMarksQ],
         });
         const pt = tp.purification;
         purTheory.replaceChildren(dataTable({
