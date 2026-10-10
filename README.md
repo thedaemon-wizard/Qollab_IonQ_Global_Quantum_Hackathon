@@ -139,16 +139,22 @@ The source prepares $|\Phi^+\rangle=(|00\rangle+|11\rangle)/\sqrt2$. A measureme
 angle $\theta$ in the X–Z plane is $R_y(-\theta)$ followed by a Z measurement. Alice uses
 $0^\circ$ (key), $90^\circ$, $\pm45^\circ$; Bob uses $0^\circ$ and $90^\circ$:
 
-$$S = E_{00}+E_{01}+E_{10}-E_{11},\qquad E_{xy}=\frac{N_\text{same}-N_\text{diff}}{N}.$$
+```math
+S = E_{00}+E_{01}+E_{10}-E_{11},\qquad E_{xy}=\frac{N_\text{same}-N_\text{diff}}{N}.
+```
 
 Link noise is an exact **Pauli channel** on Bob's qubit,
 $\rho\mapsto p_I\rho+p_XX\rho X+p_YY\rho Y+p_ZZ\rho Z$, built from two ancilla qubits;
 depolarizing noise of strength $\lambda$ gives the Werner state with visibility $1-\lambda$,
 so $S=2\sqrt2(1-\lambda)$. The certificates are
 
-$$r_\text{BBM92}=1-h(Q_Z)-h(Q_X),\qquad r_\text{DI}=1-h(Q)-h\!\left(\tfrac{1+\sqrt{(S/2)^2-1}}{2}\right),$$
+```math
+r_\text{BBM92}=1-h(Q_Z)-h(Q_X),\qquad r_\text{DI}=1-h(Q)-h\!\left(\tfrac{1+\sqrt{(S/2)^2-1}}{2}\right),
+```
 
-$$H_\text{min}\ge 1-\log_2\!\left(1+\sqrt{2-S^2/4}\right),\qquad F\ge\tfrac12+\tfrac12\,\frac{S-\beta^*}{2\sqrt2-\beta^*},\ \ \beta^*=\tfrac{16+14\sqrt2}{17}.$$
+```math
+H_\text{min}\ge 1-\log_2\!\left(1+\sqrt{2-S^2/4}\right),\qquad F\ge\tfrac12+\tfrac12\,\frac{S-\beta^*}{2\sqrt2-\beta^*},\ \ \beta^*=\tfrac{16+14\sqrt2}{17}.
+```
 
 S gets a two-sided **Hoeffding** interval and the error rates **Wilson** intervals, with the
 risk $\delta=0.05$ split equally between them. A vector of correlators (all $|E_{xy}|\le1$) is
@@ -219,7 +225,7 @@ Quoted S and Q from Nadlinger 2022, Zhang 2022 and Liu 2026 (10 km and 101 km) a
 with the same asymptotic bounds, at the central values and at the corner (S − σ, Q + σ);
 Meiers 2026 (a preprint that makes no device-independent claim) reports S only and is listed
 without a rate. For Liu 2026 at 101 km the rate is 0.087 at the centre and −0.038 at that
-corner. For Lu et al. 2026 (Science 391, 592), our $(1-\gamma)\,r_\text{DI}$ with
+corner. For Lu et al. 2026 (Science 391, 592), our $(1-\gamma)r_\text{DI}$ with
 $\gamma=10^{-3}$ is 0.0008–0.0015 above every deposited Fig. 5C value; the paper does not print
 its exact formula, so the lab reports the difference rather than claiming a reproduction.
 

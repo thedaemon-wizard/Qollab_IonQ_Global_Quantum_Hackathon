@@ -28,6 +28,9 @@ def convert(text: str, ref: str, images: bool = True) -> str:
     blob = f"https://github.com/{REPO}/blob/{ref}/"
     text = text.replace("\r\n", "\n")
     text = re.sub(r"```mermaid\n.*?```\n\n?", "", text, flags=re.S)
+    # GitHub needs ```math blocks (it would eat * and backslash escapes inside $$...$$);
+    # Qollab's write-up renders $$...$$.
+    text = re.sub(r"```math\n(.*?)\n```", lambda m: f"$${m.group(1)}$$", text, flags=re.S)
     if not images:  # while the repository is private the image URLs would not load
         text = re.sub(r"!\[[^\]]*\]\([^)]+\)\n\n?", "", text)
         marker = f"> https://github.com/{REPO}\n"
