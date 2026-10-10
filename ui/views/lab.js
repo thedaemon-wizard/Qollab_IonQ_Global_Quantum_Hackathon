@@ -1,6 +1,6 @@
 // Bell Lab: one CHSH experiment. The run is ONE job on the injected backend; afterwards the
 // five stages of the protocol are replayed from its counts (Run, Pause, Resume, Step, Reset).
-import { announce, h, prefersReducedMotion } from '../core/dom.js';
+import { announce, h, prefersReducedMotion, setDisabled } from '../core/dom.js';
 import { int, num, pct } from '../core/format.js';
 import { icon } from '../core/icons.js';
 import { viewFrame } from '../core/router.js';
@@ -62,7 +62,7 @@ export default {
       h('h4', null, 'Prediction (exact model)'), predictionBox, sizeBox);
 
     // ---------- run toolbar and stepper ----------
-    const status = h('p', { class: 'muted', role: 'status', id: 'lab-status' }, 'Ready. Press Run to submit one job.');
+    const status = h('p', { class: 'muted', role: 'status', id: 'lab-status', tabindex: '-1' }, 'Ready. Press Run to submit one job.');
     const runBtn = button('Run', 'player-play', () => machine.send('RUN'), { primary: true });
     runBtn.id = 'lab-run';
     const pauseBtn = button('Pause', 'player-pause', () => (machine.state === 'paused' ? machine.send('RESUME') : machine.send('PAUSE')));
@@ -147,7 +147,7 @@ export default {
     function updateRunButton() {
       const blocker = runBlocker(ctx);
       const busy = machine.state === 'running';
-      runBtn.disabled = busy || Boolean(blocker) || !sizeOk;
+      setDisabled(runBtn, busy || Boolean(blocker) || !sizeOk, status);
       runBtn.title = blocker || (!sizeOk ? 'The experiment is too large for this backend profile' : '');
       if (blocker && !busy) status.textContent = blocker;
     }
@@ -169,7 +169,11 @@ export default {
 
     function showStage(i) {
       stage = i;
-      stepItems.forEach((li, k) => li.setAttribute('data-status', k < i ? 'done' : k === i ? 'active' : 'todo'));
+      stepItems.forEach((li, k) => {
+        li.setAttribute('data-status', k < i ? 'done' : k === i ? 'active' : 'todo');
+        if (k === i) li.setAttribute('aria-current', 'step');
+        else li.removeAttribute('aria-current');
+      });
       if (i === STAGES.length - 1 && machine.state !== 'running') stepItems[i].setAttribute('data-status', 'done');
       const rep = last;
       const a = rep.analysis;
@@ -230,7 +234,7 @@ export default {
 
     function clearResults() {
       stage = -1;
-      stepItems.forEach((li) => { li.setAttribute('data-status', 'todo'); li.querySelector('.detail').textContent = ''; });
+      stepItems.forEach((li) => { li.setAttribute('data-status', 'todo'); li.removeAttribute('aria-current'); li.querySelector('.detail').textContent = ''; });
       [countsCard, qberCard, corrCard, ladderCard].forEach((c) => { c.hidden = true; });
       gauge.update(null);
       gaugeCard.lastChild.replaceChildren();
@@ -238,10 +242,10 @@ export default {
 
     machine.subscribe(async (state, prev, event) => {
       clearInterval(timer);
-      pauseBtn.disabled = !(state === 'replay' || state === 'paused');
+      setDisabled(pauseBtn, !(state === 'replay' || state === 'paused'), status);
       pauseBtn.replaceChildren(icon(state === 'paused' ? 'player-play' : 'player-pause'), state === 'paused' ? 'Resume' : 'Pause');
-      stepBtn.disabled = !(state === 'replay' || state === 'paused');
-      resetBtn.disabled = state === 'running' || state === 'idle';
+      setDisabled(stepBtn, !(state === 'replay' || state === 'paused'), status);
+      setDisabled(resetBtn, state === 'running' || state === 'idle', status);
       if (state !== 'running') updateRunButton();
       if (state === 'running') {
         clearResults();

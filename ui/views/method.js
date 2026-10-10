@@ -56,7 +56,19 @@ export default {
     const { element, body } = viewFrame('method', 'Method, limits and sources', 'book',
       'How the numbers are made, what they do and do not show, and where every formula comes from. The full notes, with page-level checks, are in docs/references.md of the repository.');
     const sec = (title, iconName, ...content) => h('div', { class: 'card wide' }, h('h3', null, icon(iconName), title), ...content);
+    const term = (t, d) => [h('dt', null, t), h('dd', null, d)];
     body.append(
+      sec('Terms used in this lab', 'list-details',
+        h('dl', { class: 'kv' },
+          ...term('QBER (Q, Q_Z, Q_X)', 'Quantum bit error rate: the fraction of rounds in which Alice’s and Bob’s bits differ when both measure in the same basis (Z = key basis 0°/0°, X = 90°/90°).'),
+          ...term('Werner state', 'The entangled pair mixed with white noise: visibility v times |Φ+⟩⟨Φ+| plus (1 − v) times the maximally mixed state. Depolarizing noise of strength λ gives v = 1 − λ.'),
+          ...term('DI (device-independent)', 'A claim that needs no model of the devices, only the observed statistics (here: S and Q), assuming i.i.d. rounds.'),
+          ...term('BBM92', 'Entanglement-based key distribution (Bennett, Brassard, Mermin 1992) with trusted qubit measurements.'),
+          ...term('i.i.d.', 'Independent and identically distributed rounds; all intervals and bounds here assume it.'),
+          ...term('h(x)', 'Binary entropy, −x log₂ x − (1 − x) log₂(1 − x).'),
+          ...term('Pauli frame', 'Bit flips that a repeater’s Bell-measurement result requires, applied to Bob’s recorded bit in software instead of in the circuit.'),
+          ...term('BBPSSW, DEJMPS', 'Two entanglement-purification protocols (1996): two noisy pairs in, at most one better pair out.'),
+          ...term('TLM', 'Tsirelson–Landau–Masanes: the inequalities that decide whether four correlators are reachable by quantum mechanics.'))),
       sec('1. State, settings and the CHSH value', 'atom',
         h('p', null, 'The source prepares |Φ+⟩ = (|00⟩ + |11⟩)/√2. A measurement along angle θ in the X–Z plane is Ry(−θ) followed by a Z measurement; bit 0 means outcome +1. Alice uses 0° (key), 90° and ±45°; Bob uses 0° and 90°. Six settings are measured; four give the CHSH value and two give the BBM92 error rates.'),
         math(F.chsh, 'S equals E00 plus E01 plus E10 minus E11, where E is the difference between same and different outcomes divided by the number of rounds')),
@@ -75,7 +87,7 @@ export default {
         h('p', null, 'Entanglement witness with trusted measurements: the fidelity with |Φ+⟩ is at least (⟨XX⟩ + ⟨ZZ⟩)/2, and equals (1 + ⟨XX⟩ − ⟨YY⟩ + ⟨ZZ⟩)/4 when YY is also measured.')),
       sec('5. Swapping, purification and geometry', 'route',
         h('p', null, 'Repeaters perform Bell measurements (CNOT, then H) that are deferred to the end of the circuit; Bob’s recorded bit is corrected by the parity of the relevant repeater bits (a Pauli frame). This gives the same statistics as feed-forward and runs on IonQ targets, which do not execute mid-circuit feedback. Purification applies CNOTs between two pairs, measures the second pair in Z and keeps rounds where Alice’s and Bob’s results agree: the recurrence step of BBPSSW, without its random twirl, or of DEJMPS, which adds Rx(±π/2) first.'),
-        h('p', null, 'A correlator vector is local if it satisfies all eight CHSH inequalities and quantum if it satisfies the Tsirelson–Landau–Masanes inequalities:'), math(F.tlm, 'the maximum over sign vectors s with product minus one of the sum of s times arcsine E is at most pi')),
+        h('p', null, 'A correlator vector (with every |E| ≤ 1) is local if it satisfies all eight CHSH inequalities, and quantum if it satisfies the Tsirelson–Landau–Masanes inequalities, taken over the eight sign vectors s with s00·s01·s10·s11 = −1:'), math(F.tlm, 'the maximum over sign vectors s with product minus one of the sum of s times arcsine E is at most pi')),
       sec('Limits', 'alert-triangle',
         h('ul', null,
           h('li', null, 'A simulated CHSH value above 2 shows nothing about nature and closes no loophole.'),

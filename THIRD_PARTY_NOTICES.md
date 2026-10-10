@@ -8,7 +8,7 @@ third-party material.
 | Item | Where | Licence | Notes |
 |---|---|---|---|
 | Tabler Icons 3.49.0, 81 outline icons | `ui/core/icons.js` | MIT, Copyright (c) 2020-2026 Paweł Kuna | Path data copied by `tools/vendor_icons.py` from the npm package `@tabler/icons@3.49.0`. https://tabler.io/icons |
-| Munich event-ready Bell test data (two `*_pairs.csv` files) | `data/third_party/rosenfeld2017/` | CC BY 4.0 | W. Rosenfeld et al., Phys. Rev. Lett. 119, 010402 (2017); Zenodo doi:10.5281/zenodo.22936124. Copied without modification; see the folder's `NOTICE.md`. |
+| Munich event-ready Bell test data (two `*_pairs.csv` files) | `data/third_party/rosenfeld2017/` | CC BY 4.0 | W. Rosenfeld et al., Phys. Rev. Lett. 119, 010402 (2017); Zenodo record "Experimental data and archived website material for 'Event-Ready Bell Test Using Entangled Atoms Simultaneously Closing Detection and Locality Loopholes'", doi:10.5281/zenodo.22936124, Copyright (C) 2016 The Authors. Copied without modification; see the folder's `NOTICE.md`. |
 | Published S, Q and key-rate values | `data/experiments.json` | values quoted with attribution; data records CC BY 4.0 where noted | Lu et al., Science 391, 592 (2026), Zenodo doi:10.5281/zenodo.17958512; Liu et al., Nature 652, 51 (2026), Zenodo doi:10.5281/zenodo.18218281; other values from the cited papers. |
 
 Tabler Icons licence text (MIT):

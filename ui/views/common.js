@@ -1,6 +1,6 @@
 // Pieces shared by the Lab and Repeater views: experiment controls, the certificate ladder,
 // the run gate (refusals and the one-IonQ-job rule) and request building.
-import { h } from '../core/dom.js';
+import { h, scrollableWhenNeeded } from '../core/dom.js';
 import { num, pct } from '../core/format.js';
 import { icon } from '../core/icons.js';
 import { checkbox, select, slider } from '../widgets/controls.js';
@@ -109,7 +109,7 @@ export const RUNG_INFO = [
 export function ladderTable(analysis) {
   const point = { ...analysis.ladder_point, S: analysis.S.point };
   const cons = { ...analysis.ladder_conservative, S: analysis.S.low };
-  return h('div', { class: 'table-wrap' }, h('table', null,
+  return scrollableWhenNeeded(h('div', { class: 'table-wrap' }, h('table', null,
     h('caption', null, `Same counts, six claims. Conservative = S at the lower end of its interval, error rates at the upper end; each interval is at ${(100 * (1 - analysis.delta / 2)).toFixed(1)}%, so each claim, which combines at most two of them, holds at ${Math.round(100 * (1 - analysis.delta))}% (i.i.d. rounds).`),
     h('thead', null, h('tr', null, h('th', { scope: 'col', class: 'text' }, 'Certificate'), h('th', { scope: 'col', class: 'text' }, 'Assumes'),
       h('th', { scope: 'col' }, 'Point estimate'), h('th', { scope: 'col' }, 'Conservative'), h('th', { scope: 'col' }, 'Holds?'))),
@@ -120,7 +120,7 @@ export function ladderTable(analysis) {
       h('td', null, r.show(cons)),
       h('td', null, r.ok(cons) ? h('span', { style: { color: 'var(--good)' } }, icon('check', { size: 16, label: 'holds' }), ' yes')
         : r.ok(point) ? h('span', { style: { color: 'var(--warn)' } }, icon('alert-triangle', { size: 16, label: 'only at the point estimate' }), ' point only')
-          : h('span', { class: 'muted' }, icon('x', { size: 16, label: 'does not hold' }), ' no')))))));
+          : h('span', { class: 'muted' }, icon('x', { size: 16, label: 'does not hold' }), ' no'))))))), 'Table: certificates from these counts');
 }
 
 export function qberList(analysis) {

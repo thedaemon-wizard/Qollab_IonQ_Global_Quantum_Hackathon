@@ -28,7 +28,7 @@ export const STEPS = [
     view: 'lab',
     target: '#lab-gauge',
     title: 'A perfect pair reaches Tsirelson’s bound',
-    body: 'No added noise, no eavesdropper: on an ideal simulator S lands near 2√2 ≈ 2.83, the largest value quantum mechanics allows; a noise-model backend pulls it lower. The bar is the 95% confidence interval from the finite number of shots.',
+    body: 'No added noise, no eavesdropper: on an ideal simulator S lands near 2√2 ≈ 2.83, the largest value quantum mechanics allows; a noise-model backend pulls it lower. The bar is the 97.5% confidence interval for S from the finite number of shots.',
     action: (ctx) => labRun(ctx, { channel: { kind: 'none' }, eve: { enabled: false }, include_yy: false }),
   },
   {

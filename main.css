@@ -7,6 +7,7 @@
   --surface: #151c2b;
   --surface-2: #1c2538;
   --border: #2e3a55;
+  --control-border: #6b7a99;
   --text: #e8edf6;
   --muted: #aab4c8;
   --accent: #74b9ff;
@@ -40,6 +41,7 @@
   --surface: #ffffff;
   --surface-2: #eef2f8;
   --border: #c9d2e1;
+  --control-border: #77849a;
   --text: #121826;
   --muted: #475266;
   --accent: #0b5cc2;
@@ -74,6 +76,7 @@
     --surface: #ffffff;
     --surface-2: #eef2f8;
     --border: #c9d2e1;
+    --control-border: #77849a;
     --text: #121826;
     --muted: #475266;
     --accent: #0b5cc2;
@@ -114,6 +117,7 @@ body { background: #0e1320; }
   font: 15px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
   display: grid;
   grid-template-rows: auto 1fr;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .sr-only {
@@ -148,8 +152,9 @@ p { margin: 0 0 0.6rem; }
 .chip {
   display: inline-flex; align-items: center; gap: 0.35rem;
   padding: 0.12rem 0.55rem; border: 1px solid var(--border); border-radius: 999px;
-  background: var(--surface-2); font-size: 0.84rem; white-space: nowrap;
+  background: var(--surface-2); font-size: 0.84rem; white-space: nowrap; max-width: 100%;
 }
+.bk-header .chip { white-space: normal; }
 .chip.good { border-color: var(--good); }
 .chip.warn { border-color: var(--warn); }
 .chip.bad { border-color: var(--bad); }
@@ -219,7 +224,7 @@ p { margin: 0 0 0.6rem; }
 .field output { min-width: 4.5ch; font-variant-numeric: tabular-nums; }
 select, input[type='number'] {
   font: inherit; color: var(--text); background: var(--surface-2);
-  border: 1px solid var(--border); border-radius: 6px; padding: 0.3rem 0.45rem; min-height: 32px;
+  border: 1px solid var(--control-border); border-radius: 6px; padding: 0.3rem 0.45rem; min-height: 32px;
 }
 input[type='range'] { width: 100%; accent-color: var(--accent); min-height: 24px; }
 input[type='checkbox'] { width: 18px; height: 18px; accent-color: var(--accent); }
@@ -278,6 +283,7 @@ figcaption { font-size: 0.84rem; color: var(--muted); margin-top: 0.3rem; }
 /* ---------- tour ---------- */
 .tour {
   position: fixed; z-index: 40; max-width: min(420px, calc(100vw - 24px));
+  max-height: calc(100vh - 24px); overflow-y: auto;
   background: var(--surface); border: 2px solid var(--accent); border-radius: 12px;
   padding: 0.75rem 0.9rem; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
 }

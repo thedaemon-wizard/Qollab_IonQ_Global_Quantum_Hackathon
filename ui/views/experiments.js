@@ -26,7 +26,7 @@ function rosenfeldCard(run, index) {
       h('dt', null, 'Hoeffding lower end'), h('dd', null, num(run.S_low, 4)),
       h('dt', null, 'Self-test bound (point / low)'), h('dd', null, `${num(run.point.kaniewski_F)} / ${num(run.conservative.kaniewski_F)}`),
       h('dt', null, 'H_min (point / low)'), h('dd', null, `${num(run.point.pironio_Hmin)} / ${num(run.conservative.pironio_Hmin)} bit`),
-      h('dt', null, 'In the quantum set (TLM)'), h('dd', null, run.geometry.in_quantum ? 'yes' : 'no')),
+      h('dt', null, 'In the quantum set (Tsirelson–Landau–Masanes test)'), h('dd', null, run.geometry.in_quantum ? 'yes' : 'no')),
     verdict);
 }
 

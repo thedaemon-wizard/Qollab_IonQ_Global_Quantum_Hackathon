@@ -65,6 +65,9 @@ export function createTour(ctx) {
     back.disabled = i === 0;
     next.replaceChildren(i === STEPS.length - 1 ? 'Finish' : 'Next', icon(i === STEPS.length - 1 ? 'check' : 'arrow-right'));
     box.hidden = false;
+    // Focus the title before Next is disabled, so keyboard focus (and the box's key handler)
+    // stays in the tour while the step runs.
+    title.focus();
     next.disabled = true;
     try {
       if (step.view) await ctx.router.go(step.view);
@@ -97,6 +100,11 @@ export function createTour(ctx) {
     index = -1;
     if (opener) opener.focus();
   }
+
+  // Keep the box on screen when the frame is resized (narrow screens, zoom).
+  window.addEventListener('resize', () => {
+    if (index >= 0 && !busy) place(highlighted);
+  });
 
   next.addEventListener('click', () => (index >= STEPS.length - 1 ? stop() : show(index + 1)));
   back.addEventListener('click', () => index > 0 && show(index - 1));

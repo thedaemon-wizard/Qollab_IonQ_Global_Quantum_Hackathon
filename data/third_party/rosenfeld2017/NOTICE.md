@@ -1,7 +1,10 @@
 # Munich event-ready Bell test data (Rosenfeld et al. 2017)
 
 The two files in this folder are copied without modification from the Zenodo record
-**doi:10.5281/zenodo.22936124** (published 2026-09-24), licensed under
+*"Experimental data and archived website material for "Event-Ready Bell Test Using Entangled
+Atoms Simultaneously Closing Detection and Locality Loopholes""* by W. Rosenfeld, D. Burchardt,
+R. Garthoff, K. Redeker, N. Ortegel, M. Rau and H. Weinfurter,
+**doi:10.5281/zenodo.22936124** (published 2026-09-24), Copyright (C) 2016 The Authors, licensed under
 **Creative Commons Attribution 4.0 International (CC BY 4.0)**,
 https://creativecommons.org/licenses/by/4.0/.
 

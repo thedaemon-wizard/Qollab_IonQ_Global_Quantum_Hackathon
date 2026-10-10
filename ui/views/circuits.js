@@ -109,7 +109,7 @@ export default {
       if (!data) return;
       const unit = data.units.find((u) => u.name === unitSel.value) || data.units[0];
       if (mode === 'text') {
-        drawBox.replaceChildren(h('pre', { tabindex: '0', 'aria-label': `Qiskit text drawing of ${unit.name}` }, unit.text),
+        drawBox.replaceChildren(h('pre', { tabindex: '0', role: 'region', 'aria-label': `Qiskit text drawing of ${unit.name}` }, unit.text),
           h('p', { class: 'muted small' }, 'Qiskit’s own drawing of the same circuit (qubits q_0, q_1, … in the order of the diagram labels).'));
         return;
       }
@@ -164,7 +164,7 @@ export default {
         y: { min: 0, max: 3, label: 'S', ticks: [0, 1, 2, 2.83] },
         hlines: [{ y: 2, label: 'local bound' }, { y: 2 * Math.SQRT2, label: '2√2' }],
         markers: [
-          ...rows.map((r, k) => ({ x: r.i, y: r.S, ylo: r.low, yhi: r.high, color: 'var(--c1)', shape: 'circle', legend: k === 0 ? 'measured S (95% interval)' : null })),
+          ...rows.map((r, k) => ({ x: r.i, y: r.S, ylo: r.low, yhi: r.high, color: 'var(--c1)', shape: 'circle', legend: k === 0 ? `measured S (${(100 * (1 - cfg.confidence.delta / 2)).toFixed(1)}% interval)` : null })),
           ...rows.map((r, k) => ({ x: r.i + 0.15, y: r.pred, color: 'var(--c2)', shape: 'square', hollow: true, legend: k === 0 ? 'prediction without device noise' : null })),
         ],
         caption: 'Device noise models (IBM, IonQ) lower S below the channel-only prediction; how much depends on the transpiled circuit.',

@@ -1,6 +1,6 @@
 // Repeater: entanglement swapping across n links (deferred Bell measurements + Pauli frame) and
 // one round of purification with post-selection. One job per run, like the Bell Lab.
-import { h } from '../core/dom.js';
+import { h, setDisabled } from '../core/dom.js';
 import { int, num, pct } from '../core/format.js';
 import { icon } from '../core/icons.js';
 import { viewFrame } from '../core/router.js';
@@ -68,6 +68,17 @@ export default {
   icon: 'route',
   create(ctx) {
     const cfg = ctx.config;
+    const level = `${(100 * (1 - cfg.confidence.delta / 2)).toFixed(1)}%`;
+    // Data table under each chart: predicted values and measured points with their intervals.
+    const pointsTable = (caption, valueLabel, ...groups) => ({
+      summary: 'Data table', caption,
+      columns: [
+        { key: 'what', label: 'Series', align: 'text' }, { key: 'hops', label: 'Links' },
+        { key: 'v', label: valueLabel, format: (v) => num(v) },
+        { key: 'lo', label: `${level} interval`, format: (v, r) => (v === undefined ? '—' : `[${num(r.lo)}, ${num(r.hi)}]`) },
+      ],
+      rows: groups.flat(),
+    });
     const th = cfg.thresholds;
     const { element, body } = viewFrame('repeater', 'Stretching the link: swapping and purification', 'route',
       'Split the distance into links joined by entanglement swapping, and see how the noise of every link adds up. Then try one round of purification, which trades pairs for quality.');
@@ -85,9 +96,9 @@ export default {
     const budgetBox = h('div');
     const chartS = lineChart({ title: 'S', x: { min: 1, max: 4, label: 'links' }, y: { min: 0, max: 2.9, label: 'S' } });
     const chartQ = lineChart({ title: 'Q', x: { min: 1, max: 4, label: 'links' }, y: { min: 0, max: 0.5, label: 'Q' } });
-    const chainStatus = h('p', { class: 'muted', role: 'status' }, 'Ready.');
+    const chainStatus = h('p', { class: 'muted', role: 'status', tabindex: '-1' }, 'Ready.');
     const chainResult = h('div', { class: 'stack' });
-    const purStatus = h('p', { class: 'muted', role: 'status' }, 'Ready.');
+    const purStatus = h('p', { class: 'muted', role: 'status', tabindex: '-1' }, 'Ready.');
     const purResult = h('div', { class: 'stack' });
     const purTheory = h('div');
     const chainRun = button('Run the chain', 'player-play', () => runChain(), { primary: true });
@@ -173,7 +184,10 @@ export default {
           y: { min: 0, max: 2.9, label: 'S', ticks: [0, 1, 2, 2.83], format: (v) => v.toFixed(2) },
           series: [{ name: 'predicted', color: 'var(--c1)', marker: 'circle', markEvery: 1, points: hc.map((p) => [p.hops, p.S]) }],
           hlines: [{ y: 2, label: 'local bound' }, { y: th.acin.S_werner, label: 'DI key (Werner)', color: 'var(--c3)' }],
-          markers: [...marks.map((m, i) => ({ x: m.hops + 0.06, y: m.S, ylo: m.S_low, yhi: m.S_high, color: 'var(--c2)', shape: 'square', legend: i === 0 ? 'this session (95% interval)' : null })), ...recMarksS],
+          markers: [...marks.map((m, i) => ({ x: m.hops + 0.06, y: m.S, ylo: m.S_low, yhi: m.S_high, color: 'var(--c2)', shape: 'square', legend: i === 0 ? `this session (${level} interval)` : null })), ...recMarksS],
+          table: pointsTable('S against the number of links', 'S', hc.map((p) => ({ what: 'predicted', hops: p.hops, v: p.S })),
+            marks.map((m) => ({ what: 'this session', hops: m.hops, v: m.S, lo: m.S_low, hi: m.S_high })),
+            rec.map((m) => ({ what: `recorded: ${m.label}`, hops: m.hops, v: m.S, lo: m.S_low, hi: m.S_high }))),
         });
         chartQ.update({
           title: 'Error rates against number of links', desc: 'Predicted Q_Z and Q_X for 1 to 4 links, with measured runs.', width: 480, height: 260,
@@ -185,6 +199,10 @@ export default {
           ],
           hlines: [{ y: th.bbm92.Q, label: 'BBM92 limit (Werner)', color: 'var(--c1)' }],
           markers: [...marks.map((m, i) => ({ x: m.hops + 0.06, y: m.Q_Z, ylo: m.Q_Z_low, yhi: m.Q_Z_high, color: 'var(--c2)', shape: 'square', hollow: true, legend: i === 0 ? 'this session Q_Z' : null })), ...recMarksQ],
+          table: pointsTable('Error rates against the number of links', 'QBER',
+            hc.flatMap((p) => [{ what: 'Q_Z predicted', hops: p.hops, v: p.Q_Z }, { what: 'Q_X predicted', hops: p.hops, v: p.Q_X }]),
+            marks.map((m) => ({ what: 'Q_Z this session', hops: m.hops, v: m.Q_Z, lo: m.Q_Z_low, hi: m.Q_Z_high })),
+            rec.map((m) => ({ what: `Q_Z recorded: ${m.label}`, hops: m.hops, v: m.Q_Z, lo: m.Q_Z_low, hi: m.Q_Z_high }))),
         });
         const pt = tp.purification;
         purTheory.replaceChildren(dataTable({
@@ -203,8 +221,8 @@ export default {
     async function runGeneric(req, statusEl, resultEl, title) {
       resultEl.replaceChildren();
       statusEl.textContent = `Submitting one job to ${ctx.backend.name}…`;
-      chainRun.disabled = true;
-      purRun.disabled = true;
+      setDisabled(chainRun, true, statusEl);
+      setDisabled(purRun, true, statusEl);
       try {
         const rep = await submitRun(ctx, req);
         statusEl.textContent = `Done in ${rep.seconds} s on ${rep.backend.name} (${int(rep.shots)} shots per setting).`;
@@ -249,8 +267,8 @@ export default {
     let sizeOk = { chain: false, purify: false };
     function updateButtons() {
       const blocker = runBlocker(ctx);
-      chainRun.disabled = Boolean(blocker) || !sizeOk.chain;
-      purRun.disabled = Boolean(blocker) || !sizeOk.purify;
+      setDisabled(chainRun, Boolean(blocker) || !sizeOk.chain, chainStatus);
+      setDisabled(purRun, Boolean(blocker) || !sizeOk.purify, purStatus);
       chainRun.title = blocker || (sizeOk.chain ? '' : 'Too large for this backend profile');
       purRun.title = blocker || (sizeOk.purify ? '' : 'Too large for this backend profile');
       if (blocker) {

@@ -17,9 +17,11 @@ ROOT = Path(__file__).resolve().parent.parent
 INTRO = """# Bell-Test Lab: walkthrough
 
 This notebook calls the same Python package that runs inside the Qollab project (`bellkit`).
-Every number below is computed when the notebook is executed; the app shows the same ones.
+Every number below is computed when the notebook is executed. For the same request and seed, the
+app gives the same numbers on Qollab's built-in simulator and in the local harness.
 
-Simulated counts and asymptotic formulas only: no quantum hardware and no security proof."""
+Run it from the repository root (the data paths are relative to it, as on Qollab). Simulated
+counts and asymptotic formulas only: no quantum hardware and no security proof."""
 
 SETUP = """import json
 import sys
@@ -38,18 +40,28 @@ RUN = """request = {'module': 'bell', 'channel': {'kind': 'depolarizing', 'stren
 rep = json.loads(app.run_json(BasicSimulator(), json.dumps(request)))
 a = rep['analysis']
 print(f"backend {rep['backend']['name']}, {rep['shots']} shots per setting, layout {rep['layout']}")
-print(f"S   = {a['S']['point']:.3f}   95% interval [{a['S']['low']:.3f}, {a['S']['high']:.3f}]")
+level = 100 * (1 - a["delta"] / 2)  # each interval at 97.5 %, so each claim holds at 95 %
+print(f"S   = {a['S']['point']:.3f}   {level:.1f}% interval [{a['S']['low']:.3f}, {a['S']['high']:.3f}]")
 print(f"exact prediction S = {rep['prediction']['S_fixed']:.3f}")
 print(f"Q_Z = {a['Q_Z']['point']:.2%}   Q_X = {a['Q_X']['point']:.2%}")"""
 
-LADDER = """def show(v):
-    return f"{v:.3f}" if isinstance(v, float) else str(v)
+LADDER = """RUNGS = [
+    ("Bell violation", "bell_violation"),
+    ("Entanglement witness (fidelity >=)", "witness_fidelity_low"),
+    ("BBM92 key rate (bit/round)", "rate_bbm92"),
+    ("Self-test extractability (Kaniewski)", "kaniewski_extractability"),
+    ("DI randomness H_min (Pironio)", "min_entropy_pironio"),
+    ("DI key rate (Acin 2007)", "rate_di_acin"),
+]
 
-keys = ['bell_violation', 'rate_bbm92', 'kaniewski_extractability',
-        'min_entropy_pironio', 'rate_di_acin']
-for k in keys:
-    p, c = a['ladder_point'][k], a['ladder_conservative'][k]
-    print(f"{k:26s} point {show(p):>6}   conservative {show(c):>6}")"""
+
+def show(v):
+    return f"{v:.3f}" if isinstance(v, float) else ("none" if v is None else str(v))
+
+
+for label, key in RUNGS:
+    p, c = show(a["ladder_point"][key]), show(a["ladder_conservative"][key])
+    print(f"{label:38s} point {p:>6}   conservative {c:>6}")"""
 
 CIRCUIT = """exp = Experiment('bell', PauliChannel.from_kind('depolarizing', 0.05))
 units = make_units(exp, settings, None)
@@ -66,19 +78,45 @@ for name, v in th.items():
 
 SWEEP = """import matplotlib.pyplot as plt
 
-qs = [i / 100 for i in range(41)]
-fig, axes = plt.subplots(1, 2, figsize=(10, 3.4))
-for kind, ls in (('depolarizing', '-'), ('dephasing', '--'), ('bit_flip', ':'), ('y_flip', '-.')):
+qs = [i / 200 for i in range(81)]
+kinds = (("depolarizing", "-"), ("dephasing", "--"), ("bit_flip", ":"), ("y_flip", "-."))
+fig, axes = plt.subplots(1, 2, figsize=(10, 3.6))
+for kind, ls in kinds:
     preds = [models.predict(PauliChannel.from_kind(kind, q), settings) for q in qs]
-    axes[0].plot(qs, [p['S_fixed'] for p in preds], ls, label=kind)
-    rates = [max(0.0, bounds.di_rate_acin(p['S_fixed'], p['Q_Z']) or 0.0) for p in preds]
+    axes[0].plot(qs, [p["S_fixed"] for p in preds], ls, label=kind)
+    rates = [max(0.0, bounds.di_rate_acin(p["S_fixed"], p["Q_Z"]) or 0.0) for p in preds]
     axes[1].plot(qs, rates, ls, label=kind)
-axes[0].axhline(2, color='grey', lw=1)
-axes[0].set(xlabel='noise strength', ylabel='CHSH value S (exact model)')
-axes[1].set(xlabel='noise strength', ylabel='DI key rate (Acín et al. 2007)')
+axes[0].axhline(2, color="grey", lw=1, label="local bound S = 2")
+axes[0].set(xlabel="noise strength", ylabel="CHSH value S", title="S (exact model)")
+axes[1].set(xlabel="noise strength", ylabel="bits per round", title="DI key rate (Acin et al. 2007)")
+axes[0].legend(fontsize=8)
 axes[1].legend(fontsize=8)
+fig.suptitle("Where each named channel loses the Bell violation and the DI key")
 plt.tight_layout()
 plt.show()"""
+
+CROSSINGS = """def crossing(kind, f):
+    lo, hi = 0.0, 1.0
+    if f(PauliChannel.from_kind(kind, hi)) > 0:
+        return None
+    for _ in range(60):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if f(PauliChannel.from_kind(kind, mid)) > 0 else (lo, mid)
+    return lo
+
+
+def margin_s(ch):
+    return models.predict(ch, settings)["S_fixed"] - 2
+
+
+def margin_di(ch):
+    p = models.predict(ch, settings)
+    return bounds.di_rate_acin(p["S_fixed"], p["Q_Z"]) or -1.0
+
+
+print(f"{'channel':14s} {'S = 2 at':>10s} {'DI key = 0 at':>14s}")
+for kind, _ in kinds:
+    print(f"{kind:14s} {crossing(kind, margin_s):10.4f} {crossing(kind, margin_di):14.4f}")"""
 
 CHAIN = """channel = PauliChannel.from_kind('depolarizing', 0.05)
 for n in range(1, 5):
@@ -116,6 +154,11 @@ cells = [
     code(THRESHOLDS),
     md("## 5. Noise sweep\nS and the device-independent key rate for each named channel (exact model)."),
     code(SWEEP),
+    md(
+        "The same information as text: the noise strength at which each channel reaches S = 2 and "
+        "at which the DI key rate reaches zero."
+    ),
+    code(CROSSINGS),
     md("## 6. Entanglement swapping\nS against the number of links for 5% depolarizing noise per link."),
     code(CHAIN),
     md(
@@ -125,15 +168,20 @@ cells = [
     ),
     code(MUNICH),
     md(
-        "## 8. The packed layout used for IonQ\nIonQ accepts one circuit per job, so the settings share "
-        "one circuit, with a canary register that checks the bit order."
+        "## 8. The packed layout used for IonQ\n"
+        "On Qollab, the IonQ simulator accepts one circuit per job, so the settings share one circuit, "
+        "with a canary register that checks the bit order."
     ),
     code(PACKED),
 ]
+for i, cell in enumerate(cells):
+    cell["id"] = f"cell-{i:02d}"  # stable ids, so a rebuild only changes what really changed
 nb = nbformat.v4.new_notebook(cells=cells)
 nb.metadata["kernelspec"] = {"name": "python3", "display_name": "Python 3", "language": "python"}
 client = NotebookClient(nb, timeout=600, kernel_name="python3", resources={"metadata": {"path": str(ROOT)}})
 client.execute()
+for cell in nb.cells:
+    cell.get("metadata", {}).pop("execution", None)  # timestamps would change on every rebuild
 out = ROOT / "notebooks" / "walkthrough.ipynb"
 nbformat.write(nb, out)
 # Same code style as the rest of the repository (outputs are kept).

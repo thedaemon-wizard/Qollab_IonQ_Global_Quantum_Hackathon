@@ -18,7 +18,7 @@ export default {
     const cfg = ctx.config;
     const th = cfg.thresholds;
     const { element, body } = viewFrame('certificates', 'What the counts certify', 'certificate',
-      'Each certificate is a formula of S and the error rates. The curves show where each one switches on; the markers show your latest Bell Lab run, at its point estimate (filled) and at the conservative end of its confidence interval (hollow).');
+      'Each certificate is a formula of S and the error rates (QBER: the share of rounds where Alice’s and Bob’s bits differ in the same basis). The curves show where each one switches on; the markers show your latest Bell Lab run, at its point estimate (filled) and at the conservative end of its confidence interval (hollow).');
 
     const rateChart = lineChart({ title: 'Key rate', x: { min: 0, max: 0.16, label: 'QBER Q' }, y: { min: 0, max: 1, label: 'bits per round' } });
     const entropyChart = lineChart({ title: 'Entropy', x: { min: 2, max: 2.84, label: 'S' }, y: { min: 0, max: 1, label: 'value' } });

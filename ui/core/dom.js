@@ -75,3 +75,33 @@ export function nextPaint() {
 export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+/**
+ * Enable or disable a control. A control that has keyboard focus when it is disabled would
+ * drop focus to <body>, so focus moves to `fallback` first (a status line with tabindex="-1").
+ */
+export function setDisabled(el, disabled, fallback) {
+  if (disabled && fallback && document.activeElement === el) fallback.focus();
+  el.disabled = disabled;
+}
+
+/**
+ * Make a box that may scroll sideways reachable by keyboard, but only while it actually
+ * overflows (Safari does not focus scrollable boxes by itself). `label` names the region.
+ */
+export function scrollableWhenNeeded(el, label) {
+  const update = () => {
+    if (el.scrollWidth > el.clientWidth + 1) {
+      el.setAttribute('tabindex', '0');
+      el.setAttribute('role', 'region');
+      el.setAttribute('aria-label', label);
+    } else {
+      el.removeAttribute('tabindex');
+      el.removeAttribute('role');
+      el.removeAttribute('aria-label');
+    }
+  };
+  if (typeof ResizeObserver === 'function') new ResizeObserver(update).observe(el);
+  requestAnimationFrame(update);
+  return el;
+}

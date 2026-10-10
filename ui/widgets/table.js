@@ -1,5 +1,5 @@
 // Accessible data table. columns: [{key, label, align?: 'text', format?: fn}]
-import { h } from '../core/dom.js';
+import { h, scrollableWhenNeeded } from '../core/dom.js';
 
 export function dataTable({ caption, columns, rows, rowHeader = true }) {
   const head = h('tr', null, columns.map((c) => h('th', { scope: 'col', class: c.align === 'text' ? 'text' : null }, c.label)));
@@ -10,8 +10,9 @@ export function dataTable({ caption, columns, rows, rowHeader = true }) {
       return i === 0 && rowHeader ? h('th', { ...attrs, scope: 'row' }, value) : h('td', attrs, value);
     })),
   );
-  return h('div', { class: 'table-wrap' },
+  const wrap = h('div', { class: 'table-wrap' },
     h('table', null, caption ? h('caption', null, caption) : null, h('thead', null, head), h('tbody', null, body)));
+  return scrollableWhenNeeded(wrap, caption ? `Table: ${caption.slice(0, 80)}` : 'Table');
 }
 
 /** A table hidden in <details>, used under every chart so the data is readable as text. */

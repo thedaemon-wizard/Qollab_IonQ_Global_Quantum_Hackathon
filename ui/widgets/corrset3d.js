@@ -107,16 +107,34 @@ export async function createCorrSet3d(container, { colors, labels }) {
     material('werner', () => new THREE.LineDashedMaterial({ color: 0xe69f00, dashSize: 0.06, gapSize: 0.04 }))));
   groups.werner.children[0].computeLineDistances();
 
+  function pointObject(p) {
+    const mat = new THREE.MeshBasicMaterial({ color: p.color, depthTest: false, wireframe: p.hollow });
+    const mesh = (geo, rz = 0) => {
+      const m = new THREE.Mesh(geo, mat);
+      m.rotation.z = rz;
+      m.renderOrder = 10;
+      return m;
+    };
+    if (p.shape === 'cross') {
+      const g = new THREE.Group();
+      g.add(mesh(new THREE.BoxGeometry(0.17, 0.035, 0.035), Math.PI / 4), mesh(new THREE.BoxGeometry(0.17, 0.035, 0.035), -Math.PI / 4));
+      return g;
+    }
+    if (p.shape === 'square') return mesh(new THREE.BoxGeometry(0.1, 0.1, 0.1));
+    if (p.shape === 'triangle') return mesh(new THREE.ConeGeometry(0.07, 0.13, 3));
+    if (p.shape === 'diamond') return mesh(new THREE.OctahedronGeometry(0.08));
+    return mesh(p.hollow ? new THREE.SphereGeometry(0.065, 10, 7) : new THREE.SphereGeometry(0.06, 20, 14));
+  }
+
   function setPoints(points) {
     disposeGroup(groups.points);
     for (const p of points) {
       const [e00, e11, m] = p.sym;
-      // Drawn on top of the translucent sets so that points inside them stay visible;
-      // names are in the legend next to the view.
-      const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.06, 20, 14), new THREE.MeshBasicMaterial({ color: p.color, depthTest: false }));
-      mesh.renderOrder = 10;
-      mesh.position.set(e00, m, e11);
-      groups.points.add(mesh);
+      // Drawn on top of the translucent sets so that points inside them stay visible; each point
+      // has the same shape as its 2D marker, and names are in the legend next to the view.
+      const obj = pointObject(p);
+      obj.position.set(e00, m, e11);
+      groups.points.add(obj);
     }
     render();
   }

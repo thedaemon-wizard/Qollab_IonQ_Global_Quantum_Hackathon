@@ -48,3 +48,63 @@ HIGH findings survived. Three reported findings were refuted and are not listed.
 | 39 | LOW | tests | Assertions that cannot fail, and a path-dependent exclusion check | `tests/test_app.py`:35 | Fixed: tightened assertions (membership, conservative fields) and a path-independent exclusion check. |
 
 Line numbers refer to the files before the fixes.
+
+## Round 2 (2026-10-10, afternoon)
+
+Three independent reviews of the state after the morning's work (correctness of numbers and
+claims; the hackathon rules and disclosures; accessibility and documentation), each finding then
+checked against the code, the data or the original source before it was fixed. Prefixes: C =
+correctness, R = rules, A = accessibility, D = documentation.
+
+| # | Severity | Finding | What was done |
+|---|---|---|---|
+| R1 | HIGH | Demo video not linked yet | Open until submission: the README and write-up get the public link before the final version. |
+| R2 | HIGH | Repository private; the write-up links a tag that does not exist yet | Open until submission: tag `v1.0-submission`, make the repository public, regenerate the write-up with images, check every link signed out. |
+| A1 | HIGH | Tour box cut off at 400 % zoom (Reflow) | Fixed: box limited to the viewport and scrolls inside; checked at 320 × 256 px. |
+| A2 | HIGH | Input borders 1.5:1 (non-text contrast) | Fixed: separate control-border colour, 3.4–4.0:1. |
+| R3 | MEDIUM | Pre-window throwaway test project on Qollab not disclosed | Fixed: listed in "Pre-window material" (date, what it established, nothing reused). |
+| R4 | MEDIUM | In-window commit times could look like pre-window coding | Fixed: window start in JST and UTC, GitHub event time of the pre-window push, commits described as batched snapshots, D9 dated "during the window". |
+| R5 | MEDIUM | No accessibility statement in the write-up | Fixed: "Accessibility" section with the measured results. |
+| R6 | MEDIUM | CC BY notice lacked the Zenodo record title and its copyright line | Fixed in `NOTICE.md` and `THIRD_PARTY_NOTICES.md` (checked against the Zenodo record). |
+| R7 | MEDIUM | Recorded IonQ runs predate the final code | Checked: circuits and decoding unchanged since the captures; noted in Results; a new IonQ Forte Enterprise 1 run was made with the final upload. |
+| C1 | MEDIUM | S interval called "95 %" in the notebook and three UI labels, "97.5 %" in the README | Fixed: labels built from δ (97.5 % per interval, 95 % per claim). |
+| C2 | MEDIUM | "Canary fraction of 1" wrong for the IBM Fez runs (0.9725) | Fixed. |
+| C3 | MEDIUM | "IonQ accepts one circuit per job" broader than the evidence | Fixed: "on Qollab, the IonQ simulator…". |
+| C4 | MEDIUM | Meiers 2026 presented as an S–Q point | Fixed: described as S only, preprint, no DI claim. |
+| C5 | MEDIUM | decisions.md header did not mention D3 and D10 | Fixed. |
+| A3 | MEDIUM | Correlation-space points kept dark-theme colours in light mode | Fixed: theme colour tokens, resolved again on a theme change. |
+| A4 | MEDIUM | 3D points told apart by colour only | Fixed: same marker shape in 3D, the 2D slice and the legend. |
+| A5 | MEDIUM | Focus dropped to the page when a focused button became disabled | Fixed: focus moves to the status line or the tour title first. |
+| A6 | MEDIUM | Tour box not repositioned on resize | Fixed. |
+| A7 | MEDIUM | Overflowing scroll boxes not keyboard-reachable in Safari | Fixed: focusable region while overflowing. |
+| D1 | MEDIUM | Jargon used before it is defined | Fixed: glossary in the README and in the Method view; QBER spelled out in the UI. |
+| D2 | MEDIUM | Write-up links point to a tag that does not exist | Same as R2. |
+| D3 | MEDIUM | LaTeX in the write-up may not render on Qollab | Checked on Qollab's preview: 21 formulas, no errors. |
+| C6 | LOW | Two dates for the throwaway test project | Fixed: reused once in the window for the WebGPU check (D10). |
+| C7 | LOW | No capture for the built-in simulator on Qollab | Fixed: the built-in run on Qollab gives the same seed and counts as the local reference row (S = 2.708), now stated. |
+| C8 | LOW | Write-up script edge cases (CRLF, scheme links, missing marker) | Fixed: CRLF normalised, links with a scheme, `//` or `#` left alone, error when the marker is missing. |
+| C9 | LOW | Every notebook rebuild changes cell ids and timestamps | Fixed: stable ids, execution timestamps removed. |
+| C10 | LOW | TLM condition did not say which sign vectors | Fixed in the README and the Method view. |
+| C11 | LOW | "More so for the swap" no longer true across backends | Fixed: compared within one backend. |
+| C12 | LOW | Generated write-ups out of date | Regenerated before pasting. |
+| C13 | LOW | Notebook intro overstated what the app shows | Fixed. |
+| R8 | LOW | License section did not mention CC BY data | Fixed. |
+| R9 | LOW | Pre-window table missed in-window edits to the requirements files | Fixed. |
+| R10 | LOW | The earlier public demo is not linked | Open: the author's decision. |
+| R11 | LOW | "Use of AI" may not cover the AI-assisted review | Open: the author's decision. |
+| R12 | LOW | The "beyond tutorial" category is not named | Fixed: named in "Prior work and what is new here". |
+| R13 | LOW | Uploaded README links break in Qollab's file view | Not changed: the Project Card uses the converted write-up with absolute links. |
+| R14 | LOW | No "What didn't work" section | Fixed: added. |
+| R15 | LOW | Tag time is self-asserted | Fixed: GitHub's event time of the first push cited. |
+| A8 | LOW | `<pre>` with a name but no role | Fixed: `role="region"`. |
+| A9 | LOW | Live regions unreliable; current stage not exposed | Partly fixed: `aria-current="step"` on the active stage; the busy indicator is unchanged. |
+| A10 | LOW | Two bar pairs and two gauge zones differ by colour only | Not changed: the bars are labelled by position and listed in the counts table; the gauge zones are labelled by their tick values. |
+| A11 | LOW | Header 8 px too wide at 320 px | Fixed. |
+| A12 | LOW | Repeater charts without a data table | Fixed. |
+| D4 | LOW | Notebook figure without a text alternative | Fixed: titles, legends on both panels, and a printed table of the crossing points. |
+| D5 | LOW | Notebook: run location, raw rung names, five of six rungs | Fixed. |
+| D6 | LOW | decisions.md intro out of date | Same as C5. |
+| D7 | LOW | Architecture diagram shown twice; weak alt text | Alt text improved; the Mermaid source stays for GitHub (Qollab's write-up drops it). |
+
+After the fixes: 254 tests pass; axe-core 4.14.0 reports 0 violations on all 8 views in both
+schemes, and Lighthouse 13.5.0 scores accessibility 100 (`results/a11y/`).

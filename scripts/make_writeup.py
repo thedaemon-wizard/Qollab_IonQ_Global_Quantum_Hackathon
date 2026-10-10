@@ -17,26 +17,30 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 REPO = "thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon"
 LIMIT = 65_000
+# Relative targets only: anything with a scheme (https:, mailto:), protocol-relative (//) or an
+# in-page anchor (#) is left alone.
+LOCAL_IMAGE = r"!\[([^\]]*)\]\((?![a-z][a-z0-9+.-]*:|//)([^)]+)\)"
+LOCAL_LINK = r"(?<!!)\[([^\]]+)\]\((?![a-z][a-z0-9+.-]*:|//|#)([^)]+)\)"
 
 
 def convert(text: str, ref: str, images: bool = True) -> str:
     raw = f"https://raw.githubusercontent.com/{REPO}/{ref}/"
     blob = f"https://github.com/{REPO}/blob/{ref}/"
+    text = text.replace("\r\n", "\n")
     text = re.sub(r"```mermaid\n.*?```\n\n?", "", text, flags=re.S)
     if not images:  # while the repository is private the image URLs would not load
         text = re.sub(r"!\[[^\]]*\]\([^)]+\)\n\n?", "", text)
+        marker = f"> https://github.com/{REPO}\n"
+        if marker not in text:
+            raise ValueError("repository line not found; cannot add the interim note")
         text = text.replace(
-            f"> https://github.com/{REPO}\n",
-            f"> https://github.com/{REPO}\n>\n> *Interim version: the repository and its links go public with"
+            marker,
+            marker + ">\n> *Interim version: the repository and its links go public with"
             " the final submission; figures and screenshots appear then.*\n",
             1,
         )
-    text = re.sub(
-        r"!\[([^\]]*)\]\((?!https?://)([^)]+)\)", lambda m: f"![{m.group(1)}]({raw}{m.group(2)})", text
-    )
-    text = re.sub(
-        r"(?<!!)\[([^\]]+)\]\((?!https?://|#)([^)]+)\)", lambda m: f"[{m.group(1)}]({blob}{m.group(2)})", text
-    )
+    text = re.sub(LOCAL_IMAGE, lambda m: f"![{m.group(1)}]({raw}{m.group(2)})", text)
+    text = re.sub(LOCAL_LINK, lambda m: f"[{m.group(1)}]({blob}{m.group(2)})", text)
     return text
 
 

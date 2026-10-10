@@ -1,7 +1,7 @@
 // Circuit diagram drawn from the gate list that Python sends (bellkit.app.circuits_json).
 // Teaching sections (source, eavesdropper, link noise, Bell measurement, purification, basis,
 // measurement) are shaded and labelled; a barrier is implied between sections.
-import { h, s, uid } from '../core/dom.js';
+import { h, s, scrollableWhenNeeded, uid } from '../core/dom.js';
 
 const SECTION = {
   source: { label: 'pair source', fill: 'var(--sec-source)' },
@@ -114,5 +114,6 @@ export function circuitSvg(unit, labels) {
 }
 
 export function circuitFigure(unit, labels, caption) {
-  return h('figure', { class: 'circuit' }, circuitSvg(unit, labels), caption ? h('figcaption', null, caption) : null);
+  const fig = h('figure', { class: 'circuit' }, circuitSvg(unit, labels), caption ? h('figcaption', null, caption) : null);
+  return scrollableWhenNeeded(fig, `Circuit diagram of ${unit.name}`);
 }

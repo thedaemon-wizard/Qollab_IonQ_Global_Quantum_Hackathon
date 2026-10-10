@@ -1,17 +1,28 @@
 // Correlation space: where measured correlators sit relative to the local polytope, the quantum
 // set and the no-signalling cube. 3D (three.js) plus an exact 2D slice that carries the same
 // information for keyboard and screen-reader users, and when WebGL 2 is not available.
-import { h } from '../core/dom.js';
+import { h, s as svgEl } from '../core/dom.js';
 import { num } from '../core/format.js';
 import { icon } from '../core/icons.js';
 import { viewFrame } from '../core/router.js';
 import { cssVar } from '../core/theme.js';
-import { lineChart } from '../widgets/chart.js';
+import { lineChart, markerShape } from '../widgets/chart.js';
 import { button, checkbox, errorNote, note } from '../widgets/controls.js';
 import { createCorrSet3d, webgl2Available } from '../widgets/corrset3d.js';
 import { dataTable } from '../widgets/table.js';
 
 const S2 = Math.SQRT1_2;
+
+// One colour token and one marker shape per point, shared by the 3D view, the 2D slice and the
+// legend, so points differ by shape as well as colour (and follow the light/dark theme).
+function pointStyle(name) {
+  if (name === 'Tsirelson') return { token: '--c1', shape: 'circle' };
+  if (name === 'PR box') return { token: '--c6', shape: 'square' };
+  if (name === 'deterministic') return { token: '--muted', shape: 'triangle' };
+  if (name === 'your run') return { token: '--c3', shape: 'diamond' };
+  if (name.endsWith('04-15')) return { token: '--c2', shape: 'cross' };
+  return { token: '--c4', shape: 'circle', hollow: true };
+}
 
 export default {
   id: 'space',
@@ -41,30 +52,42 @@ export default {
 
     let view3d = null;
     let geometry = null;
+    let lastPts = [];
+
+    // three.js needs concrete colours: resolve the tokens now (and again on a theme change).
+    function drawPoints3d() {
+      if (!view3d || !geometry) return;
+      view3d.setPoints(lastPts.map((p) => ({
+        name: p.name, color: cssVar(ctx.root, p.token), shape: p.shape, hollow: Boolean(p.hollow), sym: geometry.points[p.name].symmetric,
+      })));
+    }
 
     function points() {
       const pts = [
-        { name: 'Tsirelson', e: [S2, S2, S2, -S2], color: '#56b4e9' },
-        { name: 'PR box', e: [1, 1, 1, -1], color: '#ff8080' },
-        { name: 'deterministic', e: [1, 1, 1, 1], color: '#aab4c8' },
+        { name: 'Tsirelson', e: [S2, S2, S2, -S2] },
+        { name: 'PR box', e: [1, 1, 1, -1] },
+        { name: 'deterministic', e: [1, 1, 1, 1] },
       ];
       const run = ctx.store.get().last.bell;
       if (run) {
         const st = run.analysis.settings;
-        pts.push({ name: 'your run', e: [st.c00.E, st.c01.E, st.c10.E, st.c11.E], color: '#2fc79a' });
+        pts.push({ name: 'your run', e: [st.c00.E, st.c01.E, st.c10.E, st.c11.E] });
       }
       for (const r of ctx.rosenfeldRuns || []) {
         const E = r.pooled.E;
-        pts.push({ name: `Munich ${r.run}`, e: [E.E00, E.E01, E.E10, E.E11], color: r.run.endsWith('04-15') ? '#e69f00' : '#cc79a7' });
+        pts.push({ name: `Munich ${r.run}`, e: [E.E00, E.E01, E.E10, E.E11] });
       }
-      return pts;
+      return pts.map((p) => {
+        const st = pointStyle(p.name);
+        return { ...p, ...st, color: `var(${st.token})` };
+      });
     }
 
     async function refresh() {
       const pts = points();
       geometry = await ctx.api.geometry(Object.fromEntries(pts.map((p) => [p.name, p.e])));
       tableBox.replaceChildren(dataTable({
-        caption: 'S = E00 + E01 + E10 − E11; max over the eight CHSH forms; TLM uses arcsin of each correlator (quantum if ≤ π)',
+        caption: 'S = E00 + E01 + E10 − E11; max over the eight CHSH forms; the TLM (Tsirelson–Landau–Masanes) value uses arcsin of each correlator (quantum if ≤ π)',
         columns: [
           { key: 'name', label: 'Point' },
           { key: 'e', label: 'E00, E01, E10, E11', align: 'text', format: (v) => v.map((x) => num(x, 3)).join(', ') },
@@ -78,10 +101,13 @@ export default {
       }));
       drawSlice(pts);
       legend3d.replaceChildren(...pts.map((p) => h('span', null,
-        h('span', { style: { display: 'inline-block', width: '11px', height: '11px', borderRadius: '50%', background: p.color } }), p.name)));
+        svgEl('svg', { width: 14, height: 14, viewBox: '0 0 14 14', 'aria-hidden': 'true' },
+          markerShape(p.shape, 7, 7, 4.5, `fill:${p.hollow ? 'var(--surface)' : p.color};stroke:${p.color};stroke-width:1.6`)),
+        p.name)));
+      lastPts = pts;
       if (view3d) {
         view3d.setQuantum(geometry.mesh);
-        view3d.setPoints(pts.map((p) => ({ name: p.name, color: p.color, sym: geometry.points[p.name].symmetric })));
+        drawPoints3d();
       }
     }
 
@@ -102,7 +128,7 @@ export default {
         markers: pts.map((p, i) => {
           const x = (p.e[0] - p.e[3]) / 2;
           const y = (p.e[1] + p.e[2]) / 2;
-          return { x, y, color: p.color, shape: ['circle', 'square', 'triangle', 'diamond', 'cross', 'circle'][i % 6], legend: p.name, hollow: i === 5, size: 5.5 };
+          return { x, y, color: p.color, shape: p.shape, legend: p.name, hollow: Boolean(p.hollow), size: 5.5 };
         }),
         caption: 'Exact for points with E11 = −E00 (the lab’s Werner runs); other points are shown at their projection, so use the table for their membership.',
       });
@@ -150,8 +176,9 @@ export default {
           checkbox({ label: 'Werner line', checked: true, onChange: (on) => view3d.show('werner', on) }).element,
           spin.element,
         );
-        ctx.theme.onChange(() => requestAnimationFrame(() => view3d.recolor()));
-        if (window.matchMedia) window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => view3d.recolor());
+        const recolor = () => { view3d.recolor(); drawPoints3d(); };
+        ctx.theme.onChange(() => requestAnimationFrame(recolor));
+        if (window.matchMedia) window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', recolor);
       } catch (err) {
         stage.replaceWith(errorNote(err));
         view3d = null;

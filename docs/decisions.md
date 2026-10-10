@@ -1,7 +1,7 @@
 # Decisions
 
-D1–D7 were recorded on 2026-10-09, before the build window; D4 was updated and D8–D9 added
-during the window (2026-10-10).
+D1–D7 were recorded on 2026-10-09, before the build window; D3 and D4 were updated and D8–D10
+added during the window (2026-10-10).
 
 Each entry states the decision, the evidence it rests on (checked on the date given), and what
 would make us revisit it. Sources are in [references.md](references.md) unless linked here.
@@ -101,7 +101,8 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
   shows which profile was chosen.
 - **Evidence.** Qollab names the IBM noise-model backend `fake_fez` and so on, while a local
   `AerSimulator.from_backend(FakeFez)` is named `aer_simulator_from(fake_fez)`; with the ideal
-  profile listed first the latter matched "aer_simulator" (found by a test on 2026-10-10).
+  profile listed first the latter matched "aer_simulator" (found by a test during the window,
+  2026-10-10).
   Qollab's Braket local simulator is named `default`, so the class name (`BraketLocalBackend`)
   is matched as well. On Qollab a 25-qubit packed circuit took over 50 s on this state-vector
   simulator, so Braket uses one circuit per setting; its results do not keep circuit names,
@@ -112,7 +113,8 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
 - **Decision.** The correlation-space view keeps three.js's `WebGLRenderer`. No WebGPU code path.
 - **Evidence (2026-10-10, Chrome 152 on Linux with WebGPU switched on).** The Qollab page itself
   exposes `navigator.gpu` and a hardware adapter, but inside the project frame (sandboxed,
-  `allow-scripts` only) a probe found `navigator.gpu` undefined, so no adapter can be requested.
+  `allow-scripts` only) a probe found `navigator.gpu` undefined, so no adapter can be requested
+  (run in the pre-window throwaway test project, reused for this check on 2026-10-10).
   Qollab's import map provides `three` and `three/addons/` but not `three/webgpu`. WebGL 2 in the
   same frame runs on the GPU (ANGLE over Vulkan), and the scene is small (a few thousand
   triangles), so WebGPU would add a second code path without a visible gain.
