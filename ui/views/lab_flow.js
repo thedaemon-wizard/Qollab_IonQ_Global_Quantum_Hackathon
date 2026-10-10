@@ -61,7 +61,7 @@ export function labFlow(stageTitles) {
     };
     const a = rep ? rep.analysis : null;
     const evePhi = rep ? rep.experiment.eve_phi_deg : opts.evePhi;
-    const channel = rep ? rep.request?.channel : opts.channel;
+    const channel = rep ? (rep.request || {}).channel : opts.channel;
     const backend = rep ? rep.backend.name : submittingTo || opts.backend;
     const node = (id, k, x, y, w, hgt, ic, title, sub, tone) => ({ id, x, y, w, h: hgt, icon: ic, title, sub, ...look(k, tone) });
 
@@ -160,7 +160,7 @@ export function labFlow(stageTitles) {
     /** Animate the highlighted stage only while the replay is playing (not when paused or done). */
     setPlaying(on) {
       playing = on;
-      wrap.firstElementChild?.setAttribute('data-playing', String(on));
+      if (wrap.firstElementChild) wrap.firstElementChild.setAttribute('data-playing', String(on));
     },
   };
 }
