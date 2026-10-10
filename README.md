@@ -9,7 +9,7 @@ self-test. Then add noise or an eavesdropper, stretch the link with entanglement
 try purification, and check the formulas against **open data from a loophole-free Bell test**
 and published device-independent QKD experiments.
 
-> Demo video (2:59, YouTube, synthetic narration, English captions): https://youtu.be/iVdBbj3bGOc · Repository:
+> Demo video (2:59, YouTube, synthetic narration, English captions): https://youtu.be/6eT2Bk_R-54 · Repository:
 > https://github.com/thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon
 
 ![The Bell Lab after one run: the protocol diagram with each stage's numbers, and the list of stages](docs/img/screen_lab.png)
@@ -185,6 +185,11 @@ captured run passes: canary fraction 0.9725 on IBM Fez and 1 elsewhere, threshol
 | IonQ Aria 1 noise model | 2-link swap, no added noise | 200 | 2.520 [2.101, 2.939] | 2.828 | 2.00 % | 0.339 → none |
 | IBM Fez noise model | 2-link swap, 5 % depolarizing | 2,000 | 2.264 [2.132, 2.396] | 2.553 | 9.25 % | none |
 | IBM Fez noise model | Bell, Eve at $`\varphi = 180^\circ`$ | 2,000 | 1.322 [1.190, 1.454] | 1.414 | 2.70 % | none ($`Q_X = 51.1\,\%`$) |
+
+The demo video shows one more run, on the IonQ Aria 1 noise model (2026-10-10 23:40 UTC, Bell, 5 %
+depolarizing, 200 shots, 22.8 s): $`S = 2.580`$ [2.161, 2.999], $`Q_Z = 3.00\,\%`$, canary 100 %. Its counts
+were not exported, so it is not in the table; the values are as shown on screen
+(`results/qollab/video_run_20261010.json`).
 
 What the table shows:
 
