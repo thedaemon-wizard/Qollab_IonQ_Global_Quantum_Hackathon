@@ -110,7 +110,7 @@ export async function createCorrSet3d(container, { colors, labels }) {
   function pointObject(p) {
     // transparent (at full opacity) puts the points in the same render pass as the translucent
     // sets, and renderOrder 10 draws them last, so their colour is not tinted by the surfaces.
-    const mat = new THREE.MeshBasicMaterial({ color: p.color, depthTest: false, wireframe: p.hollow, transparent: true, opacity: 1 });
+    const mat = new THREE.MeshBasicMaterial({ color: p.color, depthTest: false, transparent: true, opacity: 1 });
     const mesh = (geo, rz = 0) => {
       const m = new THREE.Mesh(geo, mat);
       m.rotation.z = rz;
@@ -125,7 +125,17 @@ export async function createCorrSet3d(container, { colors, labels }) {
     if (p.shape === 'square') return mesh(new THREE.BoxGeometry(0.1, 0.1, 0.1));
     if (p.shape === 'triangle') return mesh(new THREE.ConeGeometry(0.07, 0.13, 3));
     if (p.shape === 'diamond') return mesh(new THREE.OctahedronGeometry(0.08));
-    return mesh(p.hollow ? new THREE.SphereGeometry(0.065, 10, 7) : new THREE.SphereGeometry(0.06, 20, 14));
+    if (p.hollow) {
+      // A hollow circle in 2D: three crossed rings read as hollow from any viewing angle.
+      const g = new THREE.Group();
+      for (const [rx, ry] of [[0, 0], [Math.PI / 2, 0], [0, Math.PI / 2]]) {
+        const ring = mesh(new THREE.TorusGeometry(0.058, 0.012, 8, 32));
+        ring.rotation.set(rx, ry, 0);
+        g.add(ring);
+      }
+      return g;
+    }
+    return mesh(new THREE.SphereGeometry(0.06, 20, 14));
   }
 
   function setPoints(points) {
