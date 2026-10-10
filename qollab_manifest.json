@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "note": "Files uploaded to the Qollab project. Everything else (tests, scripts, docs, results) stays in the repository only.",
+  "zip_name": "dist/qollab_upload.zip",
+  "include": [
+    "index.html",
+    "main.js",
+    "main.css",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "requirements.txt",
+    "config/defaults.json",
+    "data/experiments.json",
+    "data/recorded_runs.json",
+    "data/third_party/rosenfeld2017/NOTICE.md",
+    "data/third_party/rosenfeld2017/Bell_2016-04-15_9_pairs.csv",
+    "data/third_party/rosenfeld2017/Bell_2016-06-14_16_pairs.csv",
+    "bellkit/*.py",
+    "ui/**/*.js",
+    "ui/**/*.css",
+    "ui/**/*.svg"
+  ],
+  "limits": {
+    "max_files": 100,
+    "max_file_bytes": 2000000,
+    "max_readme_chars": 65000
+  }
+}

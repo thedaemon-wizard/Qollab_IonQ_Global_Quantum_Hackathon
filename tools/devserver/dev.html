@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bell-Test Lab (local harness)</title>
+  <!-- Same three.js version and import names as Qollab's frame; bellkit.app goes to the shim. -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/",
+      "bellkit.app": "/tools/devserver/shim_app.js"
+    }
+  }
+  </script>
+  <link rel="stylesheet" href="/main.css">
+</head>
+<body>
+  <div id="host"></div>
+  <script type="module">
+    const params = new URLSearchParams(location.search);
+    window.backend = { name: params.get('backend') || 'basic_simulator' };
+    const html = await (await fetch('/index.html')).text();
+    document.getElementById('host').outerHTML = html;
+    await import('/main.js');
+  </script>
+</body>
+</html>

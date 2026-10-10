@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "note": "Runs recorded on Qollab and locally, exported with the app's JSON button. Each entry keeps the backend, the run profile, the request and the analysed numbers.",
+  "runs": []
+}

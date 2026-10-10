@@ -1,0 +1,107 @@
+// Pieces shared by the Lab and Repeater views: experiment controls, the certificate ladder,
+// the run gate (refusals and the one-IonQ-job rule) and request building.
+import { h } from '../core/dom.js';
+import { num, pct } from '../core/format.js';
+import { icon } from '../core/icons.js';
+import { checkbox, select, slider } from '../widgets/controls.js';
+
+export const CHANNELS = [
+  { value: 'none', label: 'No noise' },
+  { value: 'depolarizing', label: 'Depolarizing (Werner)' },
+  { value: 'dephasing', label: 'Dephasing (Z flips)' },
+  { value: 'bit_flip', label: 'Bit flip (X flips)' },
+  { value: 'y_flip', label: 'Y flip' },
+];
+
+export function channelControls(cfg, onChange, { kind = 'depolarizing', strength } = {}) {
+  const r = cfg.channels.strength;
+  const kindSel = select({ label: 'Link noise on Bob’s qubit', options: CHANNELS, value: kind, onChange: () => { sync(); onChange(); } });
+  const str = slider({
+    label: 'Noise strength (error probability; λ for depolarizing)',
+    min: r.min, max: r.max, step: r.step, value: strength ?? r.default,
+    format: (v) => v.toFixed(2), onInput: onChange,
+  });
+  const sync = () => str.disable(kindSel.value === 'none');
+  sync();
+  return {
+    elements: [kindSel.element, str.element],
+    value: () => ({ kind: kindSel.value, strength: kindSel.value === 'none' ? 0 : str.value }),
+    set({ kind: k, strength: st }) {
+      if (k !== undefined) kindSel.set(k);
+      if (st !== undefined) str.set(st);
+      sync();
+    },
+  };
+}
+
+export function eveControls(cfg, onChange) {
+  const r = cfg.eve.phi_deg;
+  const on = checkbox({ label: 'Eavesdropper on Bob’s link', onChange: () => { phi.disable(!on.checked); onChange(); },
+    hint: 'Eve entangles a probe with Bob’s qubit (controlled-Ry). 180° copies the Z value: intercept-resend.' });
+  const phi = slider({ label: 'Eve’s coupling angle φ', min: r.min, max: r.max, step: r.step, value: r.default, format: (v) => `${v}°`, onInput: onChange });
+  phi.disable(true);
+  return {
+    elements: [on.element, phi.element],
+    value: () => ({ enabled: on.checked, phi_deg: phi.value }),
+    set({ enabled, phi_deg: p }) {
+      if (enabled !== undefined) on.set(enabled);
+      if (p !== undefined) phi.set(p);
+      phi.disable(!on.checked);
+    },
+  };
+}
+
+/** Why a run cannot be submitted from this session right now (null if it can). */
+export function runBlocker(ctx) {
+  const prof = ctx.backend.profile;
+  if (prof.refuse) return prof.refuse_reason;
+  if (prof.one_job_per_run && ctx.store.get().ionqJobsUsed >= 1) {
+    return 'This session already used its one IonQ job (a Qollab rule). The numbers below stay; press Run in Qollab again to submit another experiment.';
+  }
+  return null;
+}
+
+export function sizeNote(ctx, circuits) {
+  const prof = ctx.backend.profile;
+  const largest = Math.max(...circuits.units.map((u) => u.num_qubits));
+  const needed = prof.layout === 'packed_single_circuit' ? circuits.packed_qubits : largest;
+  const ok = needed <= prof.max_qubits;
+  const what = prof.layout === 'packed_single_circuit'
+    ? `All ${circuits.units.length} settings packed into one circuit need ${needed} qubits`
+    : `${circuits.units.length} circuits, the largest with ${largest} qubits`;
+  return { ok, text: `${what}; the ${prof.label} profile allows ${prof.max_qubits}.${ok ? '' : ' Reduce the experiment (for example switch off the eavesdropper or the noise, or use fewer hops) or pick a larger simulator.'}` };
+}
+
+export const RUNG_INFO = [
+  { key: 'bell', icon: 'chart-dots', title: 'Bell violation', assumes: 'none about the devices', show: (l) => `S ${num(l.S)}`, ok: (l) => l.bell_violation },
+  { key: 'witness', icon: 'eye', title: 'Entanglement (witness)', assumes: 'trusted, calibrated measurements', show: (l) => `F ≥ ${num(l.witness_fidelity_low)}`, ok: (l) => l.entangled_trusted },
+  { key: 'bbm92', icon: 'key', title: 'BBM92 key rate', assumes: 'trusted measurements (qubits)', show: (l) => `${num(l.rate_bbm92)} bit/round`, ok: (l) => l.rate_bbm92 > 0 },
+  { key: 'self', icon: 'fingerprint', title: 'Self-test (Kaniewski)', assumes: 'none; i.i.d. rounds', show: (l) => `F ≥ ${num(l.kaniewski_extractability)}`, ok: (l) => l.self_test_nontrivial },
+  { key: 'rnd', icon: 'dice-5', title: 'DI randomness (Pironio)', assumes: 'none; i.i.d. rounds', show: (l) => `H_min ≥ ${num(l.min_entropy_pironio)} bit`, ok: (l) => l.min_entropy_pironio > 0 },
+  { key: 'di', icon: 'shield-lock', title: 'DI key rate (Acín 2007)', assumes: 'none; collective attacks, asymptotic', show: (l) => (l.rate_di_acin === null ? 'S ≤ 2' : `${num(l.rate_di_acin)} bit/round`), ok: (l) => l.di_certified },
+];
+
+/** Ladder of certificates: point estimate and conservative end side by side. */
+export function ladderTable(analysis) {
+  const point = { ...analysis.ladder_point, S: analysis.S.point };
+  const cons = { ...analysis.ladder_conservative, S: analysis.S.low };
+  return h('div', { class: 'table-wrap' }, h('table', null,
+    h('caption', null, `Same counts, six claims. Conservative = S at the lower end of its interval, error rates at the upper end (${Math.round(100 * (1 - analysis.delta))}% confidence).`),
+    h('thead', null, h('tr', null, h('th', { scope: 'col', class: 'text' }, 'Certificate'), h('th', { scope: 'col', class: 'text' }, 'Assumes'),
+      h('th', { scope: 'col' }, 'Point estimate'), h('th', { scope: 'col' }, 'Conservative'), h('th', { scope: 'col' }, 'Holds?'))),
+    h('tbody', null, RUNG_INFO.map((r) => h('tr', null,
+      h('th', { scope: 'row', class: 'text' }, h('span', { style: { display: 'inline-flex', gap: '0.35rem', alignItems: 'center' } }, icon(r.icon, { size: 16 }), r.title)),
+      h('td', { class: 'text muted' }, r.assumes),
+      h('td', null, r.show(point)),
+      h('td', null, r.show(cons)),
+      h('td', null, r.ok(cons) ? h('span', { style: { color: 'var(--good)' } }, icon('check', { size: 16, label: 'holds' }), ' yes')
+        : r.ok(point) ? h('span', { style: { color: 'var(--warn)' } }, icon('alert-triangle', { size: 16, label: 'only at the point estimate' }), ' point only')
+          : h('span', { class: 'muted' }, icon('x', { size: 16, label: 'does not hold' }), ' no')))))));
+}
+
+export function qberList(analysis) {
+  const row = (name, q) => [h('dt', null, name), h('dd', null, `${pct(q.point)}  [${pct(q.low)}, ${pct(q.high)}]  (N = ${q.N})`)];
+  return h('dl', { class: 'kv' }, row('Q_Z (key basis)', analysis.Q_Z), row('Q_X', analysis.Q_X),
+    h('dt', null, 'Witness (XX+ZZ)/2'), h('dd', null, `${num(analysis.witness.point)} (low ${num(analysis.witness.low)})`),
+    analysis.fidelity_with_yy !== null ? [h('dt', null, 'Fidelity with YY'), h('dd', null, num(analysis.fidelity_with_yy))] : null);
+}

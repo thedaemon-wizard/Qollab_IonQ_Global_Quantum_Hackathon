@@ -6,12 +6,24 @@ everything else is plain JSON so that no proxies leak between the two runtimes.
 
 from __future__ import annotations
 
+import base64
 import json
 import math
 
-from bellkit import analysis, bounds, config, decode, execution, experiments, geometry, models, rosenfeld
+from bellkit import (
+    analysis,
+    bounds,
+    config,
+    decode,
+    execution,
+    experiments,
+    geometry,
+    models,
+    paths,
+    rosenfeld,
+)
 from bellkit.channels import PauliChannel
-from bellkit.circuits import Experiment, build_plan, make_units, write_unit
+from bellkit.circuits import Experiment, build_plan, make_units, qubit_labels, write_unit
 from bellkit.stats import Table
 
 SCHEMA_RUN = "bellkit.run/1"
@@ -76,7 +88,8 @@ def _settings_used(cfg: dict, exp: Experiment) -> list[dict]:
 
 
 def config_json() -> str:
-    return json.dumps(config.load())
+    """The configuration plus the thresholds computed from it (for scales and labels)."""
+    return json.dumps({**config.load(), "thresholds": bounds.thresholds()})
 
 
 def describe_backend_json(backend) -> str:
@@ -274,6 +287,7 @@ def circuits_json(request_json: str) -> str:
                 "setting": unit.setting["id"],
                 "num_qubits": unit.num_qubits,
                 "num_clbits": unit.num_clbits,
+                "labels": qubit_labels(unit),
                 "ops": ops,
                 "text": str(qc.draw(output="text", fold=-1)),
             }
@@ -315,8 +329,34 @@ def rosenfeld_json() -> str:
     return json.dumps({"runs": runs, "thresholds": bounds.thresholds()})
 
 
+def recorded_runs_json() -> str:
+    with open(paths.RECORDED_RUNS, encoding="utf-8") as fh:
+        return fh.read()
+
+
+def send_file_json(name: str, mime: str, base64_data: str) -> str:
+    """Hand a file to Qollab's run console, which offers it for download.
+
+    The project frame cannot save files itself (downloads are blocked by its sandbox), and
+    ``sendFile`` accepts binary data only from Python, so the UI sends base64 here.
+    """
+    from js import sendFile  # provided by Qollab's runtime
+
+    data = base64.b64decode(base64_data)
+    payload = data.decode("utf-8") if mime.startswith(("text/", "application/json")) else data
+    sendFile(name, mime, payload)
+    return json.dumps({"sent": name, "bytes": len(data)})
+
+
 def experiments_json() -> str:
-    return json.dumps({**experiments.summary(), "thresholds": bounds.thresholds()})
+    """Published experiments with our bounds, plus the DI zero-rate curve S*(Q) for the plot."""
+    points = config.load()["theory_grid"]["points"]
+    curve = []
+    for q in _grid(0.0, 0.12, points):
+        s_zero = bounds.di_zero_s(q)
+        if s_zero is not None:
+            curve.append({"Q": q, "S": s_zero})
+    return json.dumps({**experiments.summary(), "thresholds": bounds.thresholds(), "di_zero_curve": curve})
 
 
 def selftest_json() -> str:

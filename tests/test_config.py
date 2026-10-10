@@ -24,6 +24,7 @@ def test_defaults_validate(cfg):
         ("fake_fez", "ibm_noise"),
         ("ionq_simulator", "ionq_sim"),
         ("ionq_qpu.forte-1", "qpu"),
+        ("braket_local_simulator", "braket"),
         ("something_new", None),
     ],
 )

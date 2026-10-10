@@ -104,6 +104,16 @@ def bisect(f, lo: float, hi: float, tol: float = 1e-13) -> float:
     return 0.5 * (lo + hi)
 
 
+def di_zero_s(q: float) -> float | None:
+    """The S at which the Acin rate is zero for QBER q (None if no S <= 2*sqrt(2) gives a key)."""
+    if di_rate_acin(TSIRELSON, q) <= 0.0:
+        return None
+    lo = LOCAL_BOUND + 1e-12
+    if di_rate_acin(lo, q) >= 0.0:  # q = 0: any violation gives a key
+        return LOCAL_BOUND
+    return bisect(lambda s: di_rate_acin(s, q), lo, TSIRELSON)
+
+
 def werner_s(q: float) -> float:
     """CHSH value of the Werner (depolarised Phi+) state with QBER q, at the fixed angles."""
     return TSIRELSON * (1.0 - 2.0 * q)

@@ -219,6 +219,28 @@ def write_unit(qc: QuantumCircuit, unit: Unit, qubits: list, clbits: list, notes
         qc.measure(b2, clbits[3])
 
 
+def qubit_labels(unit: Unit) -> list[str]:
+    """Role of every qubit of a unit, for diagrams (same order as ``write_unit`` uses)."""
+    exp = unit.experiment
+    anc = _channel_ancillas(exp.channel)
+    if exp.module == "bell":
+        labels = ["Alice", "Bob"]
+        if exp.eve_phi_deg is not None:
+            labels.append("Eve")
+        return labels + (["noise x", "noise z"] if anc else [])
+    if exp.module == "chain":
+        n = exp.hops
+        labels = []
+        for k in range(n):
+            labels.append("Alice" if k == 0 else f"R{k}.b")
+            labels.append("Bob" if k == n - 1 else f"R{k + 1}.a")
+        for k in range(n if anc else 0):
+            labels += [f"noise x{k + 1}", f"noise z{k + 1}"]
+        return labels
+    labels = ["Alice 1", "Bob 1", "Alice 2", "Bob 2"]
+    return labels + (["noise x1", "noise z1", "noise x2", "noise z2"] if anc else [])
+
+
 CANARY_NAME = "canary"
 
 

@@ -93,3 +93,15 @@ def _bell_prep():
     qc.h(0)
     qc.cx(0, 1)
     return qc
+
+
+def test_di_zero_curve_meets_werner_threshold():
+    th = bounds.thresholds()
+    q = th["acin"]["Q_werner"]
+    assert bounds.di_zero_s(q) == pytest.approx(th["acin"]["S_werner"], abs=1e-9)
+    assert bounds.di_rate_acin(bounds.di_zero_s(0.05), 0.05) == pytest.approx(0.0, abs=1e-9)
+    assert bounds.di_zero_s(0.5) is None  # 1 - h(1/2) = 0: no key even at 2*sqrt(2)
+
+
+def test_di_zero_curve_starts_at_local_bound():
+    assert bounds.di_zero_s(0.0) == pytest.approx(2.0, abs=1e-6)

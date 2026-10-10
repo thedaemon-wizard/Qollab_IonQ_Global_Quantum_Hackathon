@@ -171,12 +171,33 @@
       "seed_option": "seed_simulator"
     },
     {
+      "id": "braket",
+      "label": "AWS Braket local simulator",
+      "match": [
+        "braket"
+      ],
+      "shots": 2000,
+      "opt_level": 1,
+      "layout": "packed_single_circuit",
+      "max_qubits": 25,
+      "transpile": "basis",
+      "basis_gates": [
+        "rx",
+        "ry",
+        "rz",
+        "cx",
+        "h",
+        "x",
+        "measure"
+      ],
+      "seed_option": null
+    },
+    {
       "id": "ideal",
       "label": "Ideal local simulator",
       "match": [
         "basic_simulator",
         "statevector",
-        "braket",
         "aer_simulator"
       ],
       "shots": 10000,
@@ -194,9 +215,18 @@
     "opt_level": 1,
     "layout": "packed_single_circuit",
     "max_qubits": 24,
-    "transpile": "backend",
+    "transpile": "basis",
     "seed_option": null,
-    "one_job_per_run": true
+    "one_job_per_run": true,
+    "basis_gates": [
+      "rx",
+      "ry",
+      "rz",
+      "cx",
+      "h",
+      "x",
+      "measure"
+    ]
   },
   "theory_grid": {
     "points": 121
