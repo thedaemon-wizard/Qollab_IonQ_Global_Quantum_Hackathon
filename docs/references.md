@@ -1,4 +1,4 @@
-# References and fact-check notes (checked 2026-10-09)
+# References and fact-check notes (checked 2026-10-09; updated 2026-10-10)
 
 **How to read this.** Each entry has a label for its kind of source:
 
@@ -9,10 +9,13 @@
 - **press**: press releases and news, never used as a source of technical numbers
 - **docs** or **software**
 
-Everything this project produces is a **simulation**. It runs Qiskit circuits on local simulators (Qiskit Aer, BasicSimulator) or on IonQ cloud noise models.
+Everything this project computes from its own circuits is a **simulation**. It runs Qiskit circuits on local simulators (Qiskit Aer, BasicSimulator) or on IonQ cloud noise models. The only experimental inputs are published values (§3) and one open event dataset that we re-analyse (Rosenfeld 2017, §1).
 
 - **A simulated CHSH value above 2 shows nothing about nature and closes no loophole.**
-- **The device-independent (DI) bounds shown here are not security proofs.** Our DI key-rate and randomness numbers come from asymptotic formulas, mostly for collective (i.i.d.) attacks, evaluated at one end of a finite-sample confidence interval. They show how the bounds respond to noise. They are not finite-size or composable security proofs, and they certify neither a key nor randomness.
+- **The device-independent (DI) bounds shown here are not security proofs.** Our DI key-rate and randomness numbers come from asymptotic formulas, mostly for collective (i.i.d.) attacks, evaluated at one end of a finite-sample confidence interval.
+  - The interval for S is a Hoeffding interval. The intervals for the QBERs are Wilson score intervals.
+  - In the app's own runs, δ = 0.05 is split δ/2 + δ/2 (Bonferroni) between S and the QBERs. For the Rosenfeld data only S is estimated, so the full δ goes to S.
+  - These are i.i.d. plug-in bounds. They show how the bounds respond to noise. They are not finite-size or composable security proofs, and they certify neither a key nor randomness.
 - **Simulator "measurement outcomes" are pseudo-random.** Aer uses `std::mt19937_64` and BasicSimulator uses NumPy `default_rng`. Both give the same output for the same seed; our environment check uses seed 20261009 by default.
 
 Each entry says which text was actually read: the full text, the arXiv version of a paywalled paper, or the abstract only. "To verify" marks anything a primary source did not confirm. Quotes are under 15 words. F-numbers refer to §9.
@@ -101,9 +104,9 @@ Conventions: outcomes are ±1, E_xy = ⟨A_x B_y⟩, and S = E00 + E01 + E10 −
   - **Caveat:** the BB84 worst case is phase-covariant cloning, not depolarising noise. The two give the same rate only because ε_y is not monitored.
   - **Read:** arXiv v3, App. A.
 
-### Loophole-free Bell tests (2015)
+### Loophole-free Bell tests (2015–2017)
 
-These three experiments closed the detection and locality loopholes together. They still assume free setting choices and that recorded outcomes are final.
+These experiments closed the detection and locality loopholes together. They still assume free setting choices and that recorded outcomes are final.
 
 - **Hensen 2015.** B. Hensen et al., *Nature* 526, 682–686 (2015). https://doi.org/10.1038/nature15759 · [arXiv:1508.05949](https://arxiv.org/abs/1508.05949). *Experiment.*
   - **What it shows:** NV-centre spins 1280 m apart, heralded by entanglement swapping.
@@ -132,7 +135,22 @@ These three experiments closed the detection and locality loopholes together. Th
     - The arXiv body text and Fig. 3 give 5.8 × 10⁻⁹. Table I and the abstracts give 5.9 × 10⁻⁹, which is the value we use.
   - **Read:** latest arXiv version.
 
-## 2 Device-independent bounds (Acín 2007, Pironio 2010, finite-size/EAT, noisy preprocessing)
+- **Rosenfeld 2017.** W. Rosenfeld et al., "Event-Ready Bell Test Using Entangled Atoms Simultaneously Closing Detection and Locality Loopholes", *PRL* 119, 010402 (2017). https://doi.org/10.1103/PhysRevLett.119.010402 · [arXiv:1611.04604](https://arxiv.org/abs/1611.04604). Event data: https://doi.org/10.5281/zenodo.22936124 (CC BY 4.0, published 2026-09-24). *Experiment, with open event data.*
+  - **What it shows:** an event-ready Bell test between two atoms in separate labs. The data record holds the valid events of two runs: 15 April 2016 (10,201 events) and 14 June 2016 (10,202 events). We re-analyse both with the same estimator we use for simulated counts.
+  - **Numbers (our re-analysis of the open data):**
+    - The main-text S = 2.221 ± 0.033 is the 15 April 2016 run, not the public 14 June run.
+    - The paper uses 5,000 events per heralded state (Ψ⁻ and Ψ⁺). We take the first 5,000 of each in file order. That is our reading, and it reproduces the paper's Tables S8 and S10 count for count.
+    - Pooled over both states: S = 2.2213 ± 0.0332 (April; paper 2.221 ± 0.033) and S = 2.0957 ± 0.0340 (June). The ± is an i.i.d. Gaussian standard error, as in the paper.
+    - Per state, April: 2.2399 (Ψ⁻) and 2.2039 (Ψ⁺). Without the 5,000-event cut: 2.2462 and 2.1977.
+    - Two-sided Hoeffding interval at δ = 0.05, with all of δ on S: S_low = 2.1126 (April) and 1.9870 (June). At that confidence the June run does not exceed 2.
+  - **Caveats:**
+    - The paper's p-values come from martingale-based methods that do not assume i.i.d. trials. Our Hoeffding end does assume independent events.
+    - The data have no key-basis setting pair, so no QBER or DI key rate can be computed from them. Only S-based quantities apply.
+    - Lab 1 and lab 2 correspond to Alice and Bob only by convention.
+    - For in-browser fetches, only the Zenodo API content URL sends an `Access-Control-Allow-Origin` header; the `?download=1` URL does not (checked 2026-10-09).
+  - **Read:** arXiv v2 (main text and supplement) and the Zenodo record (README and both data files).
+
+## 2 Device-independent bounds (Acín 2007, Pironio 2010, self-testing, finite-size/EAT, noisy preprocessing)
 
 - **Acín 2007.** A. Acín et al., "Device-independent security of quantum cryptography against collective attacks", *PRL* 98, 230501 (2007). https://doi.org/10.1103/PhysRevLett.98.230501 · [arXiv:quant-ph/0702152](https://arxiv.org/abs/quant-ph/0702152). *Theory.*
   - **What it shows:**
@@ -168,6 +186,17 @@ These three experiments closed the detection and locality loopholes together. Th
     - The locality loophole was open.
     - The bound holds against an adversary who measures side information before extraction. It is not proven universally composable.
   - **Read:** arXiv v3. The Nature version was not compared.
+
+- **Kaniewski 2016.** J. Kaniewski, *PRL* 117, 070402 (2016). https://doi.org/10.1103/PhysRevLett.117.070402 · [arXiv:1604.08176](https://arxiv.org/abs/1604.08176). *Theory.*
+  - **What it shows:** a self-testing bound that uses the CHSH value alone. It bounds the singlet *extractability*: the largest fidelity with a singlet-equivalent state that local channels (no shared randomness, no communication) can reach from the unknown state, in any dimension.
+  - **Formula (Eq. 10):** extractability ≥ 1/2 + (1/2)(S − b*)/(2√2 − b*), with b* = (16 + 14√2)/17 ≈ 2.1058.
+    - Non-trivial only for S > b*.
+    - Examples: 0.565 at S = 2.2 and 0.704 at S = 2.4.
+  - **Caveats:**
+    - We call this "extractability (local channels)". It is not the fidelity of the physical state.
+    - The true DI threshold for non-trivial extractability lies somewhere in [2.05, 2.11] and is unresolved. Valcarce et al., *Quantum* 4, 246 (2020) give a state with trivial extractability at S ≈ 2.05. Bhavsar et al., *PRX Quantum* 6, 040356 (2025) ([arXiv:2505.06833](https://arxiv.org/abs/2505.06833)) still describe the tight bound for local channels as open.
+    - The paper's statement is about expectation values. Our finite-sample value plugs in an i.i.d. Hoeffding end for S; it is not a composable proof.
+  - **Read:** arXiv v3 (Eq. 10). Valcarce 2020 and Bhavsar 2025 were checked only for the threshold statement above.
 
 - **Arnon-Friedman 2018.** R. Arnon-Friedman, F. Dupuis, O. Fawzi, R. Renner, T. Vidick, "Practical device-independent quantum cryptography via entropy accumulation", *Nat. Commun.* 9, 459 (2018). https://doi.org/10.1038/s41467-017-02307-4. *Theory.*
   - **What it shows:** the Entropy Accumulation Theorem (EAT; F15). It gives finite-n DIQKD security against general, non-i.i.d. attacks, built on the single-round form of F9 (F10), with an explicit key length (Eq. 35).
@@ -220,18 +249,20 @@ These three experiments closed the detection and locality loopholes together. Th
 
 | Experiment | Platform | Distance | S | QBER | Key result | Regime |
 |---|---|---|---|---|---|---|
-| Nadlinger 2022 | ⁸⁸Sr⁺ ions | nodes ≈ 2 m apart, 3.5 m fibre | 2.677(6)ᵃ | 1.44(2)%ᵃ | 95,884 bits (95,628 net) | finite-size, general attacks, ε = 10⁻¹⁰ |
+| Nadlinger 2022 | ⁸⁸Sr⁺ ions | nodes ≈ 2 m apart | 2.677(6)ᵃ | 1.44(2)%ᵃ | 95,884 bits (95,628 net) | finite-size, general attacks, ε = 10⁻¹⁰ |
 | Zhang 2022 | ⁸⁷Rb atoms | labs 400 m apart, 700 m fibre | 2.578(75) | 7.8(9)% | 0.07 per event | asymptotic; no key extracted |
 | Liu 2022 | photons | 20–220 m added fibre | —ᵇ | not reported | 2.33 × 10⁻⁴ per pulse | asymptotic, collective attacks |
 | Liu 2026 | ⁴⁰Ca⁺ ions | 10 km, spooled | 2.5758(59) | 3.60(6)% | 1,917 bits, ε = 10⁻⁵ | finite-size |
-| Liu 2026 | ⁴⁰Ca⁺ ions | 101 km, spooled | 2.504(75) | 6.9 ± 1.1% | 0.0974 per round | asymptotic, 2,799 rounds |
+| Liu 2026 | ⁴⁰Ca⁺ ions | 101 km, spooled | 2.494 ± 0.075ᶜ | 6.92 ± 1.13%ᶜ | 0.0974 per round | asymptotic, 2,799 rounds |
 | Lu 2026 | ⁸⁷Rb atoms | 11 km, spooled, one lab | 2.612(31) | 2.85% | 0.112 bits/event (estimated) | finite-size, ε = 10⁻⁵ |
-| Lu 2026 | ⁸⁷Rb atoms | 100 km, spooled, one lab | shown only in a figure | 7.16% | positive | asymptotic, different variant |
-| Meiers 2026 | ⁴⁰Ca⁺ ion + photon | 25 km, spooled | 2.75 (+0.16/−0.15)ᶜ | not reported | "69 bits" (model value) | authors make no DI claim |
+| Lu 2026 | ⁸⁷Rb atoms | 100 km, spooled, one lab | 2.495 ± 0.103ᶜ | 7.16 ± 0.89%ᶜ | positive | asymptotic, different variant |
+| Meiers 2026 | ⁴⁰Ca⁺ ion + photon | 25 km, spooled | 2.75 (+0.16/−0.15)ᵈ | ≈1.4%ᵉ | "69 bits" (model value) | authors make no DI claim |
 
 ᵃ From a separate characterisation run, not from the key run.
 ᵇ Only a separate calibration run gives a CHSH value (ω = 0.7559, S ≈ 2.047).
-ᶜ Measured in a time window that was chosen using the same data.
+ᶜ From the authors' deposited source data (CC BY 4.0): Liu 2026 `Fig_4d.xlsx` (https://doi.org/10.5281/zenodo.18218281) and Lu 2026 `Fig_5.xlsx` (https://doi.org/10.5281/zenodo.17958512). For Liu 2026 at 101 km, the arXiv v1 text gives S = 2.504(75) and Q = 6.9(1.1)%.
+ᵈ Measured in a time window that was chosen using the same data.
+ᵉ ≈1.4%, a model value computed from S, not measured.
 
 - **Nadlinger 2022.** D. P. Nadlinger et al., "Experimental quantum key distribution certified by Bell's theorem", *Nature* 607, 682–686 (2022). https://doi.org/10.1038/s41586-022-04941-5 · [arXiv:2109.14600](https://arxiv.org/abs/2109.14600). *Experiment.*
   - **What it shows:** the first complete DI-QKD run that extracted a key. It used event-ready heralding, an EAT-based finite-size proof, real error correction and an extractor; 1.5 × 10⁶ rounds in 7.9 h.
@@ -259,29 +290,39 @@ These three experiments closed the detection and locality loopholes together. Th
     - To verify: how a statistical uncertainty of about 0.0015 can fit inside an entropy margin of about 2.6 × 10⁻⁴.
   - **Read:** arXiv v3.
 
-- **Liu 2026.** W.-Z. Liu et al. (29 authors), "Long-lived remote ion-ion entanglement for scalable quantum repeaters", *Nature* 652, 51–57 (2026). https://doi.org/10.1038/s41586-026-10177-4 · [arXiv:2602.08472](https://arxiv.org/abs/2602.08472). *Experiment.*
+- **Liu 2026.** W.-Z. Liu et al. (29 authors on arXiv v1; Crossref lists 31, to verify), "Long-lived remote ion-ion entanglement for scalable quantum repeaters", *Nature* 652, 51–57 (2026). https://doi.org/10.1038/s41586-026-10177-4 · [arXiv:2602.08472](https://arxiv.org/abs/2602.08472). Source data: https://doi.org/10.5281/zenodo.18218281 (CC BY 4.0). *Experiment.*
+  - The arXiv v1 title differs from the journal title: "A building block of quantum repeaters for scalable quantum networks".
   - **What it shows:**
     - Over 10 km, entanglement stays coherent for 550 ms while generation takes 450 ms on average, giving a link efficiency of about 1.2 (F18).
     - The 10 km key took 386 h and used the protocol of Zhang X. 2023.
   - **Caveats:**
     - The fibre is spooled, the physical node separation is not stated, and the paper makes no locality claim.
     - The "5,000×" comparison sets 10 km of fibre against Oxford's roughly 2 m node separation.
-    - Our own check (not the authors'): at 101 km, F9 gives about 0.099 at the central values but about −0.025 when S and Q each move 1σ in the unfavourable direction. That result is not statistically robust.
-  - **Read:** arXiv v1. The Nature version and supplement were not read.
+    - Our own check (not the authors'): at 101 km, F9 gives 0.0865 at the deposited central values (S = 2.494, Q = 6.92%). At (S − σ, Q + σ) = (2.419, 8.05%) it gives −0.0379. That point is a conservative corner, not a joint 1σ region. With the arXiv v1 values the same check gives 0.099 and −0.025. The 101 km rate is not statistically robust.
+  - **Read:** arXiv v1, and the Fig. 4d source data (`Fig_4d.xlsx`) on Zenodo. The Nature version and supplement were not read.
 
-- **Lu 2026.** B.-W. Lu et al., "Device-independent quantum key distribution over 100 km with single atoms", *Science* 391, 592–597 (2026). https://doi.org/10.1126/science.aec6243 · [arXiv:2602.09596](https://arxiv.org/abs/2602.09596). *Experiment.*
+- **Lu 2026.** B.-W. Lu et al., "Device-independent quantum key distribution over 100 km with single atoms", *Science* 391, 592–597 (2026). https://doi.org/10.1126/science.aec6243 · [arXiv:2602.09596](https://arxiv.org/abs/2602.09596). Source data: https://doi.org/10.5281/zenodo.17958512 (CC BY 4.0). *Experiment.*
   - **What it shows:** all nodes in one lab, with spooled fibre. At 11 km: 1.208 × 10⁶ events over 624 h, and about 135.3 kbit of estimated extractable key.
+  - **Settings:** in the main text Alice measures Z, (Z+X)/√2 and (Z−X)/√2, Bob measures Z and X, and the key comes from the (Z, Z) pair. These are the same roles as in this project, which follows Acín 2007's labelling (§2). Only the supplement's protocol description uses swapped labels.
+  - **Fig. 5C rates and our comparison:**
+    - The authors deposited S, Q, their Poissonian 1σ errors and the asymptotic rate for each distance (`Fig_5.xlsx`). These rates are for a protocol without sifting, with a test-round fraction γ = 10⁻³.
+    - Our (1 − γ)·F9 at the deposited central values is 0.0008–0.0015 above every deposited rate: +0.00079 (11 km), +0.00088 (20 km), +0.00134 (50 km), +0.00114 (70 km) and +0.00145 (100 km).
+    - The arXiv v1 supplement prints no closed-form rate, so the authors' exact formula is not known (to verify). We show our values as a comparison, not a reproduction.
+    - At the conservative corner (S − σ, Q + σ), F9 is negative at 70 km (−0.054) and 100 km (−0.066). That corner is not a joint 1σ region.
+    - The 11 km finite-size rate of 0.112 bits/event (ε = 10⁻⁵) is for the sifted protocol, whose asymptotic value is 0.275. The Fig. 5C value at 11 km (0.410) is for the variant without sifting. The gap is a protocol difference, not a units issue.
+    - For reference, the sifted protocol's error-correction leakage is Eq. S43: (1 − γ_A/2)(1 − γ_B)·h(q) + γ_Aγ_B·h(ω).
   - **Caveats:**
-    - The 100 km rate is asymptotic only, and is for a protocol variant without sifting that was not run at 11 km.
+    - The 100 km rate is asymptotic only. Like every Fig. 5C rate, it is for the variant without sifting, not for the sifted protocol of the 11 km finite-size key.
     - The 100 km QBER of 7.16% is above the depolarising 7.1% threshold. A positive rate is still possible because S and Q are evaluated separately.
     - The locality loophole is explicitly not closed.
     - To verify: whether error correction and privacy amplification were actually run.
-  - **Read:** arXiv v1 and supplement.
+  - **Read:** arXiv v1 and supplement, and the Fig. 5 source data on Zenodo.
 
 - **Meiers 2026.** J. Meiers et al., "An asymmetric atom-photon architecture for device-independent quantum key distribution over 25 km", [arXiv:2609.25795](https://arxiv.org/abs/2609.25795) (2026). *Experiment; unrefereed preprint.*
   - **What it shows:**
     - Only 629 of 10,908 trials fall inside the optimised time window.
-    - The "69 bits" is 154 key trials multiplied by an asymptotic rate from the Schwonnek model.
+    - The "69 bits" is 154 key trials multiplied by an asymptotic rate from the Schwonnek model. That model's 2.362 threshold belongs to the random-key-basis protocol (F13).
+    - The QBER of ≈1.4% is computed from S with the depolarising-model relation; it is not measured.
   - **Caveats:**
     - 61.9% of readouts failed and were discarded, so the detection loophole is open.
     - Bob's basis choice is passive.
@@ -414,6 +455,9 @@ The bound we evaluate is Pironio 2010 (see §2).
     - Qubit limits: 29 for ideal, forte-1 and forte-enterprise-1; 25 for Aria.
     - The published depolarising parameters cover only Aria and Forte jobs from before mid-September 2025. Documentation for the current Forte models is "in preparation".
     - IonQ disclaims predictive accuracy ("IonQ offers no specific guarantees of accuracy").
+    - The documented channel is ρ → (1−r)ρ + r·I/2 for one qubit and ρ → (1−r)ρ + r·I/4 for two qubits. So r is the same parameter as λ in Aer's `depolarizing_error` (F8).
+    - Read literally, the page's two-qubit Kraus list is not trace-preserving. Trace preservation needs all 15 non-identity two-qubit Pauli terms (our reading).
+    - No separate SPAM, readout or crosstalk term is described. We say the documented model "omits SPAM"; we do not call it optimistic or pessimistic compared with hardware.
   - **OpenQASM 3:** https://docs.ionq.com/api-reference/v0.4/openqasm3
     - The simulator supports mid-circuit measurement.
     - Branching and loops are rejected on every target.
@@ -440,19 +484,19 @@ The bound we evaluate is Pironio 2010 (see §2).
     - The bibliography of Brunner et al. 2014 lists a *different* Masanes paper under "Masanes 2003". Cite the arXiv number instead.
   - **Read:** full text.
 
-- **Supporting sources.** A verifier re-checked these for the statements we use, but their full bibliographic records are not in this file (to verify before publication).
-  - **Le et al. 2023** (*Quantum*; arXiv v3): the pushout map, the two-polynomial test, the Gram completion and the volume ratios.
+- **Supporting sources.** These were checked for the statements we use. Bibliographic details marked "to verify" have not yet been checked against the publisher's record.
+  - **Le et al. 2023.** T. P. Le, C. Meroni, B. Sturmfels, R. F. Werner, T. Ziegler, *Quantum* 7, 947 (2023). https://doi.org/10.22331/q-2023-03-16-947 · [arXiv:2111.06270](https://arxiv.org/abs/2111.06270) (v3 read). Used for the pushout map, the two-polynomial test, the Gram completion and the volume ratios.
     - It has a sign error on p. 13: it writes +2xyz for c₁₁ = −1, where −2xyz is correct.
     - It cites Tsirelson's "Thm 2.2" where Thm 2.3 is meant.
-  - **Goh et al. 2018:** the PR-plane slice, and the name "TLM" (Tsirelson–Landau–Masanes).
-  - **Tsirelson 1987** (LOMI 142, 174–194): Theorem 2.2 gives a polynomial criterion, stated without proof.
+  - **Goh et al. 2018**, *PRA* 97, 022104 (to verify): the PR-plane slice, and the name "TLM" (Tsirelson–Landau–Masanes).
+  - **Tsirelson, LOMI 142, 174–194:** Theorem 2.2 gives a polynomial criterion, stated without proof. LOMI 142 is the 1985 original; the 1987 item is its English translation in *J. Sov. Math.* 36 (years to verify).
   - **Landau 1988** (*Found. Phys.* 18, 449–460): the square-root form. The abstract states it as a necessary condition; only the abstract was read.
-  - **Navascués–Pironio–Acín 2007:** the level-1 Gram test and the test that accounts for marginals.
+  - **Navascués–Pironio–Acín 2007**, *PRL* 98, 010401 (to verify): the level-1 Gram test and the test that accounts for marginals.
   - **Brunner et al. 2014** (*Rev. Mod. Phys.*, 419–478).
-  - **Werner–Wolf 2001:** 16 facets, made of 8 trivial and 8 CHSH.
+  - **Werner–Wolf 2001**, *PRA* 64, 032112 (to verify): 16 facets, made of 8 trivial and 8 CHSH.
   - **Fine 1982** (*PRL*, 291–295): full text not read.
-  - **Popescu–Rohrlich 1994:** the paper does not use the term "PR box".
-  - **Barrett 2005**; **Sanyal** (the "samosa" nickname for the 3×3 elliptope); **Laurent–Mascarin–Telen** [arXiv:2605.02484](https://arxiv.org/abs/2605.02484).
+  - **Popescu–Rohrlich 1994**, *Found. Phys.* 24, 379 (to verify): the paper does not use the term "PR box".
+  - **Barrett et al. 2005**, *PRA* 71, 022101 (to verify); **Sanyal** (the "samosa" nickname for the 3×3 elliptope); **Laurent–Mascarin–Telen** [arXiv:2605.02484](https://arxiv.org/abs/2605.02484).
 
 - **What the 3D view shows:**
   - Projecting onto any three correlators fills the whole cube, so it shows nothing. The view therefore uses slices: E11 = t (F21), the section E01 = E10, or the PR plane (F22).
@@ -490,14 +534,15 @@ The bound we evaluate is Pironio 2010 (see §2).
     - LPiperides/qkd-simulation (MIT): includes the Pironio 2009 rate.
     - Zytrus/rDIQKD_qiskit, Hazem-74/Quantum-info, GiuseppeViola/npa-mp-bff-diqkd.
 
-**How this project differs.** We claim nothing new. CHSH, entanglement-based QKD, DI key rates and repeaters already appear together on GitHub. In the searches above we did not find a **Qollab** project that does all of the following:
+**How this project differs.** We claim nothing new. CHSH, entanglement-based QKD, DI key rates and repeaters already appear together on GitHub. What we add is the teaching design. In the searches above we did not find a **Qollab** project that does all of the following:
 
-- runs them on IonQ noise models;
+- takes one Bell-test dataset up a ladder of claims: trusted-device entanglement, nonlocality, self-testing (extractability), DI randomness and a DI key, each at a stated finite-sample confidence end;
+- runs the same estimator on simulated counts and on open experimental event data (Rosenfeld 2017);
 - shows the DI randomness bound (F14) next to the DI key bound (F9);
 - states the conditions behind every number (asymptotic, collective attacks, depolarising model or measured S and Q);
 - places simulated correlators in a 3D picture of the local, quantum and no-signalling sets.
 
-This is an educational presentation of known results.
+The lab runs on whichever Qollab backend is selected, including IonQ's noise-model simulators. This is an educational presentation of known results.
 
 ## 8 Third-party software
 
@@ -511,9 +556,8 @@ This is an educational presentation of known results.
 | SciPy | 1.18.0 | BSD-3-Clause | https://scipy.org | Tests and figures only |
 | Matplotlib | 3.10.8 | Matplotlib (PSF-style) | https://matplotlib.org | Figures only |
 | three.js | r186 (`three@0.186.1`, 2026-09-24) | MIT, © 2010–2026 three.js authors | https://github.com/mrdoob/three.js | Provided by Qollab's import map; not vendored |
-| gifenc | 1.0.3 (2021-03-07) | MIT, © 2017 Matt DesLauriers | https://github.com/mattdesl/gifenc | Optional GIF export |
-| Tabler Icons | 3.49.0 (2026-10-05) | MIT, © 2020–2026 Paweł Kuna | https://github.com/tabler/tabler-icons | Icons (a subset is vendored, with its licence) |
-| mermaid-cli | 12.0.0 | MIT | https://github.com/mermaid-js/mermaid-cli | Build tool: renders the README diagram to PNG |
+| Tabler Icons | 3.49.0 (2026-10-05) | MIT, © 2020–2026 Paweł Kuna | https://github.com/tabler/tabler-icons | Icons: a small subset is vendored into the UI, with its licence notice |
+| mermaid-cli | 12.0.0 | MIT | https://github.com/mermaid-js/mermaid-cli | Build tool (planned): will render the README's Mermaid diagram sources to PNG |
 
 Licence strings were read from the installed package metadata (Python packages) and from the npm registry or the repositories (JavaScript), on 2026-10-09.
 
@@ -524,9 +568,6 @@ Licence strings were read from the installed package metadata (Python packages) 
   - `Clock` is deprecated (use `Timer`).
   - WebGL is still the default renderer.
   - r187 is not on npm yet.
-- **gifenc:** dormant since 2021.
-  - The first frame must carry the palette.
-  - Frame delays are stored in 10 ms steps.
 - **Tabler Icons:** use `icons/outline/<name>.svg`. These names do not exist as files: `light`, `photon`, `circuit-loop` and `random`. `3d-cube-sphere` is only an alias.
 - **Qiskit Aer docs:** the `depolarizing_error` definition was read on a docs page that shows version 0.17.1.
 
@@ -534,7 +575,7 @@ Licence strings were read from the installed package metadata (Python packages) 
 
 - **MediaRecorder** (Chrome 47, Firefox 25, Safari 14.1) and **canvas `captureStream`** (Chrome 51, Firefox 43, Safari 11), per MDN BCD.
   - Firefox source accepts only VP8 for WebM; Chromium also accepts VP9 and AV1.
-  - Feature-detect with `isTypeSupported` and fall back to GIF.
+  - Feature-detect with `isTypeSupported`.
 - **WCAG 2.2** (https://www.w3.org/TR/WCAG22/):
   - 2.5.8: targets at least 24×24 px (AA).
   - 1.4.3: contrast 4.5:1. 1.4.11: contrast 3:1.
@@ -561,6 +602,8 @@ Notation: h(x) = −x log₂x − (1−x) log₂(1−x).
   - S > 2 if and only if Q < 14.64%.
   - Conditions: depolarising noise only, optimal settings, no loss.
   - Derived; not stated in Werner 1989.
+  - Real sources are not Werner states. At Nadlinger's S = 2.677 this relation predicts Q ≈ 2.7%, against 1.44% measured. At Lu's 11 km S = 2.612 it predicts Q ≈ 3.8%, against 2.85%.
+  - Likewise, a reported fidelity F maps to S = 2√2(4F−1)/3 only under this model. Werner presets are therefore illustrative; a fit to real data needs at least two correlators (for example E_ZZ and E_XX).
 - **F4. Bell-diagonal noise, X–Z plane settings.** S_max = 2√((1−2Q_Z)² + (1−2Q_X)²).
   - General form: S_max = 2√(t₁²+t₂²) (Horodecki 1995; to verify).
 - **F5. Werner-state thresholds.**
@@ -657,8 +700,9 @@ Notation: h(x) = −x log₂x − (1−x) log₂(1−x).
 
 **About our own results**
 
-- We never say "Bell violation", "loophole-free", "secure key" or "certified randomness". All of our outcomes come from a seeded pseudo-random generator.
+- We never say "Bell violation", "loophole-free", "secure key" or "certified randomness" about simulated results. All simulated outcomes come from a seeded pseudo-random generator.
 - DI numbers are not security proofs and not extractable bit counts. Finite-size DI keys need roughly 10⁸ to 10¹⁵ rounds; our runs use roughly 10³ to 10⁵ shots.
+- A CHSH value computed on post-selected (purified) pairs is not a DI certificate. It assumes the herald is independent of the settings, as in event-ready schemes, and its statistics use the kept shots only.
 - IonQ noise-model results are not predictions of real QPU behaviour.
 
 **About thresholds**
@@ -671,13 +715,14 @@ Notation: h(x) = −x log₂x − (1−x) log₂(1−x).
 - The 11% threshold is asymptotic and assumes trusted devices.
 - Acín 2007 and Pironio 2009 do not cover coherent (general) attacks.
 - The closed-form randomness bound is a local min-entropy, not the pair min-entropy.
+- Kaniewski's bound is an extractability (local channels), not the fidelity of the physical state. Its b* ≈ 2.106 is not the DI self-testing threshold, which lies somewhere in [2.05, 2.11] and is unresolved.
 - S ≤ 2 does not mean a state is local or unentangled.
 
 **About attribution**
 
 - The four-term CHSH form is not quoted verbatim from CHSH 1969.
 - The S and QBER formulas are not from Werner 1989.
-- The arcsin form is not from Tsirelson 1987.
+- The arcsin form is not from Tsirelson's LOMI 142 paper.
 - Ekert 1991 is not a security proof, and BBM92 security does not rely on CHSH.
 
 **About experiments**
@@ -689,6 +734,9 @@ Notation: h(x) = −x log₂x − (1−x) log₂(1−x).
 - Meiers 2026 did not produce a DI key.
 - Zhang 2022 and Liu 2022 did not produce finite-size keys.
 - Fibre length is not the same as node separation.
+- Rosenfeld's S = 2.221 ± 0.033 is the 15 April 2016 run, not the public 14 June run (2.096 ± 0.034).
+- Our comparison with Lu's Fig. 5C rates is not a reproduction; the arXiv v1 supplement does not print the authors' exact formula.
+- A rate at the (S − σ, Q + σ) point is a conservative corner, not a joint 1σ region.
 
 **About randomness**
 
@@ -725,10 +773,11 @@ To verify:
 - The Ho 2020 supplement.
 - The Vazirani–Vidick 1.6% figure.
 - Pironio 2010: the Nature text compared with arXiv, and the later security analyses.
+- Full records for Valcarce 2020 and Bhavsar 2025 (cited under Kaniewski 2016).
 
 **Experiments**
-- Liu 2026: the attack model and node separation, from the Nature version or supplement.
-- Lu 2026: whether error correction and privacy amplification were run, and the S values at 20–100 km.
+- Liu 2026: the attack model and node separation, from the Nature version or supplement; the author count (29 on arXiv v1, 31 in Crossref).
+- Lu 2026: whether error correction and privacy amplification were run, and the formula behind the Fig. 5C rates (the Science supplement was not read).
 - Zhang 2022: the locality statement.
 - Liu 2022: the statistical margin.
 - Meiers 2026: check for newer versions.
@@ -746,7 +795,7 @@ To verify:
 - Confirm numerically that v_total = ∏vᵢ.
 
 **Geometry**
-- Full records for the supporting sources.
+- Full records for the supporting sources marked "to verify", and the year of Tsirelson's LOMI 142 paper.
 - Whether Masanes 2003 was ever published.
 - The Landau 1988 body text and the Fine 1982 full text.
 - Re-run the Monte Carlo equivalence checks.
@@ -755,8 +804,6 @@ To verify:
 - `depolarizing_error` in Aer 0.17.2 (the docs page shows 0.17.1).
 - The release status of three.js r187.
 - Runtime MediaRecorder support in each target browser, including Safari.
-- GIF frame-delay clamping.
-- gifenc issue #20.
 
 **Prior art**
 - Re-check Qollab and GitHub near the submission deadline.
