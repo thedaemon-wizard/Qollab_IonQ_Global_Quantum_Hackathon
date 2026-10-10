@@ -26,7 +26,13 @@ OUT = ROOT / "docs" / "img"
 C = ["#0072B2", "#E69F00", "#009E73", "#CC79A7", "#D55E00", "#56B4E9"]
 M = ["o", "s", "^", "D", "v", "P"]
 plt.rcParams.update(
-    {"font.size": 10, "axes.spines.top": False, "axes.spines.right": False, "figure.dpi": 150}
+    {
+        "font.size": 10,
+        "axes.spines.top": False,
+        "axes.spines.right": False,
+        "figure.dpi": 150,
+        "mathtext.fontset": "cm",  # formulas in labels in Computer Modern, as in the docs
+    }
 )
 
 
@@ -84,14 +90,16 @@ def backends_figure() -> None:
         )
         ax.plot(i + 0.18, r["prediction"]["S_fixed"], marker="_", ms=16, mew=2.2, color="#555555")
     ax.axhline(2, color="#888888", ls="--", lw=1)
-    ax.text(len(runs) - 0.5, 2.01, "local bound S = 2", ha="right", va="bottom", fontsize=8, color="#555555")
+    ax.text(
+        len(runs) - 0.5, 2.01, r"local bound $S = 2$", ha="right", va="bottom", fontsize=8, color="#555555"
+    )
     ax.axhline(2 * 2**0.5, color="#888888", ls=":", lw=1)
-    ax.text(len(runs) - 0.5, 2.835, "2√2", ha="right", va="bottom", fontsize=8, color="#555555")
+    ax.text(len(runs) - 0.5, 2.835, r"$2\sqrt{2}$", ha="right", va="bottom", fontsize=8, color="#555555")
     ax.set_xticks(range(len(runs)), labels, fontsize=8)
-    ax.set_ylabel("CHSH value S")
+    ax.set_ylabel(r"CHSH value $S$")
     ax.set_ylim(1.8, 3.05)
     ax.set_title(
-        "Runs on Qollab's simulators: S with its 97.5% Hoeffding interval\n"
+        "Runs on Qollab's simulators: $S$ with its 97.5% Hoeffding interval\n"
         "(grey bar: exact prediction without device noise)",
         fontsize=10,
     )
@@ -139,8 +147,8 @@ def rates_figure() -> None:
     )
     ax.set_xlim(0, 0.1)
     ax.set_ylim(2.3, 2.9)
-    ax.set_xlabel("QBER in the key basis")
-    ax.set_ylabel("CHSH value S")
+    ax.set_xlabel(r"QBER in the key basis, $Q_Z$")
+    ax.set_ylabel(r"CHSH value $S$")
     ax.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
     ax.axvline(th["acin"]["Q_werner"], color=C[2], ls=":", lw=1)
     ax.legend(fontsize=7, loc="lower left", frameon=False)
@@ -156,19 +164,20 @@ def rosenfeld_figure() -> None:
     for i, r in enumerate(data["runs"]):
         xs = [p["events"] for p in r["running"]]
         ys = [p["S"] for p in r["running"]]
+        name = r["label"].replace("main-text S", "main-text $S$")  # the same label as in the app, typeset
         ax.plot(
             xs,
             ys,
             color=C[i],
             lw=1.8,
             ls="-" if i == 0 else "--",
-            label=f"{r['label']}: S = {r['pooled']['S']:.3f} ± {r['pooled']['se']:.3f}",
+            label=f"{name}: $S = {r['pooled']['S']:.3f} \\pm {r['pooled']['se']:.3f}$",
         )
         ax.axhspan(r["S_low"], r["pooled"]["S"] + r["hoeffding_halfwidth"], color=C[i], alpha=0.12)
     ax.axhline(2, color="#888888", ls="--", lw=1)
     ax.set_ylim(1.6, 2.9)
     ax.set_xlabel("events used (first 5,000 per heralded state)")
-    ax.set_ylabel("running CHSH value S")
+    ax.set_ylabel(r"running CHSH value $S$")
     ax.legend(fontsize=8, frameon=False, loc="upper right")
     ax.set_title(
         "Munich 2017 event-ready Bell test, re-analysed (bands: 95% Hoeffding interval)", fontsize=10

@@ -31,6 +31,14 @@ def convert(text: str, ref: str, images: bool = True) -> str:
     # GitHub needs ```math blocks (it would eat * and backslash escapes inside $$...$$);
     # Qollab's write-up renders $$...$$.
     text = re.sub(r"```math\n(.*?)\n```", lambda m: f"$${m.group(1)}$$", text, flags=re.S)
+    # Inline math is written $`...`$ in the README, so GitHub keeps \, \! \{ \% and * inside it;
+    # Qollab renders $...$ with KaTeX, and an inline formula must stay on one line.
+    text = re.sub(r"\$`([^`\n]+?)`\$", lambda m: f"${m.group(1)}$", text)
+    unpaired = [
+        n for n, line in enumerate(text.split("\n"), 1) if "$`" in line or "`$" in line or line.count("$") % 2
+    ]
+    if unpaired:
+        raise ValueError(f"math delimiters unconverted or unpaired on write-up lines {unpaired}")
     if not images:  # while the repository is private the image URLs would not load
         text = re.sub(r"!\[[^\]]*\]\([^)]+\)\n\n?", "", text)
         marker = f"> https://github.com/{REPO}\n"

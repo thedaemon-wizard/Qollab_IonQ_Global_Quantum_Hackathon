@@ -7,7 +7,7 @@ HIGH findings survived. Three reported findings were refuted and are not listed.
 
 | # | Severity | Area | Finding | Where | What was done |
 |---|---|---|---|---|---|
-| 1 | MEDIUM | physics | Canary threshold of 0.5 lets a wrong bit order through about half the time in the packed (IonQ) layout | `config/defaults.json`:125 | Fixed: threshold raised to 0.75 (a misread bit passes with probability below 1e-6 at 100 shots); test reverses every packed key and checks the run stops. |
+| 1 | MEDIUM | physics | Canary threshold of 0.5 lets a wrong bit order through about half the time in the packed (IonQ) layout | `config/defaults.json`:125 | Fixed: threshold raised to 0.75 (a misread bit passes with probability below $`10^{-6}`$ at 100 shots); test reverses every packed key and checks the run stops. |
 | 2 | MEDIUM | runtime | One-IonQ-job gate can be bypassed between the Bell Lab and Repeater views | `ui/views/repeater.js`:259 | Fixed: `submitRun` counts the IonQ job when it is submitted (and returns it for errors raised before submission); both views re-check Run whenever the job count or an in-flight job changes. |
 | 3 | MEDIUM | runtime | Bell Lab Run button looks enabled but does nothing during replay or pause | `ui/views/lab.js`:163 | Fixed: Run is accepted during the replay and while paused (it starts a new job). |
 | 4 | MEDIUM | runtime | Guided tour's runAndFinish can hang, block the tour, or report numbers from an earlier run | `ui/views/lab.js`:317 | Fixed: the tour waits for done or error, reports only the run it started, and says so when the run fails. |
@@ -19,20 +19,20 @@ HIGH findings survived. Three reported findings were refuted and are not listed.
 | 10 | MEDIUM | claims | All README images point to a tag, v1.0-submission, that does not exist | `README.md`:15 | Fixed: README uses relative image paths; `scripts/make_writeup.py` produces the Qollab write-up with absolute URLs at the submission tag. |
 | 11 | MEDIUM | tests | Packed-layout (IonQ) canary cannot detect a reversed bit order, but README and the in-app note say the run stops | `bellkit/app.py`:140 | Same as the canary finding above. |
 | 12 | MEDIUM | tests | shots and seed are never validated; an invalid seed uses up the session's single IonQ job without submitting one | `bellkit/app.py`:132 | Same as the shots/seed finding above. |
-| 13 | LOW | physics | The S interval is labelled 95% but is built as a 97.5% interval | `ui/widgets/gauge.js`:47 | Fixed: the gauge labels the S interval at 97.5 % and explains that each certificate holds at 95 %. |
+| 13 | LOW | physics | The $`S`$ interval is labelled 95% but is built as a 97.5% interval | `ui/widgets/gauge.js`:47 | Fixed: the gauge labels the $`S`$ interval at 97.5 % and explains that each certificate holds at 95 %. |
 | 14 | LOW | physics | Wilson intervals labelled 98% instead of 97.5% | `ui/views/lab.js`:193 | Fixed: Wilson intervals labelled 97.5 %. |
 | 15 | LOW | physics | Pauli-frame description swaps which repeater bits give the X and Z corrections | `README.md`:111 | Same as the Pauli-frame finding above. |
 | 16 | LOW | physics | Purification without a rotation is called BBPSSW, but the BBPSSW twirl is missing | `ui/views/method.js`:77 | Fixed: the option and the Method text say "recurrence step of BBPSSW, without its random twirl". |
 | 17 | LOW | physics | The conservative ladder exports a 'witness_fidelity_high' that is not an upper bound | `bellkit/analysis.py`:218 | Fixed: the conservative ladder reports no upper fidelity value. |
 | 18 | LOW | physics | The YY setting gets no predicted correlator, so the table and CSV show a blank | `bellkit/models.py`:220 | Fixed: the exact model predicts the YY correlator; a test checks it against the circuit. |
-| 19 | LOW | runtime | Confidence levels on the error-rate and S intervals are mislabelled | `ui/views/lab.js`:193 | Same as the interval-label findings above. |
+| 19 | LOW | runtime | Confidence levels on the error-rate and $`S`$ intervals are mislabelled | `ui/views/lab.js`:193 | Same as the interval-label findings above. |
 | 20 | LOW | runtime | 'allows undefined' size note on the refused (QPU) profile | `ui/views/common.js`:72 | Fixed: a refused (QPU) profile shows its refusal instead of a qubit limit. |
 | 21 | LOW | runtime | Reset leaves the old error and the old report in place, and exports then disagree | `ui/views/lab.js`:284 | Fixed: Reset clears the error message and the last report, so exports are empty again. |
 | 22 | LOW | runtime | Run markers outside the axis range disappear while their legend entries stay | `ui/views/certificates.js`:215 | Fixed: markers outside the axes are pinned to the edge and drawn hollow. |
 | 23 | LOW | runtime | Noise-strength slider in the Certificates noise sweep has no effect | `ui/views/certificates.js`:171 | Fixed: the noise sweep shows only the noise-type selector (the sweep covers every strength). |
 | 24 | LOW | runtime | 3D view leaks GPU buffers on every Bell run | `ui/widgets/corrset3d.js`:289 | Fixed: geometries and materials are disposed when the 3D points or surfaces are rebuilt. |
-| 25 | LOW | claims | The S interval is labelled 95 % but is computed as a 97.5 % Hoeffding interval | `ui/widgets/gauge.js`:47 | Same as the interval-label findings above. |
-| 26 | LOW | claims | Tour says 'these settings cannot show' the v = 0.5 Werner state's entanglement, implying other settings could | `ui/views/tour_steps.js`:136 | Fixed: the tour says no CHSH test can show this entanglement (Werner states violate CHSH only above visibility 1/√2). |
+| 25 | LOW | claims | The $`S`$ interval is labelled 95 % but is computed as a 97.5 % Hoeffding interval | `ui/widgets/gauge.js`:47 | Same as the interval-label findings above. |
+| 26 | LOW | claims | Tour says 'these settings cannot show' the $`v = 0.5`$ Werner state's entanglement, implying other settings could | `ui/views/tour_steps.js`:136 | Fixed: the tour says no CHSH test can show this entanglement (Werner states violate CHSH only above visibility $`1/\sqrt{2}`$). |
 | 27 | LOW | claims | decisions.md contradicts the code and the README on how results are read and what is recorded | `docs/decisions.md`:48 | Fixed: D4 now says results are read by position (D9). |
 | 28 | LOW | claims | On IonQ the tour hands the user a two-link swap that is too large to run | `ui/views/tour_steps.js`:173 | Same as the tour/IonQ finding above. |
 | 29 | LOW | claims | The recorded IBM Fez chain run shows seed null, although it ran seeded | `data/recorded_runs.json`:2679 | Fixed: `scripts/record_runs.py` records the configured seed for seeded profiles; recorded runs rebuilt. |
@@ -67,10 +67,10 @@ correctness, R = rules, A = accessibility, D = documentation.
 | R5 | MEDIUM | No accessibility statement in the write-up | Fixed: "Accessibility" section with the measured results. |
 | R6 | MEDIUM | CC BY notice lacked the Zenodo record title and its copyright line | Fixed in `NOTICE.md` and `THIRD_PARTY_NOTICES.md` (checked against the Zenodo record). |
 | R7 | MEDIUM | Recorded IonQ runs predate the final code | Checked: circuits and decoding unchanged since the captures; noted in Results; a new IonQ Forte Enterprise 1 run was made with the final upload. |
-| C1 | MEDIUM | S interval called "95 %" in the notebook and three UI labels, "97.5 %" in the README | Fixed: labels built from δ (97.5 % per interval, 95 % per claim). |
+| C1 | MEDIUM | $`S`$ interval called "95 %" in the notebook and three UI labels, "97.5 %" in the README | Fixed: labels built from $`\delta`$ (97.5 % per interval, 95 % per claim). |
 | C2 | MEDIUM | "Canary fraction of 1" wrong for the IBM Fez runs (0.9725) | Fixed. |
 | C3 | MEDIUM | "IonQ accepts one circuit per job" broader than the evidence | Fixed: "on Qollab, the IonQ simulator…". |
-| C4 | MEDIUM | Meiers 2026 presented as an S–Q point | Fixed: described as S only, preprint, no DI claim. |
+| C4 | MEDIUM | Meiers 2026 presented as an $`S`$–$`Q`$ point | Fixed: described as $`S`$ only, preprint, no DI claim. |
 | C5 | MEDIUM | decisions.md header did not mention D3 and D10 | Fixed. |
 | A3 | MEDIUM | Correlation-space points kept dark-theme colours in light mode | Fixed: theme colour tokens, resolved again on a theme change. |
 | A4 | MEDIUM | 3D points told apart by colour only | Fixed: same marker shape in 3D, the 2D slice and the legend. |
@@ -81,7 +81,7 @@ correctness, R = rules, A = accessibility, D = documentation.
 | D2 | MEDIUM | Write-up links point to a tag that does not exist | Same as R2. |
 | D3 | MEDIUM | LaTeX in the write-up may not render on Qollab | Checked on Qollab's preview: 21 formulas, no errors. |
 | C6 | LOW | Two dates for the throwaway test project | Fixed: reused once in the window for the WebGPU check (D10). |
-| C7 | LOW | No capture for the built-in simulator on Qollab | Fixed: the built-in run on Qollab gives the same seed and counts as the local reference row (S = 2.708), now stated. |
+| C7 | LOW | No capture for the built-in simulator on Qollab | Fixed: the built-in run on Qollab gives the same seed and counts as the local reference row ($`S = 2.708`$), now stated. |
 | C8 | LOW | Write-up script edge cases (CRLF, scheme links, missing marker) | Fixed: CRLF normalised, links with a scheme, `//` or `#` left alone, error when the marker is missing. |
 | C9 | LOW | Every notebook rebuild changes cell ids and timestamps | Fixed: stable ids, execution timestamps removed. |
 | C10 | LOW | TLM condition did not say which sign vectors | Fixed in the README and the Method view. |

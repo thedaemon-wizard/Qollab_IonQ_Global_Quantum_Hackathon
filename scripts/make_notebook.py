@@ -86,7 +86,7 @@ for kind, ls in kinds:
     axes[0].plot(qs, [p["S_fixed"] for p in preds], ls, label=kind)
     rates = [max(0.0, bounds.di_rate_acin(p["S_fixed"], p["Q_Z"]) or 0.0) for p in preds]
     axes[1].plot(qs, rates, ls, label=kind)
-axes[0].axhline(2, color="grey", lw=1, label="local bound S = 2")
+axes[0].axhline(2, color="grey", lw=1, label=r"local bound $S = 2$")
 axes[0].set(xlabel="noise strength", ylabel="CHSH value S", title="S (exact model)")
 axes[1].set(xlabel="noise strength", ylabel="bits per round", title="DI key rate (Acin et al. 2007)")
 axes[0].legend(fontsize=8)
@@ -139,32 +139,33 @@ cells = [
     md(INTRO),
     code(SETUP),
     md(
-        "## 1. One Bell run\nSix settings (Alice 0°, 90°, ±45°; Bob 0°, 90°) in one job, "
+        "## 1. One Bell run\nSix settings (Alice $0^\\circ$, $90^\\circ$, $\\pm 45^\\circ$; "
+        "Bob $0^\\circ$, $90^\\circ$) in one job, "
         "with 5% depolarizing noise on Bob's link, on Qiskit's BasicSimulator."
     ),
     code(RUN),
     md(
         "## 2. The certificate ladder\nEach claim at the point estimate and at the conservative end "
-        "(S at its lower end, error rates at their upper ends)."
+        "($S$ at its lower end, error rates at their upper ends)."
     ),
     code(LADDER),
     md("## 3. One of the circuits\nThe Pauli channel uses two ancilla qubits. Qiskit's own drawing:"),
     code(CIRCUIT),
     md("## 4. Thresholds, computed from the formulas"),
     code(THRESHOLDS),
-    md("## 5. Noise sweep\nS and the device-independent key rate for each named channel (exact model)."),
+    md("## 5. Noise sweep\n$S$ and the device-independent key rate for each named channel (exact model)."),
     code(SWEEP),
     md(
-        "The same information as text: the noise strength at which each channel reaches S = 2 and "
+        "The same information as text: the noise strength at which each channel reaches $S = 2$ and "
         "at which the DI key rate reaches zero."
     ),
     code(CROSSINGS),
-    md("## 6. Entanglement swapping\nS against the number of links for 5% depolarizing noise per link."),
+    md("## 6. Entanglement swapping\n$S$ against the number of links for 5% depolarizing noise per link."),
     code(CHAIN),
     md(
         "## 7. Real data: the Munich 2017 Bell test\n"
         "The first 5,000 events per heralded state, as in the paper "
-        "(Rosenfeld et al. 2017, S = 2.221 ± 0.033 for the April run)."
+        "(Rosenfeld et al. 2017, $S = 2.221 \\pm 0.033$ for the April run)."
     ),
     code(MUNICH),
     md(

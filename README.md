@@ -16,51 +16,51 @@ and published device-independent QKD experiments.
 
 ## Why this lab
 
-Bell tests are usually taught as a yes/no question: is S above 2? In practice the same counts
+Bell tests are usually taught as a yes/no question: is $`S`$ above 2? In practice the same counts
 are used for very different claims, and each claim needs different assumptions and a
 different amount of evidence:
 
 | Claim | What it assumes about the devices | Threshold (Werner states) |
 |---|---|---|
-| Bell violation | nothing | S > 2 |
-| Entanglement witness | trusted, calibrated measurements | visibility > 1/2 |
-| BBM92 key (asymptotic) | trusted qubit measurements | QBER < 11.0 % |
-| Self-test, non-trivial (Kaniewski 2016) | nothing; i.i.d. rounds | S > 2.106 |
-| DI randomness (Pironio et al. 2010) | nothing; i.i.d. rounds | S > 2 |
-| DI key (Acín et al. 2007, collective attacks) | nothing; i.i.d. rounds | S > 2.424, QBER < 7.15 % |
+| Bell violation | nothing | $`S > 2`$ |
+| Entanglement witness | trusted, calibrated measurements | visibility $`v > 1/2`$ |
+| BBM92 key (asymptotic) | trusted qubit measurements | QBER $`Q < 11.0\,\%`$ |
+| Self-test, non-trivial (Kaniewski 2016) | nothing; i.i.d. rounds | $`S > 2.106`$ |
+| DI randomness (Pironio et al. 2010) | nothing; i.i.d. rounds | $`S > 2`$ |
+| DI key (Acín et al. 2007, collective attacks) | nothing; i.i.d. rounds | $`S > 2.424`$, QBER $`Q < 7.15\,\%`$ |
 
 The lab makes this ladder visible. Every run shows each certificate twice: at the **point
-estimate**, and at the **conservative end** (S at the lower end of its interval, error rates at
+estimate**, and at the **conservative end** ($`S`$ at the lower end of its interval, error rates at
 the upper ends of theirs; each interval is at 97.5 %, so every claim holds at 95 %). With 10,000
 shots per setting most claims survive; with the 200 shots of an IonQ noise-model run, the
 device-independent key does not — finite statistics are part of the lesson, not a footnote.
 
 **Terms used here.**
 
-- **S**: the CHSH value, a sum of four correlators $E_{xy}$; local models give $|S|\le2$,
-  quantum mechanics at most $2\sqrt2\approx2.83$ (Tsirelson's bound).
-- **QBER** ($Q$, $Q_Z$, $Q_X$): quantum bit error rate, the share of rounds in which Alice's and
+- **CHSH value** $`S`$: a sum of four correlators $`E_{xy}`$; local models give $`\lvert S\rvert \le 2`$,
+  quantum mechanics at most $`2\sqrt{2} \approx 2.83`$ (Tsirelson's bound).
+- **QBER** ($`Q`$, $`Q_Z`$, $`Q_X`$): quantum bit error rate, the share of rounds in which Alice's and
   Bob's bits differ when both measure in the same basis (Z = key basis, X = the second basis).
-- **Werner state**: the entangled pair mixed with white noise, with visibility $v$;
-  depolarizing noise of strength $\lambda$ gives $v = 1-\lambda$.
+- **Werner state**: the entangled pair mixed with white noise, with visibility $`v`$;
+  depolarizing noise of strength $`\lambda`$ gives $`v = 1 - \lambda`$.
 - **DI (device-independent)**: a claim that needs no model of the devices, only the observed
   statistics. **i.i.d.**: independent and identically distributed rounds (assumed throughout).
 - **BBM92**: entanglement-based key distribution with trusted measurements (Bennett, Brassard,
   Mermin 1992). **BBPSSW / DEJMPS**: two entanglement-purification protocols (1996).
 - **Pauli frame**: corrections required by a repeater's Bell measurement, applied to Bob's bit
   in software. **TLM**: the Tsirelson–Landau–Masanes test of whether correlators are quantum.
-  $h(x)$ is the binary entropy.
+  $`h(x)`$ is the binary entropy.
 
 ## What you can do
 
 | View | What it shows |
 |---|---|
 | **Overview** | The protocol and the software architecture as diagrams; which numbers are simulated, measured or bounds; the injected backend and its run profile; an 8-check formula self-test run in Python at start-up. |
-| **Bell Lab** | Choose link noise (depolarizing, dephasing, bit flip, Y flip), an eavesdropper (controlled-Ry with angle φ), an optional YY setting, shots and seed. **One job** runs six settings; the five protocol stages then replay from its counts (Run, Pause, Step, Reset), as a stepper and as a protocol diagram whose current stage lights up and whose boxes fill in with that stage's numbers (the pacing is not physical time). S gauge with its interval, outcome counts, correlators against the exact prediction, error rates, the six-rung certificate ladder. Exports to JSON, CSV and PNG. |
-| **Certificates** | Key rate against QBER (BBM92 and DI), what S alone certifies (min-entropy, von Neumann entropy, self-test bound), noise sweeps for each channel type, and a threshold table — with your latest run placed on the curves. |
-| **Real data** | The **Munich 2017 event-ready Bell test** (Rosenfeld et al., open event files) re-analysed with the same estimator; published DI-QKD experiments on the S–Q plane against the DI-key boundary (plus one S-only result); a distance series (Lu et al. 2026) next to our recomputation. |
-| **Repeater** | 1–4 links joined by entanglement swapping (topology diagram, timeline of classical messages, link budget, S and QBER against the number of links), and one round of BBPSSW/DEJMPS purification with post-selection. |
-| **Correlation space** | A three.js view of the CHSH correlation sets — no-signalling cube, local polytope, curved quantum boundary — with your run, the Munich runs and reference points; plus an exact 2D slice (diamond ⊂ disc ⊂ square) and a membership table for keyboard and screen-reader users. |
+| **Bell Lab** | Choose link noise (depolarizing, dephasing, bit flip, Y flip), an eavesdropper (controlled-Ry with angle $`\varphi`$), an optional YY setting, shots and seed. **One job** runs six settings; the five protocol stages then replay from its counts (Run, Pause, Step, Reset), as a stepper and as a protocol diagram whose current stage lights up and whose boxes fill in with that stage's numbers (the pacing is not physical time). $`S`$ gauge with its interval, outcome counts, correlators against the exact prediction, error rates, the six-rung certificate ladder. Exports to JSON, CSV and PNG. |
+| **Certificates** | Key rate against QBER (BBM92 and DI), what $`S`$ alone certifies (min-entropy, von Neumann entropy, self-test bound), noise sweeps for each channel type, and a threshold table — with your latest run placed on the curves. |
+| **Real data** | The **Munich 2017 event-ready Bell test** (Rosenfeld et al., open event files) re-analysed with the same estimator; published DI-QKD experiments on the $`S`$–$`Q`$ plane against the DI-key boundary (plus one $`S`$-only result); a distance series (Lu et al. 2026) next to our recomputation. |
+| **Repeater** | 1–4 links joined by entanglement swapping (topology diagram, timeline of classical messages, link budget, $`S`$ and QBER against the number of links), and one round of BBPSSW/DEJMPS purification with post-selection. |
+| **Correlation space** | A three.js view of the CHSH correlation sets — no-signalling cube, local polytope, curved quantum boundary — with your run, the Munich runs and reference points; plus an exact 2D slice ($`\text{diamond} \subset \text{disc} \subset \text{square}`$) and a membership table for keyboard and screen-reader users. |
 | **Backends & circuits** | Every circuit of the run as a diagram with shaded protocol sections, or Qiskit's own text drawing; how the plan is laid out for the backend; transpiled depth and gate counts; a comparison of runs across backends. |
 | **Method & sources** | Formulas (MathML), finite-statistics method, limits, disclosure and references. |
 
@@ -135,31 +135,31 @@ flowchart LR
 
 ### The physics, briefly
 
-The source prepares $|\Phi^+\rangle=(|00\rangle+|11\rangle)/\sqrt2$. A measurement along
-angle $\theta$ in the X–Z plane is $R_y(-\theta)$ followed by a Z measurement. Alice uses
-$0^\circ$ (key), $90^\circ$, $\pm45^\circ$; Bob uses $0^\circ$ and $90^\circ$:
+The source prepares $`\lvert\Phi^+\rangle = (\lvert 00\rangle + \lvert 11\rangle)/\sqrt{2}`$. A measurement along
+angle $`\theta`$ in the X–Z plane is $`R_y(-\theta)`$ followed by a Z measurement. Alice uses
+$`0^\circ`$ (key), $`90^\circ`$, $`\pm 45^\circ`$; Bob uses $`0^\circ`$ and $`90^\circ`$:
 
 ```math
 S = E_{00}+E_{01}+E_{10}-E_{11},\qquad E_{xy}=\frac{N_\text{same}-N_\text{diff}}{N}.
 ```
 
 Link noise is an exact **Pauli channel** on Bob's qubit,
-$\rho\mapsto p_I\rho+p_XX\rho X+p_YY\rho Y+p_ZZ\rho Z$, built from two ancilla qubits;
-depolarizing noise of strength $\lambda$ gives the Werner state with visibility $1-\lambda$,
-so $S=2\sqrt2(1-\lambda)$. The certificates are
+$`\rho \mapsto p_I\,\rho + p_X\,X\rho X + p_Y\,Y\rho Y + p_Z\,Z\rho Z`$, built from two ancilla qubits;
+depolarizing noise of strength $`\lambda`$ gives the Werner state with visibility $`1 - \lambda`$,
+so $`S = 2\sqrt{2}\,(1 - \lambda)`$. The certificates are
 
 ```math
 r_\text{BBM92}=1-h(Q_Z)-h(Q_X),\qquad r_\text{DI}=1-h(Q)-h\!\left(\tfrac{1+\sqrt{(S/2)^2-1}}{2}\right),
 ```
 
 ```math
-H_\text{min}\ge 1-\log_2\!\left(1+\sqrt{2-S^2/4}\right),\qquad F\ge\tfrac12+\tfrac12\,\frac{S-\beta^*}{2\sqrt2-\beta^*},\ \ \beta^*=\tfrac{16+14\sqrt2}{17}.
+H_\text{min}\ge 1-\log_2\!\left(1+\sqrt{2-S^2/4}\right),\qquad F\ge\tfrac12+\tfrac12\,\frac{S-\beta^{\ast}}{2\sqrt2-\beta^{\ast}},\ \ \beta^{\ast}=\tfrac{16+14\sqrt2}{17}.
 ```
 
-S gets a two-sided **Hoeffding** interval and the error rates **Wilson** intervals, with the
-risk $\delta=0.05$ split equally between them. A vector of correlators (all $|E_{xy}|\le1$) is
-quantum if $\max_s\sum_{xy}s_{xy}\arcsin E_{xy}\le\pi$ over the eight sign vectors with
-$s_{00}s_{01}s_{10}s_{11}=-1$ (Tsirelson–Landau–Masanes), and local if it obeys all eight CHSH
+$`S`$ gets a two-sided **Hoeffding** interval and the error rates **Wilson** intervals, with the
+risk $`\delta = 0.05`$ split equally between them. A vector of correlators (all $`\lvert E_{xy}\rvert \le 1`$) is
+quantum if $`\max_s \sum_{xy} s_{xy} \arcsin E_{xy} \le \pi`$ over the eight sign vectors with
+$`s_{00}\,s_{01}\,s_{10}\,s_{11} = -1`$ (Tsirelson–Landau–Masanes), and local if it obeys all eight CHSH
 inequalities. Full derivations and page-level sources: [docs/references.md](docs/references.md).
 
 ## Results
@@ -173,7 +173,7 @@ captured run passes: canary fraction 0.9725 on IBM Fez and 1 elsewhere, threshol
 
 ![S on each simulator, with intervals and the exact prediction](docs/img/backends.png)
 
-| Backend (Qollab) | Experiment | Shots / setting | S [97.5 % interval] | Exact prediction | Q_Z | DI key rate, point → conservative |
+| Backend (Qollab) | Experiment | Shots / setting | $`S`$ [97.5 % interval] | Exact prediction | $`Q_Z`$ | DI key rate, point → conservative |
 |---|---|---:|---|---:|---:|---|
 | Qiskit BasicSimulator (local reference run) | Bell, 5 % depolarizing | 10,000 | 2.708 [2.649, 2.767] | 2.687 | 2.36 % | 0.580 → 0.469 |
 | AWS Braket local (ideal) | Bell, 5 % depolarizing | 2,000 | 2.670 [2.538, 2.802] | 2.687 | 1.55 % | 0.566 → 0.343 |
@@ -184,23 +184,23 @@ captured run passes: canary fraction 0.9725 on IBM Fez and 1 elsewhere, threshol
 | IonQ Forte Enterprise 1 noise model | Bell, 5 % depolarizing | 200 | 2.320 [1.901, 2.739] | 2.687 | 10.50 % | none |
 | IonQ Aria 1 noise model | 2-link swap, no added noise | 200 | 2.520 [2.101, 2.939] | 2.828 | 2.00 % | 0.339 → none |
 | IBM Fez noise model | 2-link swap, 5 % depolarizing | 2,000 | 2.264 [2.132, 2.396] | 2.553 | 9.25 % | none |
-| IBM Fez noise model | Bell, Eve at φ = 180° | 2,000 | 1.322 [1.190, 1.454] | 1.414 | 2.70 % | none (Q_X = 51.1 %) |
+| IBM Fez noise model | Bell, Eve at $`\varphi = 180^\circ`$ | 2,000 | 1.322 [1.190, 1.454] | 1.414 | 2.70 % | none ($`Q_X = 51.1\,\%`$) |
 
 What the table shows:
 
-- **Device noise adds to the channel noise.** On the noise-model backends S falls below the
+- **Device noise adds to the channel noise.** On the noise-model backends $`S`$ falls below the
   channel-only prediction. Within one backend the swap loses more than the Bell test (IBM Fez:
   0.29 against 0.13), since its circuits have more two-qubit gates; the 200-shot IonQ gaps are
   within their intervals.
 - **Finite statistics decide the stronger claims.** With 200 shots per setting (IonQ) the
-  interval on S is about ±0.42. The Aria 1 and Forte 1 runs keep S above 2 at the conservative
+  interval on $`S`$ is about ±0.42. The Aria 1 and Forte 1 runs keep $`S`$ above 2 at the conservative
   end, but the asymptotic DI-key bound turns negative there; the Forte Enterprise 1 run shows a
-  Bell violation only at its point estimate (S = 2.320, lower end 1.901). One 200-shot run per
-  model cannot rank the models: its S differs from the Forte 1 run's by 0.25, about 1.6 combined
+  Bell violation only at its point estimate ($`S = 2.320`$, lower end 1.901). One 200-shot run per
+  model cannot rank the models: its $`S`$ differs from the Forte 1 run's by 0.25, about 1.6 combined
   standard errors. With 2,000–10,000 shots the DI-key bound for the same experiment stays
   positive at the conservative end. (These are simulated counts; see Limits.)
-- **The eavesdropper is caught by the second basis**: the key basis looks clean (Q_Z ≈ 2.7 %,
-  device noise only) while Q_X ≈ 51 % and S < 2.
+- **The eavesdropper is caught by the second basis**: the key basis looks clean ($`Q_Z \approx 2.7\,\%`$,
+  device noise only) while $`Q_X \approx 51\,\%`$ and $`S < 2`$.
 - **Reproducibility**: seeded IBM Fez runs on Qollab (Pyodide in the browser) and the same
   requests run locally with Python 3.14 give **identical counts** for all five tour runs.
 
@@ -210,37 +210,37 @@ What the table shows:
 
 The open event files of Rosenfeld et al. (Phys. Rev. Lett. 119, 010402, 2017; Zenodo
 doi:10.5281/zenodo.22936124, CC BY 4.0) list every valid atom–atom event. Mapped onto this
-lab's CHSH form, the first 5,000 events per heralded state give **S = 2.2213 ± 0.0332** for
+lab's CHSH form, the first 5,000 events per heralded state give **$`S = 2.2213 \pm 0.0332`$** for
 the 15 April 2016 run, the paper's 2.221 ± 0.033, and match the paper's published count tables
 (Supplement Tables S8 and S10; one cell is kept as a regression test). The public 14 June 2016 run gives 2.0957 ± 0.0340. Under this lab's conservative
-i.i.d. Hoeffding bound the April run clears 2 (S ≥ 2.113) and the June run does not
-(S ≥ 1.987) — the paper's own tests do not assume i.i.d. trials, so this is our reading, not a
+i.i.d. Hoeffding bound the April run clears 2 ($`S \ge 2.113`$) and the June run does not
+($`S \ge 1.987`$) — the paper's own tests do not assume i.i.d. trials, so this is our reading, not a
 contradiction. The data have no key-basis pair, so only CHSH-based certificates apply.
 
 ### Published DI-QKD experiments
 
 ![Published experiments on the S–Q plane with the DI-key boundary](docs/img/di_boundary.png)
 
-Quoted S and Q from Nadlinger 2022, Zhang 2022 and Liu 2026 (10 km and 101 km) are evaluated
-with the same asymptotic bounds, at the central values and at the corner (S − σ, Q + σ);
-Meiers 2026 (a preprint that makes no device-independent claim) reports S only and is listed
+Quoted $`S`$ and $`Q`$ from Nadlinger 2022, Zhang 2022 and Liu 2026 (10 km and 101 km) are evaluated
+with the same asymptotic bounds, at the central values and at the corner $`(S - \sigma, Q + \sigma)`$;
+Meiers 2026 (a preprint that makes no device-independent claim) reports $`S`$ only and is listed
 without a rate. For Liu 2026 at 101 km the rate is 0.087 at the centre and −0.038 at that
-corner. For Lu et al. 2026 (Science 391, 592), our $(1-\gamma)r_\text{DI}$ with
-$\gamma=10^{-3}$ is 0.0008–0.0015 above every deposited Fig. 5C value; the paper does not print
+corner. For Lu et al. 2026 (Science 391, 592), our $`(1 - \gamma)\,r_\text{DI}`$ with
+$`\gamma = 10^{-3}`$ is 0.0008–0.0015 above every deposited Fig. 5C value; the paper does not print
 its exact formula, so the lab reports the difference rather than claiming a reproduction.
 
 ## How it was verified
 
 - **More than 240 tests** (`pytest`): every circuit family is checked against the exact channel model
-  to $10^{-9}$ using exact output distributions (Bell with each channel and the eavesdropper,
+  to $`10^{-9}`$ using exact output distributions (Bell with each channel and the eavesdropper,
   1–3-hop chains with and without the Pauli frame, purification with both rotations, the packed
   IonQ layout); bounds and thresholds against published values; Hoeffding and Wilson
-  coverage (by simulation); the correlation-set membership tests (including Monte-Carlo volume ratios 2/3 and
-  $3\pi^2/32$); the Munich re-analysis against the paper's tables; the published-rate
+  coverage (by simulation); the correlation-set membership tests (including Monte-Carlo volume ratios $`2/3`$ and
+  $`3\pi^2/32`$); the Munich re-analysis against the paper's tables; the published-rate
   recomputation; and static checks of the Qollab rules (no Sampler/Estimator, no dynamic
   circuits, literal data paths, upload limits, a single Python bridge in the browser code).
 - **On Qollab**: the full guided tour on the IBM Fez noise model; Bell runs on the built-in
-  simulator (same seed and counts as the local reference row: S = 2.708), Braket, IBM Fez, IonQ Aria 1, IonQ Forte 1 and IonQ Forte Enterprise 1 simulators; a two-link
+  simulator (same seed and counts as the local reference row: $`S = 2.708`$), Braket, IBM Fez, IonQ Aria 1, IonQ Forte 1 and IonQ Forte Enterprise 1 simulators; a two-link
   swap on IonQ Aria 1.
 - Problems found on Qollab and fixed: a module-level name clashing with the injected
   `backend`; the Braket backend's name (`default`) and its loss of circuit names; a 25-qubit
@@ -379,8 +379,8 @@ author checked each finding before it was fixed.
 Munich Bell-test event files: W. Rosenfeld et al., PRL 119, 010402 (2017), Zenodo
 doi:10.5281/zenodo.22936124, **CC BY 4.0**. Published values from Lu et al. (Zenodo
 doi:10.5281/zenodo.17958512) and Liu et al. (Zenodo doi:10.5281/zenodo.18218281), CC BY 4.0, and
-from the cited papers. Tabler Icons (MIT), three.js (MIT, provided by Qollab), Qiskit
-(Apache-2.0). Details: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+from the cited papers. Tabler Icons (MIT), three.js (MIT, provided by Qollab) and Qiskit (Apache-2.0); loaded at run time
+from jsDelivr and not included: Temml 0.14.0 (MIT) and the Latin Modern Math font (GUST Font License). Details: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Attribution
 
