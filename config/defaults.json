@@ -178,7 +178,7 @@
       ],
       "shots": 2000,
       "opt_level": 1,
-      "layout": "packed_single_circuit",
+      "layout": "multi_circuit",
       "max_qubits": 25,
       "transpile": "basis",
       "basis_gates": [

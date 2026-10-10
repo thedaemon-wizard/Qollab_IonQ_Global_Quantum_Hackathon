@@ -92,14 +92,19 @@ def config_json() -> str:
     return json.dumps({**config.load(), "thresholds": bounds.thresholds()})
 
 
+def _profile_for(cfg: dict, backend) -> tuple[str, dict]:
+    name = str(getattr(backend, "name", "unknown"))
+    return name, config.resolve_profile(cfg, name, type(backend).__name__)
+
+
 def describe_backend_json(backend) -> str:
     cfg = config.load()
-    name = str(getattr(backend, "name", "unknown"))
-    profile = config.resolve_profile(cfg, name)
+    name, profile = _profile_for(cfg, backend)
     return json.dumps(
         {
             "name": name,
             "num_qubits": getattr(backend, "num_qubits", None),
+            "type": type(backend).__name__,
             "profile": {k: v for k, v in profile.items() if k != "match"},
         }
     )
@@ -119,11 +124,9 @@ def run_json(backend, request_json: str) -> str:
     cfg = config.load()
     req = json.loads(request_json)
     exp = parse_request(req, cfg)
-    name = str(getattr(backend, "name", "unknown"))
-    profile = config.resolve_profile(cfg, name)
+    name, profile = _profile_for(cfg, backend)
     if profile.get("refuse"):
         raise execution.RefusedBackend(profile["refuse_reason"])
-    settings = _settings_used(cfg, exp)
     units = make_units(exp, config.settings(cfg), _yy_setting(cfg) if exp.include_yy else None)
     plan = build_plan(units, profile["layout"])
     shots = int(req.get("shots") or profile["shots"])
@@ -145,12 +148,27 @@ def run_json(backend, request_json: str) -> str:
         )
         tables[unit.setting["id"]] = table
         selection[unit.setting["id"]] = {"kept": kept, "total": total}
+    meta = {
+        "backend": {"name": name, "profile": profile["id"], "profile_label": profile["label"]},
+        "layout": plan.layout,
+        "shots": shots,
+        "seed": seed if profile.get("seed_option") else None,
+        "seconds": run["seconds"],
+        "canary_fraction": canary,
+        "circuits": {"logical": run["logical"], "compiled": run["compiled"]},
+    }
+    return json.dumps(build_report(cfg, req, exp, tables, selection, meta))
+
+
+def build_report(cfg: dict, req: dict, exp: Experiment, tables: dict, selection: dict, meta: dict) -> dict:
+    """The report for one run, from its decoded tables (also used for recorded runs)."""
+    settings = _settings_used(cfg, exp)
     result = analysis.analyse(tables, settings, cfg["confidence"]["delta"])
     chsh_ids = [s["id"] for s in settings if "chsh" in s["roles"]]
     measured_e = tuple(result["settings"][i]["E"] for i in chsh_ids)
     report = {
         "schema": SCHEMA_RUN,
-        "backend": {"name": name, "profile": profile["id"], "profile_label": profile["label"]},
+        **{k: v for k, v in meta.items() if k == "backend"},
         "request": req,
         "experiment": {
             "module": exp.module,
@@ -160,12 +178,7 @@ def run_json(backend, request_json: str) -> str:
             "rotation": exp.rotation,
             "include_yy": exp.include_yy,
         },
-        "layout": plan.layout,
-        "shots": shots,
-        "seed": seed if profile.get("seed_option") else None,
-        "seconds": run["seconds"],
-        "canary_fraction": canary,
-        "circuits": {"logical": run["logical"], "compiled": run["compiled"]},
+        **{k: v for k, v in meta.items() if k != "backend"},
         "selection": selection,
         "analysis": result,
         "prediction": _prediction(exp, cfg),
@@ -175,7 +188,7 @@ def run_json(backend, request_json: str) -> str:
         kept = sum(v["kept"] for v in selection.values())
         total = sum(v["total"] for v in selection.values())
         report["purification"] = {"P_success_measured": kept / total, "kept": kept, "total": total}
-    return json.dumps(report)
+    return report
 
 
 def _grid(lo: float, hi: float, points: int) -> list[float]:

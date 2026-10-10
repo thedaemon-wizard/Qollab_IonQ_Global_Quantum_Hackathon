@@ -59,16 +59,18 @@ def settings(cfg: dict) -> list[dict]:
     ]
 
 
-def resolve_profile(cfg: dict, backend_name: str) -> dict:
+def resolve_profile(cfg: dict, backend_name: str, backend_type: str = "") -> dict:
     """Pick the first profile (in file order) whose match pattern occurs in the backend name.
 
     Profiles are listed most specific first: a local IBM noise model is named
-    ``aer_simulator_from(fake_fez)`` and must hit the IBM profile before the ideal one.
+    ``aer_simulator_from(fake_fez)`` and must hit the IBM profile before the ideal one. The
+    backend's class name is matched too: Qollab's Braket local simulator is named "default"
+    (class BraketLocalBackend).
 
     An unrecognised backend gets the explicit, conservative ``default_profile``; the UI
     names it so that the choice is visible.
     """
-    name = (backend_name or "").lower()
+    name = f"{backend_name or ''} {backend_type or ''}".lower()
     for profile in cfg["profiles"]:
         if any(pattern in name for pattern in profile["match"]):
             return profile

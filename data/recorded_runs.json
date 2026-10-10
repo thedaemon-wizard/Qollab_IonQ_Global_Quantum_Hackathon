@@ -1,5 +1,2415 @@
 {
-  "schema_version": 1,
-  "note": "Runs recorded on Qollab and locally, exported with the app's JSON button. Each entry keeps the backend, the run profile, the request and the analysed numbers.",
-  "runs": []
+ "schema_version": 1,
+ "note": "Runs recorded on Qollab and locally; analysis recomputed from the captured counts by scripts/record_runs.py.",
+ "runs": [
+  {
+   "schema": "bellkit.run/1",
+   "backend": {
+    "name": "basic_simulator",
+    "profile": "ideal",
+    "profile_label": "Ideal local simulator"
+   },
+   "request": {
+    "module": "bell",
+    "channel": {
+     "kind": "depolarizing",
+     "strength": 0.05
+    },
+    "eve": {
+     "enabled": false,
+     "phi_deg": 180
+    },
+    "include_yy": false,
+    "shots": 10000,
+    "seed": 20261010
+   },
+   "experiment": {
+    "module": "bell",
+    "channel": {
+     "p_i": 0.9625,
+     "p_x": 0.0125,
+     "p_y": 0.0125,
+     "p_z": 0.0125
+    },
+    "eve_phi_deg": null,
+    "hops": 1,
+    "rotation": "none",
+    "include_yy": false
+   },
+   "layout": "multi_circuit",
+   "shots": 10000,
+   "seed": 20261010,
+   "seconds": 0.031,
+   "canary_fraction": 1.0,
+   "circuits": {
+    "logical": [],
+    "compiled": [
+     {
+      "num_qubits": 4,
+      "depth": 5,
+      "two_qubit_gates": 4,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 4,
+      "depth": 6,
+      "two_qubit_gates": 4,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 4,
+      "depth": 5,
+      "two_qubit_gates": 4,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 4,
+      "depth": 6,
+      "two_qubit_gates": 4,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 4,
+      "depth": 5,
+      "two_qubit_gates": 4,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 4,
+      "depth": 6,
+      "two_qubit_gates": 4,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 2,
+      "depth": 2,
+      "two_qubit_gates": 0,
+      "name": "",
+      "ops": {}
+     }
+    ]
+   },
+   "selection": {
+    "key_z": {
+     "kept": 10000,
+     "total": 10000
+    },
+    "x_x": {
+     "kept": 10000,
+     "total": 10000
+    },
+    "c00": {
+     "kept": 10000,
+     "total": 10000
+    },
+    "c01": {
+     "kept": 10000,
+     "total": 10000
+    },
+    "c10": {
+     "kept": 10000,
+     "total": 10000
+    },
+    "c11": {
+     "kept": 10000,
+     "total": 10000
+    }
+   },
+   "analysis": {
+    "settings": {
+     "key_z": {
+      "n00": 4941,
+      "n01": 115,
+      "n10": 121,
+      "n11": 4823,
+      "N": 10000,
+      "E": 0.9528,
+      "SE": 0.0030359868247408464,
+      "alice_deg": 0.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "key",
+       "bbm92_z"
+      ]
+     },
+     "x_x": {
+      "n00": 4883,
+      "n01": 128,
+      "n10": 119,
+      "n11": 4870,
+      "N": 10000,
+      "E": 0.9506,
+      "SE": 0.0031041849171722998,
+      "alice_deg": 90.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "bbm92_x"
+      ]
+     },
+     "c00": {
+      "n00": 4228,
+      "n01": 807,
+      "n10": 794,
+      "n11": 4171,
+      "N": 10000,
+      "E": 0.6798,
+      "SE": 0.00733397545673559,
+      "alice_deg": 45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c01": {
+      "n00": 4198,
+      "n01": 833,
+      "n10": 754,
+      "n11": 4215,
+      "N": 10000,
+      "E": 0.6826,
+      "SE": 0.007307922002867847,
+      "alice_deg": 45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c10": {
+      "n00": 4089,
+      "n01": 826,
+      "n10": 787,
+      "n11": 4298,
+      "N": 10000,
+      "E": 0.6774,
+      "SE": 0.007356148720628207,
+      "alice_deg": -45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c11": {
+      "n00": 834,
+      "n01": 4239,
+      "n10": 4102,
+      "n11": 825,
+      "N": 10000,
+      "E": -0.6682,
+      "SE": 0.007439816933231623,
+      "alice_deg": -45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     }
+    },
+    "S": {
+     "point": 2.708,
+     "se": 0.014719263568534943,
+     "low": 2.6487917125079683,
+     "high": 2.767208287492032,
+     "halfwidth_hoeffding": 0.059208287492031934,
+     "above_classical": true,
+     "inconclusive": false,
+     "outside_quantum_set": false
+    },
+    "Q_Z": {
+     "point": 0.0236,
+     "low": 0.020429236355910277,
+     "high": 0.02724919915945937,
+     "N": 10000
+    },
+    "Q_X": {
+     "point": 0.0247,
+     "low": 0.021452495491643093,
+     "high": 0.028424835323754036,
+     "N": 10000
+    },
+    "E_ZZ": 0.9528,
+    "E_XX": 0.9506,
+    "witness": {
+     "point": 0.9517,
+     "low": 0.9307667092059708
+    },
+    "fidelity_with_yy": null,
+    "ladder_point": {
+     "witness_fidelity_low": 0.9517,
+     "witness_fidelity_high": 0.9753000000000001,
+     "entangled_trusted": true,
+     "bell_violation": true,
+     "kaniewski_extractability": 0.9166714459716842,
+     "self_test_nontrivial": true,
+     "min_entropy_pironio": 0.5060765323181116,
+     "von_neumann_local": 0.741575570803813,
+     "rate_bbm92": 0.6717250839631487,
+     "rate_di_acin": 0.5803732917176218,
+     "di_certified": true
+    },
+    "ladder_conservative": {
+     "witness_fidelity_low": 0.9307667092059708,
+     "witness_fidelity_high": 0.9653833546029854,
+     "entangled_trusted": true,
+     "bell_violation": true,
+     "kaniewski_extractability": 0.8757027606061396,
+     "self_test_nontrivial": true,
+     "min_entropy_pironio": 0.41892908610505186,
+     "von_neumann_local": 0.6498453481330827,
+     "rate_bbm92": 0.6331667605008462,
+     "rate_di_acin": 0.46944201836900834,
+     "di_certified": true
+    },
+    "delta": 0.05,
+    "method": "Hoeffding (S, delta/2) and Wilson (QBER, delta/2); asymptotic formulas at confidence ends"
+   },
+   "prediction": {
+    "T": {
+     "xx": 0.95,
+     "yy": -0.95,
+     "zz": 0.95
+    },
+    "E": {
+     "key_z": 0.95,
+     "x_x": 0.95,
+     "c00": 0.6717514421272202,
+     "c01": 0.67175144212722,
+     "c10": 0.6717514421272202,
+     "c11": -0.67175144212722
+    },
+    "S_fixed": 2.6870057685088806,
+    "S_max_horodecki": 2.6870057685088806,
+    "Q_Z": 0.025000000000000022,
+    "Q_X": 0.025000000000000022,
+    "fidelity": 0.9624999999999999
+   },
+   "geometry": {
+    "S": 2.708,
+    "max_chsh": 2.708,
+    "max_tlm": 2.974813564526962,
+    "in_no_signalling": true,
+    "in_local": false,
+    "in_quantum": true,
+    "symmetric": [
+     0.6798,
+     -0.6682,
+     0.6799999999999999
+    ]
+   },
+   "origin": {
+    "where": "local",
+    "device_label": "Qiskit BasicSimulator (local, ideal)",
+    "captured_utc": "20261010T0111Z",
+    "source_file": "results/local/bell_basic_simulator_20261010T0111Z.json",
+    "S_as_reported_by_the_app": 2.708
+   }
+  },
+  {
+   "schema": "bellkit.run/1",
+   "backend": {
+    "name": "default",
+    "profile": "braket",
+    "profile_label": "AWS Braket local simulator"
+   },
+   "request": {
+    "module": "bell",
+    "channel": {
+     "kind": "depolarizing",
+     "strength": 0.05
+    },
+    "eve": {
+     "enabled": false,
+     "phi_deg": 180
+    },
+    "include_yy": false,
+    "shots": 2000,
+    "seed": 20261010
+   },
+   "experiment": {
+    "module": "bell",
+    "channel": {
+     "p_i": 0.9625,
+     "p_x": 0.0125,
+     "p_y": 0.0125,
+     "p_z": 0.0125
+    },
+    "eve_phi_deg": null,
+    "hops": 1,
+    "rotation": "none",
+    "include_yy": false
+   },
+   "layout": "multi_circuit",
+   "shots": 2000,
+   "seed": null,
+   "seconds": 0.186,
+   "canary_fraction": 1,
+   "circuits": {
+    "logical": [],
+    "compiled": [
+     {
+      "num_qubits": 4,
+      "depth": 10,
+      "two_qubit_gates": 5,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 4,
+      "depth": 9,
+      "two_qubit_gates": 5,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 4,
+      "depth": 10,
+      "two_qubit_gates": 5,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 4,
+      "depth": 9,
+      "two_qubit_gates": 5,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 4,
+      "depth": 10,
+      "two_qubit_gates": 5,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 4,
+      "depth": 9,
+      "two_qubit_gates": 5,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 2,
+      "depth": 2,
+      "two_qubit_gates": 0,
+      "name": "",
+      "ops": {}
+     }
+    ]
+   },
+   "selection": {
+    "key_z": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "x_x": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c00": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c01": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c10": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c11": {
+     "kept": 2000,
+     "total": 2000
+    }
+   },
+   "analysis": {
+    "settings": {
+     "key_z": {
+      "n00": 984,
+      "n01": 15,
+      "n10": 16,
+      "n11": 985,
+      "N": 2000,
+      "E": 0.969,
+      "SE": 0.005524445673549522,
+      "alice_deg": 0.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "key",
+       "bbm92_z"
+      ]
+     },
+     "x_x": {
+      "n00": 981,
+      "n01": 21,
+      "n10": 34,
+      "n11": 964,
+      "N": 2000,
+      "E": 0.945,
+      "SE": 0.00731351488683793,
+      "alice_deg": 90.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "bbm92_x"
+      ]
+     },
+     "c00": {
+      "n00": 870,
+      "n01": 166,
+      "n10": 153,
+      "n11": 811,
+      "N": 2000,
+      "E": 0.681,
+      "SE": 0.016374354949127003,
+      "alice_deg": 45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c01": {
+      "n00": 823,
+      "n01": 169,
+      "n10": 155,
+      "n11": 853,
+      "N": 2000,
+      "E": 0.676,
+      "SE": 0.016477621187537962,
+      "alice_deg": 45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c10": {
+      "n00": 839,
+      "n01": 193,
+      "n10": 171,
+      "n11": 797,
+      "N": 2000,
+      "E": 0.636,
+      "SE": 0.01725549187939886,
+      "alice_deg": -45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c11": {
+      "n00": 175,
+      "n01": 812,
+      "n10": 865,
+      "n11": 148,
+      "N": 2000,
+      "E": -0.677,
+      "SE": 0.016457080543036788,
+      "alice_deg": -45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     }
+    },
+    "S": {
+     "point": 2.67,
+     "se": 0.03328992340033242,
+     "low": 2.537606244336466,
+     "high": 2.802393755663534,
+     "halfwidth_hoeffding": 0.13239375566353392,
+     "above_classical": true,
+     "inconclusive": false,
+     "outside_quantum_set": false
+    },
+    "Q_Z": {
+     "point": 0.0155,
+     "low": 0.010412452040731957,
+     "high": 0.023015521884688563,
+     "N": 2000
+    },
+    "Q_X": {
+     "point": 0.0275,
+     "low": 0.020412757449186407,
+     "high": 0.036955080899133914,
+     "N": 2000
+    },
+    "E_ZZ": 0.969,
+    "E_XX": 0.945,
+    "witness": {
+     "point": 0.957,
+     "low": 0.9101917387917801
+    },
+    "fidelity_with_yy": null,
+    "ladder_point": {
+     "witness_fidelity_low": 0.957,
+     "witness_fidelity_high": 0.9724999999999999,
+     "entangled_trusted": true,
+     "bell_violation": true,
+     "kaniewski_extractability": 0.8903776599185035,
+     "self_test_nontrivial": true,
+     "min_entropy_pironio": 0.4474619045302819,
+     "von_neumann_local": 0.681421051504211,
+     "rate_bbm92": 0.7029376196508619,
+     "rate_di_acin": 0.5660538709182001,
+     "di_certified": true
+    },
+    "ladder_conservative": {
+     "witness_fidelity_low": 0.9101917387917801,
+     "witness_fidelity_high": 0.95509586939589,
+     "entangled_trusted": true,
+     "bell_violation": true,
+     "kaniewski_extractability": 0.7987688944923451,
+     "self_test_nontrivial": true,
+     "min_entropy_pironio": 0.2999058699704843,
+     "von_neumann_local": 0.5014976031207858,
+     "rate_bbm92": 0.6137947301270579,
+     "rate_di_acin": 0.34344511136852807,
+     "di_certified": true
+    },
+    "delta": 0.05,
+    "method": "Hoeffding (S, delta/2) and Wilson (QBER, delta/2); asymptotic formulas at confidence ends"
+   },
+   "prediction": {
+    "T": {
+     "xx": 0.95,
+     "yy": -0.95,
+     "zz": 0.95
+    },
+    "E": {
+     "key_z": 0.95,
+     "x_x": 0.95,
+     "c00": 0.6717514421272202,
+     "c01": 0.67175144212722,
+     "c10": 0.6717514421272202,
+     "c11": -0.67175144212722
+    },
+    "S_fixed": 2.6870057685088806,
+    "S_max_horodecki": 2.6870057685088806,
+    "Q_Z": 0.025000000000000022,
+    "Q_X": 0.025000000000000022,
+    "fidelity": 0.9624999999999999
+   },
+   "geometry": {
+    "S": 2.6700000000000004,
+    "max_chsh": 2.67,
+    "max_tlm": 2.924430712300474,
+    "in_no_signalling": true,
+    "in_local": false,
+    "in_quantum": true,
+    "symmetric": [
+     0.681,
+     -0.677,
+     0.656
+    ]
+   },
+   "origin": {
+    "where": "Qollab",
+    "device_label": "AWS Braket local simulator (25q), ideal",
+    "captured_utc": "20261010T0111Z",
+    "source_file": "results/qollab/bell_braket_local_20261010T0111Z.json",
+    "S_as_reported_by_the_app": 2.67
+   }
+  },
+  {
+   "schema": "bellkit.run/1",
+   "backend": {
+    "name": "ionq_simulator",
+    "profile": "ionq_sim",
+    "profile_label": "IonQ cloud noise-model simulator"
+   },
+   "request": {
+    "module": "bell",
+    "channel": {
+     "kind": "depolarizing",
+     "strength": 0.05
+    },
+    "eve": {
+     "enabled": false,
+     "phi_deg": 180
+    },
+    "include_yy": false,
+    "shots": 200,
+    "seed": 20261010
+   },
+   "experiment": {
+    "module": "bell",
+    "channel": {
+     "p_i": 0.9625,
+     "p_x": 0.0125,
+     "p_y": 0.0125,
+     "p_z": 0.0125
+    },
+    "eve_phi_deg": null,
+    "hops": 1,
+    "rotation": "none",
+    "include_yy": false
+   },
+   "layout": "packed_single_circuit",
+   "shots": 200,
+   "seed": null,
+   "seconds": 22.831,
+   "canary_fraction": 1,
+   "circuits": {
+    "logical": [],
+    "compiled": [
+     {
+      "num_qubits": 25,
+      "depth": 10,
+      "two_qubit_gates": 30,
+      "name": "",
+      "ops": {
+       "cx": 30,
+       "ry": 26,
+       "h": 15,
+       "measure": 13,
+       "rz": 3,
+       "x": 1
+      }
+     }
+    ]
+   },
+   "selection": {
+    "key_z": {
+     "kept": 200,
+     "total": 200
+    },
+    "x_x": {
+     "kept": 200,
+     "total": 200
+    },
+    "c00": {
+     "kept": 200,
+     "total": 200
+    },
+    "c01": {
+     "kept": 200,
+     "total": 200
+    },
+    "c10": {
+     "kept": 200,
+     "total": 200
+    },
+    "c11": {
+     "kept": 200,
+     "total": 200
+    }
+   },
+   "analysis": {
+    "settings": {
+     "key_z": {
+      "n00": 98,
+      "n01": 6,
+      "n10": 2,
+      "n11": 94,
+      "N": 200,
+      "E": 0.92,
+      "SE": 0.027712812921102035,
+      "alice_deg": 0.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "key",
+       "bbm92_z"
+      ]
+     },
+     "x_x": {
+      "n00": 112,
+      "n01": 4,
+      "n10": 6,
+      "n11": 78,
+      "N": 200,
+      "E": 0.9,
+      "SE": 0.03082207001484488,
+      "alice_deg": 90.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "bbm92_x"
+      ]
+     },
+     "c00": {
+      "n00": 92,
+      "n01": 12,
+      "n10": 22,
+      "n11": 74,
+      "N": 200,
+      "E": 0.66,
+      "SE": 0.0531224999411737,
+      "alice_deg": 45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c01": {
+      "n00": 77,
+      "n01": 23,
+      "n10": 23,
+      "n11": 77,
+      "N": 200,
+      "E": 0.54,
+      "SE": 0.05951470406546604,
+      "alice_deg": 45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c10": {
+      "n00": 87,
+      "n01": 20,
+      "n10": 14,
+      "n11": 79,
+      "N": 200,
+      "E": 0.66,
+      "SE": 0.0531224999411737,
+      "alice_deg": -45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c11": {
+      "n00": 16,
+      "n01": 88,
+      "n10": 83,
+      "n11": 13,
+      "N": 200,
+      "E": -0.71,
+      "SE": 0.0497945780180935,
+      "alice_deg": -45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     }
+    },
+    "S": {
+     "point": 2.5700000000000003,
+     "se": 0.10800694422119347,
+     "low": 2.151334184119416,
+     "high": 2.9886658158805846,
+     "halfwidth_hoeffding": 0.4186658158805842,
+     "above_classical": true,
+     "inconclusive": false,
+     "outside_quantum_set": false
+    },
+    "Q_Z": {
+     "point": 0.04,
+     "low": 0.018591475364633285,
+     "high": 0.0839521188393462,
+     "N": 200
+    },
+    "Q_X": {
+     "point": 0.05,
+     "low": 0.025172539829903362,
+     "high": 0.096880976239207,
+     "N": 200
+    },
+    "E_ZZ": 0.92,
+    "E_XX": 0.9,
+    "witness": {
+     "point": 0.91,
+     "low": 0.7619792812699202
+    },
+    "fidelity_with_yy": null,
+    "ladder_point": {
+     "witness_fidelity_low": 0.91,
+     "witness_fidelity_high": 0.95,
+     "entangled_trusted": true,
+     "bell_violation": true,
+     "kaniewski_extractability": 0.8211834860943446,
+     "self_test_nontrivial": true,
+     "min_entropy_pironio": 0.3304545410870473,
+     "von_neumann_local": 0.5421743722185803,
+     "rate_bbm92": 0.47131085380162896,
+     "rate_di_acin": 0.2998821831361655,
+     "di_certified": true
+    },
+    "ladder_conservative": {
+     "witness_fidelity_low": 0.7619792812699202,
+     "witness_fidelity_high": 0.8809896406349601,
+     "entangled_trusted": true,
+     "bell_violation": true,
+     "kaniewski_extractability": 0.5314911337115986,
+     "self_test_nontrivial": true,
+     "min_entropy_pironio": 0.060308669641086055,
+     "von_neumann_local": 0.11646399828117693,
+     "rate_bbm92": 0.12501629329986363,
+     "rate_di_acin": -0.29948989055406694,
+     "di_certified": false
+    },
+    "delta": 0.05,
+    "method": "Hoeffding (S, delta/2) and Wilson (QBER, delta/2); asymptotic formulas at confidence ends"
+   },
+   "prediction": {
+    "T": {
+     "xx": 0.95,
+     "yy": -0.95,
+     "zz": 0.95
+    },
+    "E": {
+     "key_z": 0.95,
+     "x_x": 0.95,
+     "c00": 0.6717514421272202,
+     "c01": 0.67175144212722,
+     "c10": 0.6717514421272202,
+     "c11": -0.67175144212722
+    },
+    "S_fixed": 2.6870057685088806,
+    "S_max_horodecki": 2.6870057685088806,
+    "Q_Z": 0.025000000000000022,
+    "Q_X": 0.025000000000000022,
+    "fidelity": 0.9624999999999999
+   },
+   "geometry": {
+    "S": 2.5700000000000003,
+    "max_chsh": 2.5700000000000003,
+    "max_tlm": 2.801572840486273,
+    "in_no_signalling": true,
+    "in_local": false,
+    "in_quantum": true,
+    "symmetric": [
+     0.66,
+     -0.71,
+     0.6000000000000001
+    ]
+   },
+   "origin": {
+    "where": "Qollab",
+    "device_label": "IonQ Aria 1 simulator (25q), noise model",
+    "captured_utc": "20261010T0040Z",
+    "source_file": "results/qollab/bell_ionq_aria1_20261010T0040Z.json",
+    "S_as_reported_by_the_app": 2.5700000000000003
+   }
+  },
+  {
+   "schema": "bellkit.run/1",
+   "backend": {
+    "name": "fake_fez",
+    "profile": "ibm_noise",
+    "profile_label": "IBM noise model (Aer)"
+   },
+   "request": {
+    "module": "bell",
+    "channel": {
+     "kind": "none",
+     "strength": 0
+    },
+    "eve": {
+     "enabled": false,
+     "phi_deg": 180
+    },
+    "include_yy": false,
+    "shots": 2000,
+    "seed": 20261010
+   },
+   "experiment": {
+    "module": "bell",
+    "channel": {
+     "p_i": 1.0,
+     "p_x": 0.0,
+     "p_y": 0.0,
+     "p_z": 0.0
+    },
+    "eve_phi_deg": null,
+    "hops": 1,
+    "rotation": "none",
+    "include_yy": false
+   },
+   "layout": "multi_circuit",
+   "shots": 2000,
+   "seed": 20261010,
+   "seconds": 10.355,
+   "canary_fraction": 0.9725,
+   "circuits": {
+    "logical": [],
+    "compiled": [
+     {
+      "num_qubits": 156,
+      "depth": 8,
+      "two_qubit_gates": 1,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 8,
+      "two_qubit_gates": 1,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 9,
+      "two_qubit_gates": 1,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 9,
+      "two_qubit_gates": 1,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 9,
+      "two_qubit_gates": 1,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 9,
+      "two_qubit_gates": 1,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 2,
+      "two_qubit_gates": 0,
+      "name": "",
+      "ops": {}
+     }
+    ]
+   },
+   "selection": {
+    "key_z": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "x_x": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c00": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c01": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c10": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c11": {
+     "kept": 2000,
+     "total": 2000
+    }
+   },
+   "analysis": {
+    "settings": {
+     "key_z": {
+      "n00": 962,
+      "n01": 32,
+      "n10": 26,
+      "n11": 980,
+      "N": 2000,
+      "E": 0.942,
+      "SE": 0.00750453196408677,
+      "alice_deg": 0.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "key",
+       "bbm92_z"
+      ]
+     },
+     "x_x": {
+      "n00": 964,
+      "n01": 37,
+      "n10": 24,
+      "n11": 975,
+      "N": 2000,
+      "E": 0.939,
+      "SE": 0.0076902210631424675,
+      "alice_deg": 90.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "bbm92_x"
+      ]
+     },
+     "c00": {
+      "n00": 826,
+      "n01": 145,
+      "n10": 167,
+      "n11": 862,
+      "N": 2000,
+      "E": 0.688,
+      "SE": 0.01622738426241272,
+      "alice_deg": 45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c01": {
+      "n00": 857,
+      "n01": 166,
+      "n10": 176,
+      "n11": 801,
+      "N": 2000,
+      "E": 0.658,
+      "SE": 0.016837992754482348,
+      "alice_deg": 45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c10": {
+      "n00": 859,
+      "n01": 170,
+      "n10": 179,
+      "n11": 792,
+      "N": 2000,
+      "E": 0.651,
+      "SE": 0.016973494042182357,
+      "alice_deg": -45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c11": {
+      "n00": 168,
+      "n01": 837,
+      "n10": 836,
+      "n11": 159,
+      "N": 2000,
+      "E": -0.673,
+      "SE": 0.016538908670163215,
+      "alice_deg": -45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     }
+    },
+    "S": {
+     "point": 2.67,
+     "se": 0.033293858292483915,
+     "low": 2.537606244336466,
+     "high": 2.802393755663534,
+     "halfwidth_hoeffding": 0.13239375566353392,
+     "above_classical": true,
+     "inconclusive": false,
+     "outside_quantum_set": false
+    },
+    "Q_Z": {
+     "point": 0.029,
+     "low": 0.021697864386439527,
+     "high": 0.03866245701474327,
+     "N": 2000
+    },
+    "Q_X": {
+     "point": 0.0305,
+     "low": 0.022988747878867496,
+     "high": 0.040364056575177776,
+     "N": 2000
+    },
+    "E_ZZ": 0.942,
+    "E_XX": 0.939,
+    "witness": {
+     "point": 0.9404999999999999,
+     "low": 0.89369173879178
+    },
+    "fidelity_with_yy": null,
+    "ladder_point": {
+     "witness_fidelity_low": 0.9404999999999999,
+     "witness_fidelity_high": 0.9695,
+     "entangled_trusted": true,
+     "bell_violation": true,
+     "kaniewski_extractability": 0.8903776599185035,
+     "self_test_nontrivial": true,
+     "min_entropy_pironio": 0.4474619045302819,
+     "von_neumann_local": 0.681421051504211,
+     "rate_bbm92": 0.6137549835917645,
+     "rate_di_acin": 0.49206920404285914,
+     "di_certified": true
+    },
+    "ladder_conservative": {
+     "witness_fidelity_low": 0.89369173879178,
+     "witness_fidelity_high": 0.94684586939589,
+     "entangled_trusted": true,
+     "bell_violation": true,
+     "kaniewski_extractability": 0.7987688944923451,
+     "self_test_nontrivial": true,
+     "min_entropy_pironio": 0.2999058699704843,
+     "von_neumann_local": 0.5014976031207858,
+     "rate_bbm92": 0.5199154750833137,
+     "rate_di_acin": 0.26537197051437245,
+     "di_certified": true
+    },
+    "delta": 0.05,
+    "method": "Hoeffding (S, delta/2) and Wilson (QBER, delta/2); asymptotic formulas at confidence ends"
+   },
+   "prediction": {
+    "T": {
+     "xx": 1.0,
+     "yy": -1.0,
+     "zz": 1.0
+    },
+    "E": {
+     "key_z": 1.0,
+     "x_x": 1.0,
+     "c00": 0.7071067811865476,
+     "c01": 0.7071067811865475,
+     "c10": 0.7071067811865476,
+     "c11": -0.7071067811865475
+    },
+    "S_fixed": 2.82842712474619,
+    "S_max_horodecki": 2.8284271247461903,
+    "Q_Z": 0.0,
+    "Q_X": 0.0,
+    "fidelity": 1.0
+   },
+   "geometry": {
+    "S": 2.67,
+    "max_chsh": 2.67,
+    "max_tlm": 2.924047646677898,
+    "in_no_signalling": true,
+    "in_local": false,
+    "in_quantum": true,
+    "symmetric": [
+     0.688,
+     -0.673,
+     0.6545000000000001
+    ]
+   },
+   "origin": {
+    "where": "Qollab",
+    "device_label": "IBM Fez simulator (Heron r2 arch, 156q), noise model",
+    "captured_utc": "20261010T0049Z",
+    "source_file": "results/qollab/tour_ibm_fez_20261010T0049Z.json",
+    "S_as_reported_by_the_app": 2.67
+   }
+  },
+  {
+   "schema": "bellkit.run/1",
+   "backend": {
+    "name": "fake_fez",
+    "profile": "ibm_noise",
+    "profile_label": "IBM noise model (Aer)"
+   },
+   "request": {
+    "module": "bell",
+    "channel": {
+     "kind": "depolarizing",
+     "strength": 0.5
+    },
+    "eve": {
+     "enabled": false,
+     "phi_deg": 180
+    },
+    "include_yy": false,
+    "shots": 2000,
+    "seed": 20261010
+   },
+   "experiment": {
+    "module": "bell",
+    "channel": {
+     "p_i": 0.625,
+     "p_x": 0.125,
+     "p_y": 0.125,
+     "p_z": 0.125
+    },
+    "eve_phi_deg": null,
+    "hops": 1,
+    "rotation": "none",
+    "include_yy": false
+   },
+   "layout": "multi_circuit",
+   "shots": 2000,
+   "seed": 20261010,
+   "seconds": 2.425,
+   "canary_fraction": 0.9725,
+   "circuits": {
+    "logical": [],
+    "compiled": [
+     {
+      "num_qubits": 156,
+      "depth": 21,
+      "two_qubit_gates": 8,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 24,
+      "two_qubit_gates": 8,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 21,
+      "two_qubit_gates": 8,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 24,
+      "two_qubit_gates": 8,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 21,
+      "two_qubit_gates": 8,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 24,
+      "two_qubit_gates": 8,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 2,
+      "two_qubit_gates": 0,
+      "name": "",
+      "ops": {}
+     }
+    ]
+   },
+   "selection": {
+    "key_z": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "x_x": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c00": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c01": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c10": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c11": {
+     "kept": 2000,
+     "total": 2000
+    }
+   },
+   "analysis": {
+    "settings": {
+     "key_z": {
+      "n00": 742,
+      "n01": 268,
+      "n10": 277,
+      "n11": 713,
+      "N": 2000,
+      "E": 0.455,
+      "SE": 0.01991199387304044,
+      "alice_deg": 0.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "key",
+       "bbm92_z"
+      ]
+     },
+     "x_x": {
+      "n00": 720,
+      "n01": 264,
+      "n10": 272,
+      "n11": 744,
+      "N": 2000,
+      "E": 0.464,
+      "SE": 0.0198078772209442,
+      "alice_deg": 90.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "bbm92_x"
+      ]
+     },
+     "c00": {
+      "n00": 670,
+      "n01": 313,
+      "n10": 313,
+      "n11": 704,
+      "N": 2000,
+      "E": 0.374,
+      "SE": 0.0207379362521925,
+      "alice_deg": 45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c01": {
+      "n00": 670,
+      "n01": 338,
+      "n10": 325,
+      "n11": 667,
+      "N": 2000,
+      "E": 0.337,
+      "SE": 0.02105268391440863,
+      "alice_deg": 45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c10": {
+      "n00": 698,
+      "n01": 324,
+      "n10": 327,
+      "n11": 651,
+      "N": 2000,
+      "E": 0.349,
+      "SE": 0.02095470114318026,
+      "alice_deg": -45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c11": {
+      "n00": 354,
+      "n01": 693,
+      "n10": 646,
+      "n11": 307,
+      "N": 2000,
+      "E": -0.339,
+      "SE": 0.021036622827821008,
+      "alice_deg": -45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     }
+    },
+    "S": {
+     "point": 1.399,
+     "se": 0.04189172352625277,
+     "low": 1.266606244336466,
+     "high": 1.531393755663534,
+     "halfwidth_hoeffding": 0.13239375566353392,
+     "above_classical": false,
+     "inconclusive": false,
+     "outside_quantum_set": false
+    },
+    "Q_Z": {
+     "point": 0.2725,
+     "low": 0.2507753227105158,
+     "high": 0.2953647476053421,
+     "N": 2000
+    },
+    "Q_X": {
+     "point": 0.268,
+     "low": 0.24640280456028812,
+     "high": 0.2907598165969823,
+     "N": 2000
+    },
+    "E_ZZ": 0.455,
+    "E_XX": 0.464,
+    "witness": {
+     "point": 0.4595,
+     "low": 0.41269173879178017
+    },
+    "fidelity_with_yy": null,
+    "ladder_point": {
+     "witness_fidelity_low": 0.4595,
+     "witness_fidelity_high": 0.7275,
+     "entangled_trusted": false,
+     "bell_violation": false,
+     "kaniewski_extractability": 0.5,
+     "self_test_nontrivial": false,
+     "min_entropy_pironio": 0.0,
+     "von_neumann_local": 0.0,
+     "rate_bbm92": -0.6836092493027206,
+     "rate_di_acin": null,
+     "di_certified": false
+    },
+    "ladder_conservative": {
+     "witness_fidelity_low": 0.41269173879178017,
+     "witness_fidelity_high": 0.7063458693958901,
+     "entangled_trusted": false,
+     "bell_violation": false,
+     "kaniewski_extractability": 0.5,
+     "self_test_nontrivial": false,
+     "min_entropy_pironio": 0.0,
+     "von_neumann_local": 0.0,
+     "rate_bbm92": -0.7452515098758655,
+     "rate_di_acin": null,
+     "di_certified": false
+    },
+    "delta": 0.05,
+    "method": "Hoeffding (S, delta/2) and Wilson (QBER, delta/2); asymptotic formulas at confidence ends"
+   },
+   "prediction": {
+    "T": {
+     "xx": 0.5,
+     "yy": -0.5,
+     "zz": 0.5
+    },
+    "E": {
+     "key_z": 0.5,
+     "x_x": 0.5,
+     "c00": 0.3535533905932738,
+     "c01": 0.35355339059327373,
+     "c10": 0.3535533905932738,
+     "c11": -0.35355339059327373
+    },
+    "S_fixed": 1.414213562373095,
+    "S_max_horodecki": 1.4142135623730951,
+    "Q_Z": 0.25,
+    "Q_X": 0.25,
+    "fidelity": 0.625
+   },
+   "geometry": {
+    "S": 1.399,
+    "max_chsh": 1.399,
+    "max_tlm": 1.4294045221257083,
+    "in_no_signalling": true,
+    "in_local": true,
+    "in_quantum": true,
+    "symmetric": [
+     0.374,
+     -0.339,
+     0.34299999999999997
+    ]
+   },
+   "origin": {
+    "where": "Qollab",
+    "device_label": "IBM Fez simulator (Heron r2 arch, 156q), noise model",
+    "captured_utc": "20261010T0049Z",
+    "source_file": "results/qollab/tour_ibm_fez_20261010T0049Z.json",
+    "S_as_reported_by_the_app": 1.399
+   }
+  },
+  {
+   "schema": "bellkit.run/1",
+   "backend": {
+    "name": "fake_fez",
+    "profile": "ibm_noise",
+    "profile_label": "IBM noise model (Aer)"
+   },
+   "request": {
+    "module": "bell",
+    "channel": {
+     "kind": "none",
+     "strength": 0
+    },
+    "eve": {
+     "enabled": true,
+     "phi_deg": 180
+    },
+    "include_yy": false,
+    "shots": 2000,
+    "seed": 20261010
+   },
+   "experiment": {
+    "module": "bell",
+    "channel": {
+     "p_i": 1.0,
+     "p_x": 0.0,
+     "p_y": 0.0,
+     "p_z": 0.0
+    },
+    "eve_phi_deg": 180.0,
+    "hops": 1,
+    "rotation": "none",
+    "include_yy": false
+   },
+   "layout": "multi_circuit",
+   "shots": 2000,
+   "seed": 20261010,
+   "seconds": 2.23,
+   "canary_fraction": 0.9725,
+   "circuits": {
+    "logical": [],
+    "compiled": [
+     {
+      "num_qubits": 156,
+      "depth": 15,
+      "two_qubit_gates": 3,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 16,
+      "two_qubit_gates": 3,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 15,
+      "two_qubit_gates": 3,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 16,
+      "two_qubit_gates": 3,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 15,
+      "two_qubit_gates": 3,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 16,
+      "two_qubit_gates": 3,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 2,
+      "two_qubit_gates": 0,
+      "name": "",
+      "ops": {}
+     }
+    ]
+   },
+   "selection": {
+    "key_z": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "x_x": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c00": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c01": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c10": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c11": {
+     "kept": 2000,
+     "total": 2000
+    }
+   },
+   "analysis": {
+    "settings": {
+     "key_z": {
+      "n00": 968,
+      "n01": 31,
+      "n10": 23,
+      "n11": 978,
+      "N": 2000,
+      "E": 0.946,
+      "SE": 0.007248586069020636,
+      "alice_deg": 0.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "key",
+       "bbm92_z"
+      ]
+     },
+     "x_x": {
+      "n00": 505,
+      "n01": 509,
+      "n10": 513,
+      "n11": 473,
+      "N": 2000,
+      "E": -0.022,
+      "SE": 0.02235526783556842,
+      "alice_deg": 90.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "bbm92_x"
+      ]
+     },
+     "c00": {
+      "n00": 836,
+      "n01": 166,
+      "n10": 190,
+      "n11": 808,
+      "N": 2000,
+      "E": 0.644,
+      "SE": 0.017106489996489636,
+      "alice_deg": 45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c01": {
+      "n00": 542,
+      "n01": 474,
+      "n10": 471,
+      "n11": 513,
+      "N": 2000,
+      "E": 0.055,
+      "SE": 0.022326833631305627,
+      "alice_deg": 45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c10": {
+      "n00": 846,
+      "n01": 167,
+      "n10": 175,
+      "n11": 812,
+      "N": 2000,
+      "E": 0.658,
+      "SE": 0.016837992754482348,
+      "alice_deg": -45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c11": {
+      "n00": 516,
+      "n01": 511,
+      "n10": 454,
+      "n11": 519,
+      "N": 2000,
+      "E": 0.035,
+      "SE": 0.022346979661690303,
+      "alice_deg": -45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     }
+    },
+    "S": {
+     "point": 1.322,
+     "se": 0.0396739839189361,
+     "low": 1.1896062443364661,
+     "high": 1.454393755663534,
+     "halfwidth_hoeffding": 0.13239375566353392,
+     "above_classical": false,
+     "inconclusive": false,
+     "outside_quantum_set": false
+    },
+    "Q_Z": {
+     "point": 0.027,
+     "low": 0.019985748924480386,
+     "high": 0.03638459507288577,
+     "N": 2000
+    },
+    "Q_X": {
+     "point": 0.511,
+     "low": 0.48595025095372457,
+     "high": 0.5359946247672669,
+     "N": 2000
+    },
+    "E_ZZ": 0.946,
+    "E_XX": -0.022,
+    "witness": {
+     "point": 0.46199999999999997,
+     "low": 0.4151917387917801
+    },
+    "fidelity_with_yy": null,
+    "ladder_point": {
+     "witness_fidelity_low": 0.46199999999999997,
+     "witness_fidelity_high": 0.489,
+     "entangled_trusted": false,
+     "bell_violation": false,
+     "kaniewski_extractability": 0.5,
+     "self_test_nontrivial": false,
+     "min_entropy_pironio": 0.0,
+     "von_neumann_local": 0.0,
+     "rate_bbm92": -0.17911631918165183,
+     "rate_di_acin": null,
+     "di_certified": false
+    },
+    "ladder_conservative": {
+     "witness_fidelity_low": 0.4151917387917801,
+     "witness_fidelity_high": 0.70759586939589,
+     "entangled_trusted": false,
+     "bell_violation": false,
+     "kaniewski_extractability": 0.5,
+     "self_test_nontrivial": false,
+     "min_entropy_pironio": 0.0,
+     "von_neumann_local": 0.0,
+     "rate_bbm92": -0.2254627211966318,
+     "rate_di_acin": null,
+     "di_certified": false
+    },
+    "delta": 0.05,
+    "method": "Hoeffding (S, delta/2) and Wilson (QBER, delta/2); asymptotic formulas at confidence ends"
+   },
+   "prediction": {
+    "T": {
+     "xx": 6.123233995736766e-17,
+     "yy": -6.123233995736766e-17,
+     "zz": 1.0
+    },
+    "E": {
+     "key_z": 1.0,
+     "x_x": 6.123233995736766e-17,
+     "c00": 0.7071067811865476,
+     "c01": 8.659560562354933e-17,
+     "c10": 0.7071067811865476,
+     "c11": 1.232595164407831e-32
+    },
+    "S_fixed": 1.4142135623730951,
+    "S_max_horodecki": 2.0,
+    "Q_Z": 0.0,
+    "Q_X": 0.49999999999999994,
+    "fidelity": 0.5,
+    "eve_agree_z": 1.0,
+    "eve_guess_helstrom": 1.0
+   },
+   "geometry": {
+    "S": 1.3220000000000003,
+    "max_chsh": 1.322,
+    "max_tlm": 1.437895723359292,
+    "in_no_signalling": true,
+    "in_local": true,
+    "in_quantum": true,
+    "symmetric": [
+     0.644,
+     0.035,
+     0.35650000000000004
+    ]
+   },
+   "origin": {
+    "where": "Qollab",
+    "device_label": "IBM Fez simulator (Heron r2 arch, 156q), noise model",
+    "captured_utc": "20261010T0049Z",
+    "source_file": "results/qollab/tour_ibm_fez_20261010T0049Z.json",
+    "S_as_reported_by_the_app": 1.322
+   }
+  },
+  {
+   "schema": "bellkit.run/1",
+   "backend": {
+    "name": "fake_fez",
+    "profile": "ibm_noise",
+    "profile_label": "IBM noise model (Aer)"
+   },
+   "request": {
+    "module": "bell",
+    "channel": {
+     "kind": "depolarizing",
+     "strength": 0.05
+    },
+    "eve": {
+     "enabled": false,
+     "phi_deg": 180
+    },
+    "include_yy": false,
+    "shots": 2000,
+    "seed": 20261010
+   },
+   "experiment": {
+    "module": "bell",
+    "channel": {
+     "p_i": 0.9625,
+     "p_x": 0.0125,
+     "p_y": 0.0125,
+     "p_z": 0.0125
+    },
+    "eve_phi_deg": null,
+    "hops": 1,
+    "rotation": "none",
+    "include_yy": false
+   },
+   "layout": "multi_circuit",
+   "shots": 2000,
+   "seed": 20261010,
+   "seconds": 2.394,
+   "canary_fraction": 0.9725,
+   "circuits": {
+    "logical": [],
+    "compiled": [
+     {
+      "num_qubits": 156,
+      "depth": 21,
+      "two_qubit_gates": 8,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 24,
+      "two_qubit_gates": 8,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 21,
+      "two_qubit_gates": 8,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 24,
+      "two_qubit_gates": 8,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 21,
+      "two_qubit_gates": 8,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 24,
+      "two_qubit_gates": 8,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 2,
+      "two_qubit_gates": 0,
+      "name": "",
+      "ops": {}
+     }
+    ]
+   },
+   "selection": {
+    "key_z": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "x_x": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c00": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c01": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c10": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c11": {
+     "kept": 2000,
+     "total": 2000
+    }
+   },
+   "analysis": {
+    "settings": {
+     "key_z": {
+      "n00": 932,
+      "n01": 49,
+      "n10": 46,
+      "n11": 973,
+      "N": 2000,
+      "E": 0.905,
+      "SE": 0.009512491787118662,
+      "alice_deg": 0.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "key",
+       "bbm92_z"
+      ]
+     },
+     "x_x": {
+      "n00": 928,
+      "n01": 54,
+      "n10": 57,
+      "n11": 961,
+      "N": 2000,
+      "E": 0.889,
+      "SE": 0.010239116172795383,
+      "alice_deg": 90.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "bbm92_x"
+      ]
+     },
+     "c00": {
+      "n00": 812,
+      "n01": 157,
+      "n10": 187,
+      "n11": 844,
+      "N": 2000,
+      "E": 0.656,
+      "SE": 0.0168769665520792,
+      "alice_deg": 45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c01": {
+      "n00": 832,
+      "n01": 203,
+      "n10": 183,
+      "n11": 782,
+      "N": 2000,
+      "E": 0.614,
+      "SE": 0.017649419253901812,
+      "alice_deg": 45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c10": {
+      "n00": 846,
+      "n01": 190,
+      "n10": 174,
+      "n11": 790,
+      "N": 2000,
+      "E": 0.636,
+      "SE": 0.01725549187939886,
+      "alice_deg": -45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c11": {
+      "n00": 174,
+      "n01": 841,
+      "n10": 815,
+      "n11": 170,
+      "N": 2000,
+      "E": -0.656,
+      "SE": 0.0168769665520792,
+      "alice_deg": -45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     }
+    },
+    "S": {
+     "point": 2.5620000000000003,
+     "se": 0.0343353753438054,
+     "low": 2.4296062443364663,
+     "high": 2.6943937556635342,
+     "halfwidth_hoeffding": 0.13239375566353392,
+     "above_classical": true,
+     "inconclusive": false,
+     "outside_quantum_set": false
+    },
+    "Q_Z": {
+     "point": 0.0475,
+     "low": 0.03792630996388917,
+     "high": 0.05934130242259748,
+     "N": 2000
+    },
+    "Q_X": {
+     "point": 0.0555,
+     "low": 0.04509916330326555,
+     "high": 0.06812835869848764,
+     "N": 2000
+    },
+    "E_ZZ": 0.905,
+    "E_XX": 0.889,
+    "witness": {
+     "point": 0.897,
+     "low": 0.8501917387917801
+    },
+    "fidelity_with_yy": null,
+    "ladder_point": {
+     "witness_fidelity_low": 0.897,
+     "witness_fidelity_high": 0.9445,
+     "entangled_trusted": true,
+     "bell_violation": true,
+     "kaniewski_extractability": 0.8156479521884117,
+     "self_test_nontrivial": true,
+     "min_entropy_pironio": 0.3226508573713194,
+     "von_neumann_local": 0.5319567403732373,
+     "rate_bbm92": 0.41500300776539395,
+     "rate_di_acin": 0.25627605357447214,
+     "di_certified": true
+    },
+    "ladder_conservative": {
+     "witness_fidelity_low": 0.8501917387917801,
+     "witness_fidelity_high": 0.9250958693958901,
+     "entangled_trusted": true,
+     "bell_violation": true,
+     "kaniewski_extractability": 0.7240391867622534,
+     "self_test_nontrivial": true,
+     "min_entropy_pironio": 0.21419551161779193,
+     "von_neumann_local": 0.3774741350439498,
+     "rate_bbm92": 0.3162755200080476,
+     "rate_di_acin": 0.05264956755851158,
+     "di_certified": true
+    },
+    "delta": 0.05,
+    "method": "Hoeffding (S, delta/2) and Wilson (QBER, delta/2); asymptotic formulas at confidence ends"
+   },
+   "prediction": {
+    "T": {
+     "xx": 0.95,
+     "yy": -0.95,
+     "zz": 0.95
+    },
+    "E": {
+     "key_z": 0.95,
+     "x_x": 0.95,
+     "c00": 0.6717514421272202,
+     "c01": 0.67175144212722,
+     "c10": 0.6717514421272202,
+     "c11": -0.67175144212722
+    },
+    "S_fixed": 2.6870057685088806,
+    "S_max_horodecki": 2.6870057685088806,
+    "Q_Z": 0.025000000000000022,
+    "Q_X": 0.025000000000000022,
+    "fidelity": 0.9624999999999999
+   },
+   "geometry": {
+    "S": 2.5620000000000003,
+    "max_chsh": 2.5620000000000003,
+    "max_tlm": 2.7814356569760745,
+    "in_no_signalling": true,
+    "in_local": false,
+    "in_quantum": true,
+    "symmetric": [
+     0.656,
+     -0.656,
+     0.625
+    ]
+   },
+   "origin": {
+    "where": "Qollab",
+    "device_label": "IBM Fez simulator (Heron r2 arch, 156q), noise model",
+    "captured_utc": "20261010T0049Z",
+    "source_file": "results/qollab/tour_ibm_fez_20261010T0049Z.json",
+    "S_as_reported_by_the_app": 2.5620000000000003
+   }
+  },
+  {
+   "schema": "bellkit.run/1",
+   "backend": {
+    "name": "fake_fez",
+    "profile": "ibm_noise",
+    "profile_label": "IBM noise model (Aer)"
+   },
+   "request": {
+    "module": "chain",
+    "hops": 2,
+    "channel": {
+     "kind": "depolarizing",
+     "strength": 0.05
+    }
+   },
+   "experiment": {
+    "module": "chain",
+    "channel": {
+     "p_i": 0.9625,
+     "p_x": 0.0125,
+     "p_y": 0.0125,
+     "p_z": 0.0125
+    },
+    "eve_phi_deg": null,
+    "hops": 2,
+    "rotation": "none",
+    "include_yy": false
+   },
+   "layout": "multi_circuit",
+   "shots": 2000,
+   "seed": null,
+   "seconds": 2.269,
+   "canary_fraction": 0.9725,
+   "circuits": {
+    "logical": [],
+    "compiled": [
+     {
+      "num_qubits": 156,
+      "depth": 34,
+      "two_qubit_gates": 20,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 34,
+      "two_qubit_gates": 20,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 34,
+      "two_qubit_gates": 20,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 34,
+      "two_qubit_gates": 20,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 34,
+      "two_qubit_gates": 20,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 34,
+      "two_qubit_gates": 20,
+      "name": "",
+      "ops": {}
+     },
+     {
+      "num_qubits": 156,
+      "depth": 2,
+      "two_qubit_gates": 0,
+      "name": "",
+      "ops": {}
+     }
+    ]
+   },
+   "selection": {
+    "key_z": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "x_x": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c00": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c01": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c10": {
+     "kept": 2000,
+     "total": 2000
+    },
+    "c11": {
+     "kept": 2000,
+     "total": 2000
+    }
+   },
+   "analysis": {
+    "settings": {
+     "key_z": {
+      "n00": 899,
+      "n01": 106,
+      "n10": 79,
+      "n11": 916,
+      "N": 2000,
+      "E": 0.815,
+      "SE": 0.012957140888328722,
+      "alice_deg": 0.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "key",
+       "bbm92_z"
+      ]
+     },
+     "x_x": {
+      "n00": 928,
+      "n01": 109,
+      "n10": 100,
+      "n11": 863,
+      "N": 2000,
+      "E": 0.791,
+      "SE": 0.013680624985723422,
+      "alice_deg": 90.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "bbm92_x"
+      ]
+     },
+     "c00": {
+      "n00": 781,
+      "n01": 228,
+      "n10": 217,
+      "n11": 774,
+      "N": 2000,
+      "E": 0.555,
+      "SE": 0.018600739232621913,
+      "alice_deg": 45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c01": {
+      "n00": 790,
+      "n01": 237,
+      "n10": 214,
+      "n11": 759,
+      "N": 2000,
+      "E": 0.549,
+      "SE": 0.018689555906976494,
+      "alice_deg": 45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c10": {
+      "n00": 796,
+      "n01": 232,
+      "n10": 188,
+      "n11": 784,
+      "N": 2000,
+      "E": 0.58,
+      "SE": 0.01821537811850196,
+      "alice_deg": -45.0,
+      "bob_deg": 0.0,
+      "roles": [
+       "chsh"
+      ]
+     },
+     "c11": {
+      "n00": 212,
+      "n01": 771,
+      "n10": 809,
+      "n11": 208,
+      "N": 2000,
+      "E": -0.58,
+      "SE": 0.01821537811850196,
+      "alice_deg": -45.0,
+      "bob_deg": 90.0,
+      "roles": [
+       "chsh"
+      ]
+     }
+    },
+    "S": {
+     "point": 2.2640000000000002,
+     "se": 0.036863084515542106,
+     "low": 2.1316062443364663,
+     "high": 2.396393755663534,
+     "halfwidth_hoeffding": 0.13239375566353392,
+     "above_classical": true,
+     "inconclusive": false,
+     "outside_quantum_set": false
+    },
+    "Q_Z": {
+     "point": 0.0925,
+     "low": 0.0789822719737327,
+     "high": 0.1080598319986282,
+     "N": 2000
+    },
+    "Q_X": {
+     "point": 0.1045,
+     "low": 0.09014627628325317,
+     "high": 0.12083569211200754,
+     "N": 2000
+    },
+    "E_ZZ": 0.815,
+    "E_XX": 0.791,
+    "witness": {
+     "point": 0.8029999999999999,
+     "low": 0.75619173879178
+    },
+    "fidelity_with_yy": null,
+    "ladder_point": {
+     "witness_fidelity_low": 0.8029999999999999,
+     "witness_fidelity_high": 0.8955,
+     "entangled_trusted": true,
+     "bell_violation": true,
+     "kaniewski_extractability": 0.6094493141924172,
+     "self_test_nontrivial": true,
+     "min_entropy_pironio": 0.11427834997461872,
+     "von_neumann_local": 0.21379481940309575,
+     "rate_bbm92": 0.07214003490589027,
+     "rate_di_acin": -0.23096507681980738,
+     "di_certified": false
+    },
+    "ladder_conservative": {
+     "witness_fidelity_low": 0.75619173879178,
+     "witness_fidelity_high": 0.87809586939589,
+     "entangled_trusted": true,
+     "bell_violation": true,
+     "kaniewski_extractability": 0.5178405487662588,
+     "self_test_nontrivial": true,
+     "min_entropy_pironio": 0.05173536939743095,
+     "von_neumann_local": 0.10040931615884396,
+     "rate_bbm92": -0.0257942212912603,
+     "rate_di_acin": -0.3936266297491894,
+     "di_certified": false
+    },
+    "delta": 0.05,
+    "method": "Hoeffding (S, delta/2) and Wilson (QBER, delta/2); asymptotic formulas at confidence ends"
+   },
+   "prediction": {
+    "T": {
+     "xx": 0.9025,
+     "yy": -0.9025,
+     "zz": 0.9025
+    },
+    "E": {
+     "key_z": 0.9025,
+     "x_x": 0.9025,
+     "c00": 0.6381638700208592,
+     "c01": 0.6381638700208591,
+     "c10": 0.6381638700208592,
+     "c11": -0.6381638700208591
+    },
+    "S_fixed": 2.5526554800834367,
+    "S_max_horodecki": 2.5526554800834367,
+    "Q_Z": 0.048750000000000016,
+    "Q_X": 0.048750000000000016,
+    "fidelity": 0.9268749999999999
+   },
+   "geometry": {
+    "S": 2.2640000000000002,
+    "max_chsh": 2.2640000000000002,
+    "max_tlm": 2.406987688093025,
+    "in_no_signalling": true,
+    "in_local": false,
+    "in_quantum": true,
+    "symmetric": [
+     0.555,
+     -0.58,
+     0.5645
+    ]
+   },
+   "origin": {
+    "where": "Qollab",
+    "device_label": "IBM Fez simulator (Heron r2 arch, 156q), noise model",
+    "captured_utc": "20261010T0049Z",
+    "source_file": "results/qollab/tour_ibm_fez_20261010T0049Z.json",
+    "S_as_reported_by_the_app": 2.2640000000000002
+   }
+  }
+ ]
 }

@@ -136,13 +136,15 @@ export default {
             ? [h('dt', null, 'Eve guesses Z key bit'), h('dd', null, pct(p.eve_guess_helstrom))] : null));
         const size = sizeNote(ctx, circ);
         sizeBox.replaceChildren(note(size.ok ? '' : 'warn', size.text, 'cpu'));
-        updateRunButton(size.ok);
+        sizeOk = size.ok;
+        updateRunButton();
       } catch (err) {
         predictionBox.replaceChildren(errorNote(err));
       }
     }
 
-    function updateRunButton(sizeOk = true) {
+    let sizeOk = true;
+    function updateRunButton() {
       const blocker = runBlocker(ctx);
       const busy = machine.state === 'running';
       runBtn.disabled = busy || Boolean(blocker) || !sizeOk;
@@ -196,7 +198,7 @@ export default {
       if (i >= 4) {
         ladderCard.hidden = false;
         ladderCard.replaceChildren(h('h3', null, icon('certificate'), 'Certificates from these counts'), ladderTable(a),
-          a.S.outside_quantum_set ? note('warn', 'The estimate of S is above 2√2. No quantum system can do that: it is sampling noise, and the bounds use S capped at 2√2.') : null);
+          a.S.outside_quantum_set ? note('warn', 'The estimate of S is above 2√2. No quantum system can do that: it is sampling noise, and the bounds use S capped at 2√2.') : '');
         detail(4, `${a.ladder_conservative.di_certified ? 'DI key certified' : 'no DI key'} at the conservative end`);
         announce(`Done. S equals ${num(a.S.point)}; ${a.S.above_classical ? 'Bell violation confirmed at the conservative end' : 'no conclusive Bell violation'}.`);
       }

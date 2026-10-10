@@ -2,7 +2,7 @@
 
 One call submits the whole plan as ONE job: a list of circuits for local simulators, or a
 single packed circuit where the profile says so (IonQ through Qollab). Results are read
-back per circuit; the decoder takes it from there.
+back per circuit, by position; the decoder takes it from there.
 """
 
 from __future__ import annotations
@@ -33,10 +33,15 @@ def check_plan(plan: Plan, profile: dict) -> None:
 
 
 def _transpile(circuits: list, backend, profile: dict, seed: int | None) -> list:
+    # One process, as in Pyodide; this also keeps local runs identical to Qollab runs.
     mode = profile["transpile"]
     if mode == "backend":
         return transpile(
-            circuits, backend=backend, optimization_level=profile["opt_level"], seed_transpiler=seed
+            circuits,
+            backend=backend,
+            optimization_level=profile["opt_level"],
+            seed_transpiler=seed,
+            num_processes=1,
         )
     if mode == "basis":
         return transpile(
@@ -44,6 +49,7 @@ def _transpile(circuits: list, backend, profile: dict, seed: int | None) -> list
             basis_gates=profile["basis_gates"],
             optimization_level=profile["opt_level"],
             seed_transpiler=seed,
+            num_processes=1,
         )
     raise ValueError(f"unknown transpile mode {mode!r}")
 
@@ -68,10 +74,8 @@ def run_plan(backend, plan: Plan, profile: dict, shots: int, seed: int | None) -
     payload = compiled if len(compiled) > 1 else compiled[0]
     result = backend.run(payload, **options).result()
     elapsed = time.time() - start
-    if len(compiled) > 1:
-        counts = [dict(result.get_counts(c.name)) for c in compiled]
-    else:
-        counts = [dict(result.get_counts())]
+    # Read by position, not by name: the Braket provider does not keep circuit names.
+    counts = [dict(result.get_counts(i)) for i in range(len(compiled))]
     return {
         "counts": counts,
         "compiled": [circuit_stats(c) for c in compiled],

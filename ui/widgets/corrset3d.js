@@ -103,11 +103,12 @@ export async function createCorrSet3d(container, { colors, labels }) {
     groups.points.clear();
     for (const p of points) {
       const [e00, e11, m] = p.sym;
-      const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.045, 20, 14), new THREE.MeshStandardMaterial({ color: p.color }));
+      // Drawn on top of the translucent sets so that points inside them stay visible;
+      // names are in the legend next to the view.
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.06, 20, 14), new THREE.MeshBasicMaterial({ color: p.color, depthTest: false }));
+      mesh.renderOrder = 10;
       mesh.position.set(e00, m, e11);
       groups.points.add(mesh);
-      const lab = axisLabel(p.name, new THREE.Vector3(e00, m + 0.12, e11));
-      groups.points.add(lab);
     }
     render();
   }

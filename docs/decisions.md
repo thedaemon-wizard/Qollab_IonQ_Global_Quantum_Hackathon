@@ -101,3 +101,7 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
 - **Evidence.** Qollab names the IBM noise-model backend `fake_fez` and so on, while a local
   `AerSimulator.from_backend(FakeFez)` is named `aer_simulator_from(fake_fez)`; with the ideal
   profile listed first the latter matched "aer_simulator" (found by a test on 2026-10-10).
+  Qollab's Braket local simulator is named `default`, so the class name (`BraketLocalBackend`)
+  is matched as well. On Qollab a 25-qubit packed circuit took over 50 s on this state-vector
+  simulator, so Braket uses one circuit per setting; its results do not keep circuit names,
+  so counts are read by position for every backend.

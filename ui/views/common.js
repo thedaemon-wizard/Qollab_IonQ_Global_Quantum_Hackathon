@@ -56,7 +56,7 @@ export function runBlocker(ctx) {
   const prof = ctx.backend.profile;
   if (prof.refuse) return prof.refuse_reason;
   if (prof.one_job_per_run && ctx.store.get().ionqJobsUsed >= 1) {
-    return 'This session already used its one IonQ job (a Qollab rule). The numbers below stay; press Run in Qollab again to submit another experiment.';
+    return 'This session already used its one job (Qollab allows one IonQ job per project run; the lab applies the same rule to unrecognised backends). The numbers below stay; press Run in Qollab again to submit another experiment.';
   }
   return null;
 }

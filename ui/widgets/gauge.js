@@ -26,11 +26,9 @@ export function sGauge({ thresholds }) {
       s('rect', { x: x(lo), y: y0, width: x(2) - x(lo), height: 22, style: 'fill:var(--zone-local)' }),
       s('rect', { x: x(2), y: y0, width: x(tsir) - x(2), height: 22, style: 'fill:var(--zone-quantum)' }),
       s('rect', { x: x(tsir), y: y0, width: x(hi) - x(tsir), height: 22, style: 'fill:var(--zone-beyond)' }),
-      s('text', { x: x(1), y: y0 - 8, 'text-anchor': 'middle' }, 'local (S ≤ 2)'),
-      s('text', { x: (x(2) + x(tsir)) / 2, y: y0 - 8, 'text-anchor': 'middle' }, 'quantum'),
-      s('text', { x: (x(tsir) + x(hi)) / 2, y: y0 - 8, 'text-anchor': 'middle' }, 'not reachable'),
+      s('text', { x: x(1), y: y0 + 15, 'text-anchor': 'middle', style: 'fill:var(--muted)' }, 'local: S ≤ 2'),
     );
-    for (const [v, label] of [[0, '0'], [1, '1'], [2, '2'], [thresholds.acin.S_werner, num(thresholds.acin.S_werner, 3)], [tsir, '2√2'], [3, '3']]) {
+    for (const [v, label] of [[0, '0'], [1, '1'], [2, '2'], [thresholds.acin.S_werner, num(thresholds.acin.S_werner, 3)], [tsir, '2√2']]) {
       svg.append(s('line', { x1: x(v), x2: x(v), y1: y0 + 22, y2: y0 + 30, style: 'stroke:var(--muted)' }),
         s('text', { x: x(v), y: y0 + 44, 'text-anchor': 'middle', style: 'fill:var(--muted)' }, label));
     }

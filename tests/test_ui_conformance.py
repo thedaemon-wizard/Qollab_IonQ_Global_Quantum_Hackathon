@@ -67,3 +67,13 @@ def test_modules_parse(path, tmp_path):
     copy.write_text(path.read_text(encoding="utf-8"), encoding="utf-8")
     out = subprocess.run(["node", "--check", str(copy)], capture_output=True, text=True)
     assert out.returncode == 0, out.stderr
+
+
+@pytest.mark.parametrize("path", JS, ids=lambda p: p.relative_to(ROOT).as_posix())
+def test_no_top_level_name_clashes_with_qollab_globals(path):
+    """Qollab bundles main.js with its relative imports into one function that receives
+    `backend` and `sendFile`; a module-level declaration of either name breaks the run
+    (found on Qollab 2026-10-10: "Identifier 'backend' has already been declared")."""
+    src = path.read_text(encoding="utf-8")
+    clash = re.findall(r"^(?:export\s+)?(?:let|const|var|function|class)\s+(backend|sendFile)\b", src, re.M)
+    assert not clash, f"{path.name} declares {clash}"

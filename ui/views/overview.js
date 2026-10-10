@@ -13,7 +13,7 @@ function protocolDiagram() {
     height: 330,
     title: 'From entangled pairs to certificates',
     desc: 'A source sends entangled pairs to Alice and Bob through noisy links, optionally tapped by Eve. Alice and Bob measure in chosen bases, compare a sample of results over a classical channel and estimate S and the error rates. These numbers feed five certificates: Bell violation, BBM92 key, device-independent key, device-independent randomness and a self-test. ',
-    groups: [{ x: 600, y: 10, w: 210, h: 310, label: 'CERTIFICATES FROM THE SAME COUNTS' }],
+    groups: [{ x: 600, y: 10, w: 210, h: 310, label: 'CERTIFICATES' }],
     nodes: [
       n('src', 10, 130, 140, 'atom', 'Pair source', '|Φ+⟩ = (|00⟩+|11⟩)/√2', 'var(--c1)'),
       n('alice', 210, 40, 140, 'user', 'Alice', 'Z, X, ±45°', 'var(--c1)'),
@@ -31,7 +31,7 @@ function protocolDiagram() {
       { from: 'src', to: 'bob', route: 'elbow', label: 'noisy link', labelAt: [168, 246] },
       { from: 'eve', to: 'bob', fromSide: 'right', toSide: 'bottom', route: 'elbow', dash: '5 4', color: 'var(--bad)' },
       { from: 'alice', to: 'est', route: 'elbow' },
-      { from: 'bob', to: 'est', route: 'elbow', label: 'results + bases', labelAt: [430, 300] },
+      { from: 'bob', to: 'est', route: 'elbow' },
       { from: 'est', to: 'bell', route: 'elbow' },
       { from: 'est', to: 'bbm', route: 'elbow' },
       { from: 'est', to: 'di', route: 'elbow' },
@@ -98,7 +98,7 @@ export default {
         h('dt', null, 'Job layout'), h('dd', null, prof.refuse ? '\u2014' : prof.layout === 'packed_single_circuit' ? 'one packed circuit' : 'one circuit per setting'),
         h('dt', null, 'Qubit limit per circuit'), h('dd', null, String(prof.max_qubits ?? '\u2014'))),
       prof.refuse ? note('bad', prof.refuse_reason) : null,
-      prof.one_job_per_run ? note('warn', 'Qollab allows one IonQ job per project run, so this session can submit one experiment. Choose the experiment, run it once, then press Run in Qollab again for another.') : null,
+      prof.one_job_per_run ? note('warn', 'This session can submit one job (Qollab allows one IonQ job per project run; the lab applies the same rule to unrecognised backends). Choose the experiment, run it once, then press Run in Qollab again for another.') : null,
       prof.id === ctx.config.default_profile.id ? note('warn', `This backend name is not in the configured list, so the conservative "${prof.label}" profile is used.`) : null,
       h('p', { class: 'muted small' }, 'Pick another simulator in Qollab’s Run dialog to change it. This lab never submits to quantum hardware.'));
     const checks = h('div', { class: 'card' }, h('h3', null, icon('list-check'), 'Formula self-check'), h('p', { class: 'muted' }, 'Running…'));

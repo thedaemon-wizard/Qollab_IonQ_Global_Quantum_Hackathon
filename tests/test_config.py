@@ -33,6 +33,10 @@ def test_profile_resolution(cfg, name, expected):
     assert profile["id"] == (expected or cfg["default_profile"]["id"])
 
 
+def test_braket_matched_by_class_name(cfg):
+    assert config.resolve_profile(cfg, "default", "BraketLocalBackend")["id"] == "braket"
+
+
 def test_qpu_profile_refuses(cfg):
     assert config.resolve_profile(cfg, "ionq_qpu")["refuse"] is True
 

@@ -21,6 +21,7 @@ export default {
     const { element, body } = viewFrame('space', 'Where do the correlations live?', 'cube-3d-sphere',
       'Four correlators (E00, E01, E10, E11) describe a CHSH experiment. Local (classical) models fill a polytope, quantum mechanics a larger convex set with a curved boundary, and anything that does not signal fits in the cube. Measured points show where your run and the Munich data fall.');
     const stage = h('div', { class: 'space3d', id: 'space-3d' });
+    const legend3d = h('div', { class: 'legend', 'aria-hidden': 'true' });
     const status = h('p', { class: 'muted small', role: 'status' });
     const tools = h('div', { class: 'toolbar', role: 'group', 'aria-label': '3D view controls' });
     const toggles = h('div', { class: 'toolbar' });
@@ -30,7 +31,7 @@ export default {
     body.append(
       h('div', { class: 'grid two' },
         h('div', { class: 'card' }, h('h3', null, icon('cube'), '3D: the symmetric section'),
-          stage, tools, toggles, status,
+          stage, legend3d, tools, toggles, status,
           h('p', { class: 'muted small' }, 'Axes: E00, E11 and m = (E01 + E10)/2. Grey: local polytope. Blue surfaces: boundary of the quantum set. Dashed: Werner states from the centre to the Tsirelson point. Drag to rotate, or use the buttons.')),
         h('div', { class: 'card', id: 'space-slice' }, h('h3', null, icon('chart-dots'), '2D: the slice E11 = −E00'), sliceBox)),
       h('div', { class: 'card wide' }, h('h3', null, icon('table'), 'Membership of each point (full four-dimensional test)'), tableBox,
@@ -76,6 +77,8 @@ export default {
         rows: pts.map((p) => ({ name: p.name, e: p.e, ...geometry.points[p.name] })),
       }));
       drawSlice(pts);
+      legend3d.replaceChildren(...pts.map((p) => h('span', null,
+        h('span', { style: { display: 'inline-block', width: '11px', height: '11px', borderRadius: '50%', background: p.color } }), p.name)));
       if (view3d) {
         view3d.setQuantum(geometry.mesh);
         view3d.setPoints(pts.map((p) => ({ name: p.name, color: p.color, sym: geometry.points[p.name].symmetric })));

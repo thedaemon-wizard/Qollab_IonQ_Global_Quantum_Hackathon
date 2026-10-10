@@ -4,7 +4,7 @@
 // of them at once (an IonQ job suspends Python while it waits for the network).
 
 let py = null;
-let backend = null;
+let target = null; // the injected backend (named apart from Qollab's own `backend`)
 let queue = Promise.resolve();
 let inFlight = 0;
 const busyListeners = new Set();
@@ -19,7 +19,7 @@ export class ApiError extends Error {
 
 export function init(pythonModule, injectedBackend) {
   py = pythonModule;
-  backend = injectedBackend;
+  target = injectedBackend;
 }
 
 export function onBusy(fn) {
@@ -67,10 +67,10 @@ function call(fn, ...args) {
 const json = (value) => JSON.stringify(value ?? {});
 
 export const api = {
-  backendName: () => String((backend && backend.name) || 'unknown'),
+  backendName: () => String((target && target.name) || 'unknown'),
   config: () => call('config_json'),
-  describeBackend: () => call('describe_backend_json', backend),
-  run: (request) => call('run_json', backend, json(request)),
+  describeBackend: () => call('describe_backend_json', target),
+  run: (request) => call('run_json', target, json(request)),
   theory: (request) => call('theory_json', json(request)),
   circuits: (request) => call('circuits_json', json(request)),
   geometry: (points) => call('geometry_json', json(points)),

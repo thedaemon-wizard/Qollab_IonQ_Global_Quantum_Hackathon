@@ -31,25 +31,26 @@ export function createTour(ctx) {
     highlighted = null;
   }
 
+  // Put the box next to its target without covering it: below, above, left or right,
+  // whichever has room; otherwise the bottom-right corner (the frame on Qollab is short).
   function place(target) {
-    box.style.left = '';
-    box.style.top = '';
-    box.style.right = '16px';
-    box.style.bottom = '16px';
+    Object.assign(box.style, { left: '', top: '', right: '16px', bottom: '16px' });
     if (!target) return;
     const r = target.getBoundingClientRect();
     const w = box.offsetWidth;
     const hgt = box.offsetHeight;
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    let left = Math.min(Math.max(12, r.left), vw - w - 12);
-    let top = r.bottom + 12;
-    if (top + hgt > vh - 12) top = Math.max(12, r.top - hgt - 12);
-    if (top < 12 || top + hgt > vh - 12) return; // keep the corner position
-    box.style.right = '';
-    box.style.bottom = '';
-    box.style.left = `${left}px`;
-    box.style.top = `${top}px`;
+    const m = 12;
+    const clampX = (x) => Math.min(Math.max(m, x), vw - w - m);
+    const clampY = (y) => Math.min(Math.max(m, y), vh - hgt - m);
+    let pos = null;
+    if (vh - r.bottom >= hgt + 2 * m) pos = { left: clampX(r.left), top: r.bottom + m };
+    else if (r.top >= hgt + 2 * m) pos = { left: clampX(r.left), top: r.top - hgt - m };
+    else if (r.left >= w + 2 * m) pos = { left: r.left - w - m, top: clampY(r.top) };
+    else if (vw - r.right >= w + 2 * m) pos = { left: r.right + m, top: clampY(r.top) };
+    if (!pos) return;
+    Object.assign(box.style, { right: '', bottom: '', left: `${pos.left}px`, top: `${pos.top}px` });
   }
 
   async function show(i) {

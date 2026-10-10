@@ -145,13 +145,15 @@ export default {
         recorded = [];
       }
       const session = ctx.store.get().runs.map((r) => ({ ...r, origin: 'this session' }));
-      const all = [...recorded.map((r) => ({ ...r, origin: r.origin || 'recorded' })), ...session].filter((r) => r.experiment.module === 'bell');
+      const recordedRows = recorded.map((r) => ({ ...r, label: r.origin ? r.origin.device_label : r.backend.name, source: r.origin ? `recorded on ${r.origin.where} (${r.origin.captured_utc})` : 'recorded' }));
+      const sessionRows = session.map((r) => ({ ...r, label: r.backend.name, source: 'this session' }));
+      const all = [...recordedRows, ...sessionRows].filter((r) => r.experiment.module === 'bell');
       if (!all.length) {
         compareBox.replaceChildren(h('p', { class: 'muted' }, 'No Bell runs yet. Each Qollab session runs on one backend; recorded runs from other backends appear here once they are added to data/recorded_runs.json.'));
         return;
       }
       const rows = all.map((r, i) => ({
-        i: i + 1, backend: r.backend.name, origin: r.origin, channel: channelText(r),
+        i: i + 1, backend: r.label, origin: r.source, channel: channelText(r),
         shots: r.shots, S: r.analysis.S.point, low: r.analysis.S.low, high: r.analysis.S.high, pred: r.prediction.S_fixed, QZ: r.analysis.Q_Z.point, sec: r.seconds,
       }));
       const chart = lineChart({
