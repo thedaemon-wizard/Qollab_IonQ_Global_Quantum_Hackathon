@@ -1,0 +1,125 @@
+{
+ "axe_version": "4.14.0",
+ "tags": [
+  "wcag2a",
+  "wcag2aa",
+  "wcag21a",
+  "wcag21aa",
+  "wcag22aa",
+  "best-practice"
+ ],
+ "views": {
+  "dark:Overview": {
+   "violations": [],
+   "passes": 46,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "dark:Bell Lab": {
+   "violations": [],
+   "passes": 51,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "dark:Certificates": {
+   "violations": [],
+   "passes": 48,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "dark:Real data": {
+   "violations": [],
+   "passes": 46,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "dark:Repeater": {
+   "violations": [],
+   "passes": 48,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "dark:Correlation space": {
+   "violations": [],
+   "passes": 46,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "dark:Backends & circuits": {
+   "violations": [],
+   "passes": 50,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "dark:Method & sources": {
+   "violations": [],
+   "passes": 37,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "light:Overview": {
+   "violations": [],
+   "passes": 46,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "light:Bell Lab": {
+   "violations": [],
+   "passes": 51,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "light:Certificates": {
+   "violations": [],
+   "passes": 48,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "light:Real data": {
+   "violations": [],
+   "passes": 46,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "light:Repeater": {
+   "violations": [],
+   "passes": 48,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "light:Correlation space": {
+   "violations": [],
+   "passes": 46,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "light:Backends & circuits": {
+   "violations": [],
+   "passes": 50,
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  "light:Method & sources": {
+   "violations": [],
+   "passes": 37,
+   "incomplete": [
+    "color-contrast"
+   ]
+  }
+ }
+}

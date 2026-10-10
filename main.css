@@ -49,7 +49,7 @@
   --warn: #8a5a00;
   --bad: #b42318;
   --c1: #0072b2;
-  --c2: #b35f00;
+  --c2: #a35600;
   --c3: #007a5a;
   --c4: #a8467f;
   --c5: #7a6f00;
@@ -83,7 +83,7 @@
     --warn: #8a5a00;
     --bad: #b42318;
     --c1: #0072b2;
-    --c2: #b35f00;
+    --c2: #a35600;
     --c3: #007a5a;
     --c4: #a8467f;
     --c5: #7a6f00;
@@ -314,3 +314,11 @@ figcaption { font-size: 0.84rem; color: var(--muted); margin-top: 0.3rem; }
 .checks li[data-ok='true'] .icon { color: var(--good); }
 .checks li[data-ok='false'] .icon { color: var(--bad); }
 .spacer { flex: 1; }
+.grid > *, .stack > * { min-width: 0; }
+.field .row input[type='range'] { min-width: 0; flex: 1; }
+.math-wrap { overflow-x: auto; max-width: 100%; padding: 0.2rem 0; }
+.kv dd { overflow-wrap: anywhere; }
+input[type='number'] { width: 100%; min-width: 0; }
+@media (max-width: 480px) {
+  .legend span { white-space: normal; }
+}

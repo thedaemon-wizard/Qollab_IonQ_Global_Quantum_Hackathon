@@ -10,7 +10,7 @@ function math(markup, label) {
   m.setAttribute('display', 'block');
   if (label) m.setAttribute('aria-label', label);
   m.innerHTML = markup;
-  return m;
+  return h('div', { class: 'math-wrap', tabindex: '0', role: 'group', 'aria-label': label || 'formula' }, m);
 }
 
 const F = {
