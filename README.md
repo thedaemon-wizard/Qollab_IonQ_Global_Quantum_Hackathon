@@ -357,6 +357,8 @@ snapshots rather than one commit per change; `e93f76a` ("Apply pre-window audit 
 Generative-AI coding assistants drafted most of the code, documentation and research notes under
 the author's direction; the author set the design, reviewed the changes, ran the tests and checked
 the cited sources.
+The reviews recorded in [docs/review.md](docs/review.md) were also run with AI assistants; the
+author checked each finding before it was fixed.
 
 ## Data and third-party material
 
