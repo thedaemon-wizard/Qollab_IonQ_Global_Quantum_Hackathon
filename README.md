@@ -9,7 +9,7 @@ self-test. Then add noise or an eavesdropper, stretch the link with entanglement
 try purification, and check the formulas against **open data from a loophole-free Bell test**
 and published device-independent QKD experiments.
 
-> Demo video (2:59, YouTube, synthetic narration): https://youtu.be/DAtYALxMrkI · Repository:
+> Demo video (2:59, YouTube, synthetic narration, English captions): https://youtu.be/iVdBbj3bGOc · Repository:
 > https://github.com/thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon
 
 ![The Bell Lab after one run: protocol stages, counts and error rates](docs/img/screen_lab.png)
