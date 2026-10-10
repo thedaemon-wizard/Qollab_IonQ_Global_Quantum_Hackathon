@@ -1,4 +1,4 @@
-// A minimal finite-state machine shared by the Bell Lab and the Repeater views.
+// A minimal finite-state machine (used by the Bell Lab view).
 // states: { name: { on: { EVENT: 'next' | (ctx, payload) => 'next' } } }
 
 export function createMachine({ initial, states, context = {} }) {

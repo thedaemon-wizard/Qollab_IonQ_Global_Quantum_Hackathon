@@ -183,7 +183,7 @@ export default {
         detail(0, `${int(rep.shots)} shots × ${Object.keys(a.settings).length} settings on ${rep.backend.name}`);
         if (i === 0) announce(`Stage 1: ${int(n)} pairs distributed.`);
       }
-      if (i >= 1) detail(1, 'Alice: 0°, 90°, ±45°. Bob: 0°, 90°.');
+      if (i >= 1) detail(1, `Alice: 0°, 90°, ±45°. Bob: 0°, 90°.${rep.experiment.include_yy ? ' Plus Y on both sides.' : ''}`);
       if (i >= 2) {
         countsCard.hidden = false;
         counts.update(Object.fromEntries(Object.entries(a.settings).map(([id, st]) => [id, st])));
