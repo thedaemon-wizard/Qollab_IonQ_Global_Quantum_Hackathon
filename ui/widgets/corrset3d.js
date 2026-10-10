@@ -108,7 +108,9 @@ export async function createCorrSet3d(container, { colors, labels }) {
   groups.werner.children[0].computeLineDistances();
 
   function pointObject(p) {
-    const mat = new THREE.MeshBasicMaterial({ color: p.color, depthTest: false, wireframe: p.hollow });
+    // transparent (at full opacity) puts the points in the same render pass as the translucent
+    // sets, and renderOrder 10 draws them last, so their colour is not tinted by the surfaces.
+    const mat = new THREE.MeshBasicMaterial({ color: p.color, depthTest: false, wireframe: p.hollow, transparent: true, opacity: 1 });
     const mesh = (geo, rz = 0) => {
       const m = new THREE.Mesh(geo, mat);
       m.rotation.z = rz;
