@@ -1,0 +1,87 @@
+[
+ {
+  "name": "idle: all nodes todo",
+  "ok": true,
+  "info": "{\"Pair source\":\"todo\",\"Alice\":\"todo\",\"Bob\":\"todo\",\"One job\":\"todo\",\"Sift & estimate\":\"todo\",\"Bell violation\":\"todo\",\"Entanglement\":\"todo\",\"BBM92 key\":\"todo\",\"Self-test\":\"todo\",\"DI randomness\":\"todo\",\"DI key\":\"todo\"}"
+ },
+ {
+  "name": "idle: desc says no run yet",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "preview: Eve node appears when the eavesdropper is switched on",
+  "ok": true,
+  "info": "Pair source,Alice,Bob,One job,Sift & estimate,Eve,Bell violation,Entanglement,BBM92 key,Self-test,DI randomness,DI key"
+ },
+ {
+  "name": "replay: playing flag on, animations running",
+  "ok": true,
+  "info": "playing=true anims=5"
+ },
+ {
+  "name": "stage 1: node statuses match the stepper",
+  "ok": true,
+  "info": "{\"steps\":[\"active\",\"todo\",\"todo\",\"todo\",\"todo\"],\"mismatched\":[]}"
+ },
+ {
+  "name": "paused: playing flag off, no flow animation",
+  "ok": true,
+  "info": "playing=false anims=0"
+ },
+ {
+  "name": "stage 2: node statuses match the stepper",
+  "ok": true,
+  "info": "{\"steps\":[\"done\",\"active\",\"todo\",\"todo\",\"todo\"],\"mismatched\":[]}"
+ },
+ {
+  "name": "stage 3: node statuses match the stepper",
+  "ok": true,
+  "info": "{\"steps\":[\"done\",\"done\",\"active\",\"todo\",\"todo\"],\"mismatched\":[]}"
+ },
+ {
+  "name": "stage 4: node statuses match the stepper",
+  "ok": true,
+  "info": "{\"steps\":[\"done\",\"done\",\"done\",\"active\",\"todo\"],\"mismatched\":[]}"
+ },
+ {
+  "name": "stage end: node statuses match the stepper",
+  "ok": true,
+  "info": "{\"steps\":[\"done\",\"done\",\"done\",\"done\",\"done\"],\"mismatched\":[]}"
+ },
+ {
+  "name": "certificates in the diagram match the ladder table",
+  "ok": true,
+  "info": "{\"ladder\":[\"no\",\"no\",\"no\",\"no\",\"no\",\"no\"],\"certTexts\":[\"does not hold\",\"does not hold\",\"does not hold\",\"does not hold\",\"does not hold\",\"does not hold\"]}"
+ },
+ {
+  "name": "done: desc lists S and certificates",
+  "ok": true,
+  "info": "5 of 5, Certify, is done. One job on basic_simulator: 10,000 shots for each of 6 settings, 0.042 s. S = 1.355 with interval 1.296 to 1.414; Q_Z = 2.36%, Q_X = 50.12%. Certificates that hold at the conservative end: none."
+ },
+ {
+  "name": "reset: back to the empty picture",
+  "ok": true,
+  "info": ""
+ },
+ {
+  "name": "reduced motion: all stages done at once",
+  "ok": true,
+  "info": "[\"done\",\"done\",\"done\",\"done\",\"done\"]"
+ },
+ {
+  "name": "reduced motion: no running flow animation",
+  "ok": true,
+  "info": "anims=0"
+ },
+ {
+  "name": "320 px: no horizontal page scroll",
+  "ok": true,
+  "info": "{\"pageScroll\":false,\"boxScroll\":true,\"tabindex\":\"0\",\"role\":\"region\",\"label\":\"Protocol diagram\"}"
+ },
+ {
+  "name": "320 px: diagram box scrolls and is keyboard-reachable",
+  "ok": true,
+  "info": "{\"pageScroll\":false,\"boxScroll\":true,\"tabindex\":\"0\",\"role\":\"region\",\"label\":\"Protocol diagram\"}"
+ }
+]

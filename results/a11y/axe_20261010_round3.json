@@ -1,0 +1,134 @@
+{
+ "tool": "axe-core 4.14.0",
+ "date": "2026-10-10T11:03:47.970Z",
+ "runs": [
+  {
+   "scheme": "dark",
+   "view": "Overview",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "dark",
+   "view": "Bell Lab",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "dark",
+   "view": "Certificates",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "dark",
+   "view": "Real data",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "dark",
+   "view": "Repeater",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "dark",
+   "view": "Correlation space",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "dark",
+   "view": "Backends",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "dark",
+   "view": "Method",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "light",
+   "view": "Overview",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "light",
+   "view": "Bell Lab",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "light",
+   "view": "Certificates",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "light",
+   "view": "Real data",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "light",
+   "view": "Repeater",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "light",
+   "view": "Correlation space",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "light",
+   "view": "Backends",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "scheme": "light",
+   "view": "Method",
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  }
+ ]
+}

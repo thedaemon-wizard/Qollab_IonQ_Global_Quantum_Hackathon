@@ -12,6 +12,7 @@ import { exportBar } from '../widgets/exporter.js';
 import { sGauge } from '../widgets/gauge.js';
 import { dataTable } from '../widgets/table.js';
 import { channelControls, eveControls, ladderTable, qberList, runBlocker, sizeNote, submitRun } from './common.js';
+import { labFlow } from './lab_flow.js';
 
 const STAGES = [
   { id: 'distribute', icon: 'atom', title: 'Distribute pairs' },
@@ -71,8 +72,9 @@ export default {
     const stepItems = STAGES.map((st) => h('li', { 'data-status': 'todo' },
       h('span', { class: 'head' }, icon(st.icon, { size: 16 }), st.title), h('span', { class: 'muted detail' }, '')));
     const stepper = h('ol', { class: 'stepper', 'aria-label': 'Protocol stages' }, stepItems);
+    const flow = labFlow(STAGES.map((st) => st.title));
     const runCard = h('div', { class: 'card wide', id: 'lab-run-card' },
-      h('div', { class: 'toolbar' }, runBtn, pauseBtn, stepBtn, resetBtn), status, stepper,
+      h('div', { class: 'toolbar' }, runBtn, pauseBtn, stepBtn, resetBtn), status, flow.element, stepper,
       note('', 'The job runs once; the stages then replay its counts so you can follow the protocol. Nothing is re-sampled between stages.'));
 
     // ---------- results ----------
@@ -124,6 +126,7 @@ export default {
 
     async function preview() {
       drawDisc();
+      flow.preview({ channel: channel.value(), evePhi: eve.value().enabled ? eve.value().phi_deg : null, backend: ctx.backend.name });
       try {
         const req = request();
         const [th, circ] = [await ctx.api.theory(req), await ctx.api.circuits(req)];
@@ -206,6 +209,7 @@ export default {
         detail(4, `${a.ladder_conservative.di_certified ? 'DI key certified' : 'no DI key'} at the conservative end`);
         announce(`Done. S equals ${num(a.S.point)}; ${a.S.above_classical ? 'Bell violation confirmed at the conservative end' : 'no conclusive Bell violation'}.`);
       }
+      flow.update(stepItems.map((li) => li.dataset.status), rep, i);
     }
 
     function sVerdict(a) {
@@ -238,10 +242,12 @@ export default {
       [countsCard, qberCard, corrCard, ladderCard].forEach((c) => { c.hidden = true; });
       gauge.update(null);
       gaugeCard.lastChild.replaceChildren();
+      flow.reset();
     }
 
     machine.subscribe(async (state, prev, event) => {
       clearInterval(timer);
+      flow.setPlaying(state === 'replay' || state === 'running');
       setDisabled(pauseBtn, !(state === 'replay' || state === 'paused'), status);
       pauseBtn.replaceChildren(icon(state === 'paused' ? 'player-play' : 'player-pause'), state === 'paused' ? 'Resume' : 'Pause');
       setDisabled(stepBtn, !(state === 'replay' || state === 'paused'), status);
@@ -251,6 +257,7 @@ export default {
         clearResults();
         errorBox.replaceChildren();
         status.textContent = `Submitting one job to ${ctx.backend.name}…`;
+        flow.submitting(ctx.backend.name);
         updateRunButton();
         last = null;
         try {

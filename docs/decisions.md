@@ -1,6 +1,6 @@
 # Decisions
 
-D1–D7 were recorded on 2026-10-09, before the build window; D3 and D4 were updated and D8–D10
+D1–D7 were recorded on 2026-10-09, before the build window; D3 and D4 were updated and D8–D11
 added during the window (2026-10-10).
 
 Each entry states the decision, the evidence it rests on (checked on the date given), and what
@@ -119,3 +119,25 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
   same frame runs on the GPU (ANGLE over Vulkan), and the scene is small (a few thousand
   triangles), so WebGPU would add a second code path without a visible gain.
 - **Revisit if** Qollab exposes WebGPU in project frames and adds `three/webgpu` to its import map.
+
+## D11 — The protocol animation lives inside the Bell Lab; no separate end-to-end page
+
+- **Decision.** The Bell Lab's run card shows a protocol diagram (pair source → Alice and Bob →
+  one job → sift and estimate → six certificates) that follows the five-stage replay: the
+  current stage lights up, finished stages turn solid, and each box shows its numbers only once
+  its stage is reached. We did not add a separate page that runs the experiments as a chain.
+- **Evidence (2026-10-10).**
+  - Before this change the replay had only the stepper cards, and the Overview and Repeater
+    diagrams were static, so the order of the protocol was not visible as a picture.
+  - The stages cannot be streamed live: the whole experiment is one `backend.run`, and the only
+    time measured is that job's wall time. The diagram therefore replays the counts of the one
+    job, and its caption says that the pacing (1.1 s per step) is not physical time.
+  - A chain of experiments (Bell Lab, then Repeater) on one page would need several jobs per
+    run, which breaks the one-IonQ-job rule (D4).
+  - The diagram adds no computation: it reads the same report as the stepper, takes each
+    certificate's outcome from the same function as the ladder table (`rungOutcome` in
+    `ui/views/common.js`), and has no timers of its own; it moves only while the replay plays
+    (`tests/test_ui_conformance.py`). Accessibility was measured again after the change
+    ([results/a11y/](../results/a11y/README.md)).
+- **Revisit if** Qollab lets a project read intermediate results while its job runs, or allows
+  several jobs in one IonQ run.

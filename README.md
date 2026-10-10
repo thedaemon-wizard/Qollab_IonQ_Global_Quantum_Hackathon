@@ -12,7 +12,7 @@ and published device-independent QKD experiments.
 > Demo video (2:59, YouTube, synthetic narration, English captions): https://youtu.be/iVdBbj3bGOc · Repository:
 > https://github.com/thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon
 
-![The Bell Lab after one run: protocol stages, counts and error rates](docs/img/screen_lab.png)
+![The Bell Lab after one run: the protocol diagram with each stage's numbers, and the list of stages](docs/img/screen_lab.png)
 
 ## Why this lab
 
@@ -56,7 +56,7 @@ device-independent key does not — finite statistics are part of the lesson, no
 | View | What it shows |
 |---|---|
 | **Overview** | The protocol and the software architecture as diagrams; which numbers are simulated, measured or bounds; the injected backend and its run profile; an 8-check formula self-test run in Python at start-up. |
-| **Bell Lab** | Choose link noise (depolarizing, dephasing, bit flip, Y flip), an eavesdropper (controlled-Ry with angle φ), an optional YY setting, shots and seed. **One job** runs six settings; the five protocol stages then replay from its counts (Run, Pause, Step, Reset). S gauge with its interval, outcome counts, correlators against the exact prediction, error rates, the six-rung certificate ladder. Exports to JSON, CSV and PNG. |
+| **Bell Lab** | Choose link noise (depolarizing, dephasing, bit flip, Y flip), an eavesdropper (controlled-Ry with angle φ), an optional YY setting, shots and seed. **One job** runs six settings; the five protocol stages then replay from its counts (Run, Pause, Step, Reset), as a stepper and as a protocol diagram whose current stage lights up and whose boxes fill in with that stage's numbers (the pacing is not physical time). S gauge with its interval, outcome counts, correlators against the exact prediction, error rates, the six-rung certificate ladder. Exports to JSON, CSV and PNG. |
 | **Certificates** | Key rate against QBER (BBM92 and DI), what S alone certifies (min-entropy, von Neumann entropy, self-test bound), noise sweeps for each channel type, and a threshold table — with your latest run placed on the curves. |
 | **Real data** | The **Munich 2017 event-ready Bell test** (Rosenfeld et al., open event files) re-analysed with the same estimator; published DI-QKD experiments on the S–Q plane against the DI-key boundary (plus one S-only result); a distance series (Lu et al. 2026) next to our recomputation. |
 | **Repeater** | 1–4 links joined by entanglement swapping (topology diagram, timeline of classical messages, link budget, S and QBER against the number of links), and one round of BBPSSW/DEJMPS purification with post-selection. |
@@ -263,6 +263,9 @@ The terms ask for UI accessibility best practice, so it was tested, not assumed
 - **Display**: contrast checked for every colour token in both schemes; no horizontal page
   scroll at 320 px; the tour fits at 400 % zoom; with reduced motion the replay jumps to the
   result and nothing rotates.
+- **Motion**: the Bell Lab's protocol diagram moves only while the replay plays (about 5.5 s);
+  Pause stops it and keeps the highlight, and its description states the current stage and its
+  numbers, which the stepper list and the status line also give in text.
 
 ## What didn't work
 
@@ -309,7 +312,9 @@ statistics).
 
 The author previously showed an E91/CHSH Werner-state model in a separate public demo
 (<https://qsmpc-qkd-qhe-ai-hybrid.daemons.jp/orchestration>, Parameters → QKD protocol
-"E91 (CHSH)"); no code from it is used here.
+"E91 (CHSH)"); no code from it is used here. The Bell Lab's animated protocol diagram borrows
+the idea of the step-by-step flow pages in the author's earlier QKD testbed demo; it was
+written new during the window, again with no code reused.
 
 ## Extending it
 

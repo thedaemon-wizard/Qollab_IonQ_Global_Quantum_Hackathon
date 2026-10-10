@@ -29,3 +29,17 @@ after a run, Repeater after a chain run, the circuits view in Qiskit-text mode) 
 | Header 8 px too wide at 320 px | Root grid column `minmax(0, 1fr)`, backend chip may wrap | No horizontal page scroll at 320 px |
 | Repeater charts without a data table; active protocol stage not exposed | Data tables (predicted, this session, recorded, with intervals); `aria-current="step"` | Live |
 | Jargon (QBER, Werner, i.i.d., TLM) not defined | "Terms used in this lab" in the Method view; QBER spelled out in the Certificates view | Live |
+
+## Third check (2026-10-10, evening): the Bell Lab protocol diagram
+
+The Bell Lab got a protocol diagram that follows the replay (decision D11). Checked after the
+change on the local harness:
+
+| Check | Result |
+|---|---|
+| axe-core 4.14.0, same tags, all 8 views (Bell Lab after a run), dark and light | 0 violations in all 16 combinations (`axe_20261010_round3.json`) |
+| Lighthouse 13.5.0, snapshot of the Bell Lab after a run, dark and light | Accessibility 100, Best Practices 100 (`lighthouse_20261010_round3.json`) |
+| Diagram follows the stepper (Pause after the first stage, then Step four times) | Every box's state equals its stage's state in the stepper at each step; the certificate boxes say the same as the ladder table (`protocol_diagram_checks_20261010.json`, 17 of 17 checks) |
+| Motion (2.2.2 Pause, Stop, Hide; 2.3.3) | The highlight moves only while the replay plays (about 5.5 s); paused or done, no animation runs; with reduced motion all stages are shown done at once |
+| Text alternative | The SVG has a title and a description that names the current stage and its numbers (S with its interval, Q_Z, Q_X, the certificates that hold); the stepper and the status line give the same in text |
+| 320 px | No horizontal page scroll; the diagram scrolls inside a box that becomes focusable (`role="region"`, "Protocol diagram") |

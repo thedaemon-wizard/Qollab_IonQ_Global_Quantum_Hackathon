@@ -1,11 +1,13 @@
 flowchart LR
-  S["Pair source<br/>|Φ+⟩"] -->|link noise| A["Alice<br/>0°, 90°, ±45°"]
+  S["Pair source<br/>|Φ+⟩"] -->|ideal link| A["Alice<br/>0°, 90°, ±45°"]
   S -->|link noise| B["Bob<br/>0°, 90°"]
   E["Eve (optional)<br/>controlled-Ry(φ)"] -.-> B
-  A --> K["Sift + estimate<br/>S, Q_Z, Q_X<br/>with confidence"]
-  B --> K
+  A --> J["One job<br/>all settings, canary check"]
+  B --> J
+  J --> K["Sift + estimate<br/>S, Q_Z, Q_X<br/>with confidence"]
   K --> C1["Bell violation"]
-  K --> C2["BBM92 key"]
-  K --> C3["DI key (Acín 2007)"]
-  K --> C4["DI randomness (Pironio 2010)"]
-  K --> C5["Self-test (Kaniewski 2016)"]
+  K --> C2["Entanglement (witness)"]
+  K --> C3["BBM92 key"]
+  K --> C4["Self-test (Kaniewski 2016)"]
+  K --> C5["DI randomness (Pironio 2010)"]
+  K --> C6["DI key (Acín 2007)"]

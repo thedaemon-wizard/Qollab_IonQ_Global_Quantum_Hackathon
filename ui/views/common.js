@@ -105,10 +105,23 @@ export const RUNG_INFO = [
   { key: 'di', icon: 'shield-lock', title: 'DI key rate (Acín 2007)', assumes: 'none; collective attacks, asymptotic', show: (l) => (l.rate_di_acin === null ? 'S ≤ 2' : `${num(l.rate_di_acin)} bit/round`), ok: (l) => l.di_certified },
 ];
 
+/** Inputs of each certificate at the point estimate and at the conservative end. */
+export function ladderEnds(analysis) {
+  return {
+    point: { ...analysis.ladder_point, S: analysis.S.point },
+    cons: { ...analysis.ladder_conservative, S: analysis.S.low },
+  };
+}
+
+/** 'holds' (conservative end), 'point' (point estimate only) or 'no'. */
+export function rungOutcome(rung, analysis) {
+  const { point, cons } = ladderEnds(analysis);
+  return rung.ok(cons) ? 'holds' : rung.ok(point) ? 'point' : 'no';
+}
+
 /** Ladder of certificates: point estimate and conservative end side by side. */
 export function ladderTable(analysis) {
-  const point = { ...analysis.ladder_point, S: analysis.S.point };
-  const cons = { ...analysis.ladder_conservative, S: analysis.S.low };
+  const { point, cons } = ladderEnds(analysis);
   return scrollableWhenNeeded(h('div', { class: 'table-wrap' }, h('table', null,
     h('caption', null, `Same counts, six claims. Conservative = S at the lower end of its interval, error rates at the upper end; each interval is at ${(100 * (1 - analysis.delta / 2)).toFixed(1)}%, so each claim, which combines at most two of them, holds at ${Math.round(100 * (1 - analysis.delta))}% (i.i.d. rounds).`),
     h('thead', null, h('tr', null, h('th', { scope: 'col', class: 'text' }, 'Certificate'), h('th', { scope: 'col', class: 'text' }, 'Assumes'),

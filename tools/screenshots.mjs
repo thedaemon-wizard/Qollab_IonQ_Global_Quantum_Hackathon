@@ -24,7 +24,7 @@ await nav(1);
 await wait(2000);
 await page.evaluate(() => document.getElementById('lab-run').click());
 await wait(9000);
-await page.evaluate(() => document.getElementById('lab-run-card').scrollIntoView());
+await page.evaluate(() => { document.getElementById('lab-run-card').scrollIntoView(); window.scrollBy(0, -60); }); // keep the toolbar below the sticky header
 await wait(500);
 await page.screenshot({ path: `${out}/screen_lab.png` });
 await page.evaluate(() => document.getElementById('lab-ladder').scrollIntoView());

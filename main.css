@@ -270,6 +270,15 @@ figcaption { font-size: 0.84rem; color: var(--muted); margin-top: 0.3rem; }
 .stepper li[data-status='active'] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent) inset; }
 .stepper li[data-status='done'] { border-color: var(--good); }
 .stepper li[data-status='done'] .head::after { content: ' \2713'; color: var(--good); }
+/* Protocol diagram above the stepper. The current stage glows and its arrows flow only while the
+   replay plays (data-playing); paused or done, the highlight stays but nothing moves. */
+.flow-wrap { overflow-x: auto; margin: 0.4rem 0 0.2rem; }
+.diagram.flow svg { min-width: 640px; max-width: 1000px; }
+.diagram.flow .node[data-status='active'] rect { filter: drop-shadow(0 0 5px var(--accent)); }
+.diagram.flow[data-playing='true'] .node[data-status='active'] rect { animation: flow-glow 0.55s ease-in-out infinite alternate; }
+.diagram.flow[data-playing='true'] .edge[data-status='active'] { animation: flow-dash 0.8s linear infinite; }
+@keyframes flow-glow { from { filter: drop-shadow(0 0 1px var(--accent)); } to { filter: drop-shadow(0 0 9px var(--accent)); } }
+@keyframes flow-dash { to { stroke-dashoffset: -28; } }
 .kv { display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.8rem; font-size: 0.9rem; }
 .kv dt { color: var(--muted); }
 .kv dd { margin: 0; font-variant-numeric: tabular-nums; }
