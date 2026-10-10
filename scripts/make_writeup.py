@@ -25,6 +25,12 @@ def convert(text: str, ref: str, images: bool = True) -> str:
     text = re.sub(r"```mermaid\n.*?```\n\n?", "", text, flags=re.S)
     if not images:  # while the repository is private the image URLs would not load
         text = re.sub(r"!\[[^\]]*\]\([^)]+\)\n\n?", "", text)
+        text = text.replace(
+            f"> https://github.com/{REPO}\n",
+            f"> https://github.com/{REPO}\n>\n> *Interim version: the repository and its links go public with"
+            " the final submission; figures and screenshots appear then.*\n",
+            1,
+        )
     text = re.sub(
         r"!\[([^\]]*)\]\((?!https?://)([^)]+)\)", lambda m: f"![{m.group(1)}]({raw}{m.group(2)})", text
     )

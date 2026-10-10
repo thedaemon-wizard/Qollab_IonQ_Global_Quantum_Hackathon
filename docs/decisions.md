@@ -106,3 +106,14 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
   is matched as well. On Qollab a 25-qubit packed circuit took over 50 s on this state-vector
   simulator, so Braket uses one circuit per setting; its results do not keep circuit names,
   so counts are read by position for every backend.
+
+## D10 — The 3D view stays on WebGL 2; no WebGPU renderer
+
+- **Decision.** The correlation-space view keeps three.js's `WebGLRenderer`. No WebGPU code path.
+- **Evidence (2026-10-10, Chrome 152 on Linux with WebGPU switched on).** The Qollab page itself
+  exposes `navigator.gpu` and a hardware adapter, but inside the project frame (sandboxed,
+  `allow-scripts` only) a probe found `navigator.gpu` undefined, so no adapter can be requested.
+  Qollab's import map provides `three` and `three/addons/` but not `three/webgpu`. WebGL 2 in the
+  same frame runs on the GPU (ANGLE over Vulkan), and the scene is small (a few thousand
+  triangles), so WebGPU would add a second code path without a visible gain.
+- **Revisit if** Qollab exposes WebGPU in project frames and adds `three/webgpu` to its import map.
