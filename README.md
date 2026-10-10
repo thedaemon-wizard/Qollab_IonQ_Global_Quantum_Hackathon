@@ -314,7 +314,9 @@ The author previously showed an E91/CHSH Werner-state model in a separate public
 (<https://qsmpc-qkd-qhe-ai-hybrid.daemons.jp/orchestration>, Parameters → QKD protocol
 "E91 (CHSH)"); no code from it is used here. The Bell Lab's animated protocol diagram borrows
 the idea of the step-by-step flow pages in the author's earlier QKD testbed demo; it was
-written new during the window, again with no code reused.
+written new during the window, again with no code reused. During the window the author also
+built a second, separate entry, *Entangled Compass* (Quantum Playground: GHZ sensors tracking
+real geomagnetic data); the two entries share no code.
 
 ## Extending it
 
