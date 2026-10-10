@@ -57,8 +57,8 @@ Conventions: outcomes are ±1, E_xy = ⟨A_x B_y⟩, and S = E00 + E01 + E10 −
   - **Designolle 2023.** S. Designolle et al., *Phys. Rev. Research* 5, 043059 (2023). https://doi.org/10.1103/PhysRevResearch.5.043059 · [arXiv:2302.04721](https://arxiv.org/abs/2302.04721).
     - For projective measurements: local for v ≤ 0.6875 and nonlocal for v ≥ 0.6961. The nonlocality uses a Bell inequality with many settings, not CHSH.
     - Bounds on the Grothendieck constant: 1.4367 ≤ K_G(3) ≤ 1.4546.
-    - The follow-up arXiv:2409.03739 lowers the upper threshold to about 0.69604.
-    - Read: APS abstract and arXiv HTML.
+    - The follow-up S. Designolle, T. Vértesi, S. Pokutta, *Phys. Rev. A* 113, 022401 (2026), https://doi.org/10.1103/m5mn-c5dx · arXiv:2409.03739 (v4), lowers the upper threshold to about 0.69604.
+    - Read: APS abstract and arXiv HTML. arXiv v4 (2026-10-05) adds an erratum on the multipartite results and a lemma; the two-qubit bounds 0.6875/0.6961 and 1.4367 ≤ K_G(3) ≤ 1.4546 used here are unchanged (checked 2026-10-10).
   - **Renner 2024.** M. J. Renner, *Phys. Rev. Lett.* 132, 250202 (2024). https://doi.org/10.1103/PhysRevLett.132.250202 · [arXiv:2309.12290](https://arxiv.org/abs/2309.12290).
     - Gives a local model for all POVMs at v = 1/2.
     - Read: abstract only.
@@ -290,7 +290,7 @@ These experiments closed the detection and locality loopholes together. They sti
     - To verify: how a statistical uncertainty of about 0.0015 can fit inside an entropy margin of about 2.6 × 10⁻⁴.
   - **Read:** arXiv v3.
 
-- **Liu 2026.** W.-Z. Liu et al. (29 authors on arXiv v1; Crossref lists 31, to verify), "Long-lived remote ion-ion entanglement for scalable quantum repeaters", *Nature* 652, 51–57 (2026). https://doi.org/10.1038/s41586-026-10177-4 · [arXiv:2602.08472](https://arxiv.org/abs/2602.08472). Source data: https://doi.org/10.5281/zenodo.18218281 (CC BY 4.0). *Experiment.*
+- **Liu 2026.** W.-Z. Liu et al. (29 authors on arXiv v1, in Crossref and on the Nature page; checked 2026-10-10), "Long-lived remote ion-ion entanglement for scalable quantum repeaters", *Nature* 652, 51–57 (2026). https://doi.org/10.1038/s41586-026-10177-4 · [arXiv:2602.08472](https://arxiv.org/abs/2602.08472). Source data: https://doi.org/10.5281/zenodo.18218281 (CC BY 4.0). *Experiment.*
   - The arXiv v1 title differs from the journal title: "A building block of quantum repeaters for scalable quantum networks".
   - **What it shows:**
     - Over 10 km, entanglement stays coherent for 550 ms while generation takes 450 ms on average, giving a link efficiency of about 1.2 (F18).
@@ -442,9 +442,14 @@ The bound we evaluate is Pironio 2010 (see §2).
 
 - **Moore 2025.** I. D. Moore et al. (IonQ), "Electron juggling…", [arXiv:2510.27005](https://arxiv.org/abs/2510.27005). *Theory with simulation.*
   - **Numbers:**
-    - Above 1,000 Bell pairs/s only in the idealised case, and not for Ba⁺.
+    - Above 1,000 Bell pairs/s only in the idealised case, and not for Ba⁺ (for this ion–ion scheme; Hartung 2026 below reports about 1 kHz for a Ba⁺–SiV link, a different architecture).
     - 511–950 s⁻¹ once latencies are included.
   - **Read:** full PDF.
+
+- **Hartung 2026.** L. Hartung et al. (39 authors), "Quantum Networking at the Speed of Quantum Computation: Kilohertz Entanglement in a Heterogeneous Quantum System", [arXiv:2610.10705](https://arxiv.org/abs/2610.10705) (2026-10-07). *Experiment; unrefereed preprint.* IonQ announced it on 2026-10-09 (https://www.ionq.com/news/ionq-demonstrates-world-first-quantum-memory-enhanced-interconnect-for-distributed-quantum-applications).
+  - **What the abstract says:** a trapped ¹³⁸Ba⁺ ion is entangled with a silicon-vacancy (SiV⁻) centre in a diamond nanophotonic cavity; one detected photon heralds each pair. Including conversion losses, Bell pairs come at 1.03(1) kHz with fidelity 87.9(7)%, about four times the fastest photonic link between two trapped ions.
+  - **What it is not:** an ion–SiV link, not ion–ion; no entanglement swapping is claimed in the abstract; the press release's "world-first" is IonQ's own wording. Distance not in the abstract (要確認).
+  - **Read:** abstract and press release only (2026-10-10).
 
 - **PostQuantum.com, 2026-04-20.** https://postquantum.com/industry-news/ionq-photonic-interconnect-networked-quantum/. *Commentary.*
   - Confirms that the IonQ release gives no performance figures.
@@ -764,7 +769,6 @@ To verify:
 - Whether Bennett et al. 1993 should be credited for swapping.
 
 **Bibliographic details**
-- The journal reference for arXiv:2409.03739.
 - The PRL received dates for Giustina 2015 and Shalm 2015.
 - The Hensen follow-up dataset (2016).
 
@@ -776,7 +780,7 @@ To verify:
 - Full records for Valcarce 2020 and Bhavsar 2025 (cited under Kaniewski 2016).
 
 **Experiments**
-- Liu 2026: the attack model and node separation, from the Nature version or supplement; the author count (29 on arXiv v1, 31 in Crossref).
+- Liu 2026: the attack model and node separation, from the Nature version or supplement.
 - Lu 2026: whether error correction and privacy amplification were run, and the formula behind the Fig. 5C rates (the Science supplement was not read).
 - Zhang 2022: the locality statement.
 - Liu 2022: the statistical margin.
