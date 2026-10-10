@@ -46,7 +46,7 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
 - **Decision.** On IonQ backends, every measurement setting of a run is placed side by side in
   ONE circuit, each with its own classical register, plus a one-qubit "canary" register whose
   expected outcome checks the bit order. Local and IBM noise-model runs submit one circuit per
-  setting in a single `backend.run` call and read results by circuit name. All measurements are
+  setting in a single `backend.run` call. Results are read by position (see D9). All measurements are
   terminal; corrections (for example after entanglement swapping) are applied as a Pauli frame in
   classical post-processing.
 - **Evidence.** Qollab's docs say IonQ backends accept one job per run and that the run's circuits

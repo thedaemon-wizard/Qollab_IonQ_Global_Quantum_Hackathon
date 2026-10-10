@@ -35,7 +35,7 @@ export const STEPS = [
     view: 'lab',
     target: '#lab-gauge',
     title: 'Entangled, yet no violation',
-    body: 'Depolarizing noise of strength 0.5 leaves a Werner state with visibility 0.5. It is still entangled (anything above 1/3 is), but S drops to about 1.41 or below: these settings cannot show it.',
+    body: 'Depolarizing noise of strength 0.5 leaves a Werner state with visibility 0.5. It is still entangled (anything above 1/3 is), but S drops to about 1.41 or below. No CHSH test can show this entanglement: Werner states violate CHSH only above visibility 1/√2 ≈ 0.71.',
     action: (ctx) => labRun(ctx, { channel: { kind: 'depolarizing', strength: 0.5 }, eve: { enabled: false } }),
   },
   {
@@ -71,8 +71,12 @@ export const STEPS = [
     body: 'A repeater in the middle makes a Bell measurement and sends two bits to Bob, who corrects his result in software. The noise of both links adds up: compare the measured S with the link budget.',
     action: async (ctx) => {
       const rep = ctx.router.instance('repeater');
+      if (ctx.backend.profile.one_job_per_run) {
+        // 2 links with link noise would need 49 qubits; without added noise they pack into 25.
+        await rep.configure({ hops: 2, channel: { kind: 'none' } });
+        return 'On IonQ backends the tour sets up a two-link swap without added noise (the device model provides the noise) and leaves the single job to you.';
+      }
       await rep.configure({ hops: 2, channel: { kind: 'depolarizing', strength: 0.05 } });
-      if (ctx.backend.profile.one_job_per_run) return 'On IonQ the tour leaves the single job to you.';
       return rep.runChain();
     },
   },

@@ -62,6 +62,7 @@ def analyse(tables: dict[str, Table], settings: list[dict], delta: float) -> dic
     s_low, s_high = s_point - t_s, s_point + t_s
     ladder_point = bounds.certificate_ladder(s_point, q_z["point"], q_x["point"], e_xx, e_zz)
     ladder_conservative = bounds.certificate_ladder(s_low, q_z["high"], q_x["high"], w_low, w_low)
+    ladder_conservative["witness_fidelity_high"] = None  # only the lower end is conservative
     return {
         "settings": per_setting,
         "S": {

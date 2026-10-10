@@ -52,10 +52,15 @@ def test_icon_names_exist():
     used = set()
     for p in JS:
         src = p.read_text(encoding="utf-8")
-        used |= set(re.findall(r"\bicon\('([a-z0-9-]+)'", src))
+        for args in re.findall(r"\bicon\(([^(){}]*)", src):  # names before any options object
+            args = re.sub(r"[=!]==?\s*'[^']*'", "", args)  # drop comparisons in ternary conditions
+            used |= set(re.findall(r"'([a-z0-9]+(?:-[a-z0-9]+)*)'", args))
         used |= set(re.findall(r"\bicon: '([a-z0-9-]+)'", src))
         used |= set(re.findall(r"\bbutton\('[^']*', '([a-z0-9-]+)'", src))
         used |= set(re.findall(r"\bn\('[a-z]+', \d+, \d+, \d+, '([a-z0-9-]+)'", src))
+        used |= set(re.findall(r"viewFrame\([^,]+, [^,]+, '([a-z0-9-]+)'", src))
+        for block in re.findall(r"const ICON = \{([^}]*)\}", src):
+            used |= set(re.findall(r": '([a-z0-9-]+)'", block))
     assert used, "no icon names found"
     assert sorted(used - available) == []
 

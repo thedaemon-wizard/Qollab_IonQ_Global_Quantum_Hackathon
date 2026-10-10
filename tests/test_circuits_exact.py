@@ -147,3 +147,61 @@ def test_packed_layout_decodes_like_separate_circuits(settings):
         expected = models.predict(exp.channel, settings, eve_phi_deg=90)["E"][unit.setting["id"]]
         assert table.correlator() == pytest.approx(expected, abs=TOL)
     assert math.isclose(plan.total_qubits_largest, 1 + 6 * 3)
+
+
+def _subset(settings, ids):
+    return [s for s in settings if s["id"] in ids]
+
+
+@pytest.mark.parametrize(
+    ("module", "kind", "extra"),
+    [
+        ("chain", "y_flip", {"hops": 2}),
+        ("purify", "bit_flip", {"rotation": "none"}),
+        ("purify", "dephasing", {"rotation": "dejmps"}),
+    ],
+)
+def test_packed_layout_frame_and_post_selection_at_offsets(module, kind, extra, settings):
+    """Frame bits and keep bits must be read at each unit's offset in the packed circuit."""
+    ch = PauliChannel.from_kind(kind, 0.1)
+    exp = Experiment(module, ch, **extra)
+    chosen = _subset(settings, {"key_z", "x_x"})
+    units = make_units(exp, chosen, None)
+    plan = build_plan(units, "packed_single_circuit")
+    counts = exact_counts(plan.circuits[0])
+    pred = models.predict(
+        ch,
+        chosen,
+        hops=extra.get("hops", 1),
+        purify_rotation=extra.get("rotation") if module == "purify" else None,
+    )
+    for unit, _ci, offset in plan.placements:
+        assert offset > 0
+        table, kept, total = table_from_counts(counts, unit.clbits, offset, unit.setting["bob_basis"])
+        assert table.correlator() == pytest.approx(pred["E"][unit.setting["id"]], abs=TOL)
+        if module == "purify":
+            assert kept / total == pytest.approx(pred["P_success"], abs=TOL)
+
+
+def test_reversed_bit_order_fails_the_packed_canary(settings, cfg):
+    from bellkit.decode import canary_fraction
+
+    exp = Experiment("bell", PauliChannel.from_kind("depolarizing", 0.05))
+    plan = build_plan(make_units(exp, _subset(settings, {"key_z", "c00"}), None), "packed_single_circuit")
+    counts = exact_counts(plan.circuits[0])
+    good = canary_fraction(counts, "register", cfg["canary"]["expected"], 0)
+    reversed_counts = {k[::-1]: v for k, v in counts.items()}
+    bad = canary_fraction(reversed_counts, "register", cfg["canary"]["expected"], 0)
+    assert good == pytest.approx(1.0)
+    assert bad == pytest.approx(0.5, abs=1e-9)  # a data bit reads like a fair coin...
+    assert bad < cfg["canary"]["min_majority_fraction"]  # ...and is rejected
+
+
+def test_yy_setting_has_a_prediction(settings, cfg):
+    ch = PauliChannel.from_kind("depolarizing", 0.2)
+    exp = Experiment("bell", ch, include_yy=True)
+    yy = app._yy_setting(cfg)
+    e = measured(exp, settings, yy)
+    pred = models.predict(ch, [*settings, yy])
+    assert pred["E"]["y_y"] == pytest.approx(-0.8, abs=TOL)
+    assert e["y_y"][0] == pytest.approx(pred["E"]["y_y"], abs=TOL)

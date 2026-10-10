@@ -54,7 +54,7 @@ export default {
         h('div', { class: 'card' }, h('h3', null, icon('dice-5'), 'What S alone certifies'), entropyChart.element)),
       h('div', { class: 'card wide' }, h('h3', null, icon('wave-sine'), 'Noise sweep'),
         h('p', { class: 'muted' }, 'Exact predictions for the lab’s fixed settings as the noise grows. Different noise types hurt different certificates: dephasing leaves Q_Z untouched but raises Q_X, so it costs the BBM92 key less than the DI key.'),
-        h('div', { class: 'grid' }, h('div', null, ...channel.elements), h('div', null, sweepBox))),
+        h('div', { class: 'grid' }, h('div', null, channel.elements[0]), h('div', null, sweepBox))),
       h('div', { class: 'card wide' }, h('h3', null, icon('table'), 'Thresholds'), thresholdTable,
         note('', 'These are asymptotic formulas (infinitely many rounds, collective attacks for the DI key). The lab evaluates them at the ends of finite-sample confidence intervals; that is a teaching device, not a finite-size security proof.')),
     );
@@ -112,21 +112,21 @@ export default {
       const sc = base.s_curve;
       entropyChart.update({
         title: 'Device-independent quantities as a function of S',
-        desc: 'Min-entropy bound of Pironio et al. 2010, local von Neumann entropy H(A|E) and the Kaniewski self-test fidelity bound, for S from 2 to 2 root 2.',
+        desc: 'Min-entropy bound of Pironio et al. 2010, local von Neumann entropy H(A|E) and the Kaniewski self-test extractability bound, for S from 2 to 2 root 2.',
         width: 520, height: 300,
         x: { min: 2, max: 2.84, label: 'CHSH value S', ticks: [2, 2.2, 2.4, 2.6, 2.8], format: (v) => v.toFixed(1) },
-        y: { min: 0, max: 1, label: 'bits per round, or fidelity' },
+        y: { min: 0, max: 1, label: 'bits per round, or extractability' },
         series: [
           { name: 'H_min (Pironio 2010)', color: 'var(--c2)', points: sc.map((p) => [p.S, p.min_entropy]) },
           { name: 'H(A|E), local (Pironio 2009)', color: 'var(--c4)', dash: '7 4', points: sc.map((p) => [p.S, p.von_neumann]) },
-          { name: 'Self-test fidelity bound (Kaniewski)', color: 'var(--c5)', dash: '2 3', width: 2.6, points: sc.map((p) => [p.S, p.kaniewski]) },
+          { name: 'Self-test extractability bound (Kaniewski)', color: 'var(--c5)', dash: '2 3', width: 2.6, points: sc.map((p) => [p.S, p.kaniewski]) },
         ],
         vlines: [{ x: th.kaniewski.S, label: 'β*', color: 'var(--c5)' }, { x: th.acin.S_werner, label: 'DI key (Werner)', color: 'var(--c3)' }],
         markers: runMarkers('entropy'),
         table: {
           summary: 'Data table (every tenth point)',
           caption: 'Bounds against S',
-          columns: [{ key: 'S', label: 'S', format: (v) => num(v) }, { key: 'm', label: 'H_min', format: (v) => num(v) }, { key: 'v', label: 'H(A|E)', format: (v) => num(v) }, { key: 'k', label: 'Fidelity bound', format: (v) => num(v) }],
+          columns: [{ key: 'S', label: 'S', format: (v) => num(v) }, { key: 'm', label: 'H_min', format: (v) => num(v) }, { key: 'v', label: 'H(A|E)', format: (v) => num(v) }, { key: 'k', label: 'Extractability bound', format: (v) => num(v) }],
           rows: sc.filter((_, i) => i % 10 === 0).map((p) => ({ S: p.S, m: p.min_entropy, v: p.von_neumann, k: p.kaniewski })),
         },
       });

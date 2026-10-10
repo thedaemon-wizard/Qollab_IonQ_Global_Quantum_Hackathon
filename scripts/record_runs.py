@@ -42,7 +42,7 @@ def rebuild(run: dict, origin: dict) -> dict:
         "backend": {"name": run["backend"], "profile": profile["id"], "profile_label": profile["label"]},
         "layout": run["layout"],
         "shots": run["shots"],
-        "seed": run["request"].get("seed") if profile.get("seed_option") else None,
+        "seed": run["request"].get("seed", cfg["seed"]) if profile.get("seed_option") else None,
         "seconds": run["seconds"],
         "canary_fraction": run["canary"],
         "circuits": {

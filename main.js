@@ -56,6 +56,13 @@ async function start() {
   ctx.tour = tour;
   tourBtn.addEventListener('click', () => tour.start(tourBtn));
 
+  // The skip link moves focus without changing the URL (a hash change would add history
+  // entries to the page that embeds this frame).
+  document.querySelector('.skip-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('bk-main').focus();
+  });
+
   loading.remove();
   await router.go('overview');
 }

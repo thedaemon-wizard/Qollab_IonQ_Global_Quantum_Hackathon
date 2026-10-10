@@ -69,7 +69,7 @@ def test_data_paths_are_literals_and_shipped():
     literals = [
         n.value.value for n in tree.body if isinstance(n, ast.Assign) and isinstance(n.value, ast.Constant)
     ]
-    for name in ("DEFAULTS", "EXPERIMENTS", "ROSENFELD_APRIL", "ROSENFELD_JUNE"):
+    for name in ("DEFAULTS", "EXPERIMENTS", "RECORDED_RUNS", "ROSENFELD_APRIL", "ROSENFELD_JUNE"):
         value = getattr(paths, name)
         assert value in literals
         assert (ROOT / value).is_file(), value
@@ -84,4 +84,6 @@ def test_upload_limits():
     manifest = json.loads((ROOT / "qollab_manifest.json").read_text(encoding="utf-8"))
     files = build_upload.collect(manifest)
     assert build_upload.check_limits(files, manifest["limits"]) == []
-    assert not any(p.suffix == ".py" and "tests" in p.parts for p in files)
+    assert not any(
+        p.relative_to(ROOT).parts[0] in {"tests", "scripts", "tools", "docs", "results"} for p in files
+    )

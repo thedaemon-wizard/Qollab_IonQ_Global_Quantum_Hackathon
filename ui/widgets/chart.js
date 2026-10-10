@@ -108,7 +108,14 @@ export function lineChart(initial) {
     svg.append(plot);
     // Error-bar markers are drawn unclipped so that points at the edge stay visible.
     const marks = s('g');
-    for (const m of spec.markers || []) {
+    const clampX = (v) => Math.min(Math.max(v, X.min), X.max);
+    const clampY = (v) => Math.min(Math.max(v, Y.min), Y.max);
+    for (const raw of spec.markers || []) {
+      // Points outside the axes are pinned to the edge (and drawn hollow) rather than lost.
+      const off = raw.x < X.min || raw.x > X.max || raw.y < Y.min || raw.y > Y.max;
+      const m = { ...raw, x: clampX(raw.x), y: clampY(raw.y), hollow: raw.hollow || off,
+        xlo: raw.xlo === undefined ? undefined : clampX(raw.xlo), xhi: raw.xhi === undefined ? undefined : clampX(raw.xhi),
+        ylo: raw.ylo === undefined ? undefined : clampY(raw.ylo), yhi: raw.yhi === undefined ? undefined : clampY(raw.yhi) };
       const style = `stroke:${m.color};stroke-width:1.6`;
       if (m.xlo !== undefined && m.xhi !== undefined) marks.append(s('line', { x1: sx(m.xlo), x2: sx(m.xhi), y1: sy(m.y), y2: sy(m.y), style }));
       if (m.ylo !== undefined && m.yhi !== undefined) marks.append(s('line', { x1: sx(m.x), x2: sx(m.x), y1: sy(m.ylo), y2: sy(m.yhi), style }));

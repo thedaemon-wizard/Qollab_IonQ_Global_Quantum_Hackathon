@@ -64,6 +64,9 @@ def predict(
     t = correlation_diagonal(channel, eve_phi_deg, hops, purify_rotation)
     t_xx, t_yy, t_zz = t
     per = {s["id"]: correlator(t, s["alice_deg"], s["bob_deg"]) for s in settings if "alice_deg" in s}
+    for s in settings:
+        if s.get("alice_basis") == "y" and s.get("bob_basis") == "y":
+            per[s["id"]] = t_yy  # Sdg, H on both sides measures Y x Y
     chsh = [s for s in settings if "chsh" in s["roles"]]
     out = {
         "T": {"xx": t_xx, "yy": t_yy, "zz": t_zz},

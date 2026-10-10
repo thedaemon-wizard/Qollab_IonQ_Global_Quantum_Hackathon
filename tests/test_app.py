@@ -33,7 +33,9 @@ def test_run_report_contract():
     assert a["S"]["low"] < a["S"]["point"] < a["S"]["high"]
     assert a["Q_Z"]["low"] <= a["Q_Z"]["point"] <= a["Q_Z"]["high"]
     assert set(a["ladder_point"]) == set(a["ladder_conservative"])
-    assert rep["geometry"]["in_quantum"] in (True, False)
+    assert rep["geometry"]["in_quantum"] is True
+    assert rep["geometry"]["in_local"] is False
+    assert a["ladder_conservative"]["witness_fidelity_high"] is None
 
 
 def test_same_seed_same_numbers():
@@ -62,6 +64,11 @@ def test_plan_too_large_for_ionq_is_refused_before_any_run():
         {"module": "bell", "channel": {"kind": "depolarizing", "strength": 0.9}},
         {"module": "bell", "eve": {"enabled": True, "phi_deg": 400}},
         {"module": "chain", "hops": 99},
+        {"module": "bell", "shots": 5},
+        {"module": "bell", "shots": 10**7},
+        {"module": "bell", "shots": 150.5},
+        {"module": "bell", "seed": -1},
+        {"module": "bell", "seed": "x"},
     ],
 )
 def test_out_of_range_requests_are_rejected(req):
@@ -101,3 +108,17 @@ def test_geometry_json_reference_points():
     assert g["points"]["PR box"]["in_quantum"] is False
     assert g["points"]["mine"]["in_quantum"] is True
     assert len(g["mesh"]["grid"]) == len(g["mesh"]["quantum_half_height"])
+
+
+def test_wrong_bit_order_stops_the_run(monkeypatch):
+    """A backend that returned reversed keys must stop the run, not report numbers."""
+    real = execution.run_plan
+
+    def reversed_keys(*args, **kwargs):
+        run = real(*args, **kwargs)
+        run["counts"] = [{k[::-1]: v for k, v in c.items()} for c in run["counts"]]
+        return run
+
+    monkeypatch.setattr(app.execution, "run_plan", reversed_keys)
+    with pytest.raises(app.decode.BitOrderError):
+        run({"module": "bell", "shots": 500})

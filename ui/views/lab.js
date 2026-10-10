@@ -11,7 +11,7 @@ import { xzDisc } from '../widgets/disc2d.js';
 import { exportBar } from '../widgets/exporter.js';
 import { sGauge } from '../widgets/gauge.js';
 import { dataTable } from '../widgets/table.js';
-import { channelControls, eveControls, ladderTable, qberList, runBlocker, sizeNote } from './common.js';
+import { channelControls, eveControls, ladderTable, qberList, runBlocker, sizeNote, submitRun } from './common.js';
 
 const STAGES = [
   { id: 'distribute', icon: 'atom', title: 'Distribute pairs' },
@@ -41,7 +41,7 @@ export default {
     const eve = eveControls(cfg, schedulePreview);
     const yy = checkbox({ label: 'Also measure YY (direct fidelity)', onChange: schedulePreview,
       hint: 'Adds a seventh setting; with it the fidelity with |Φ+⟩ is measured, not bracketed.' });
-    const shotsInput = h('input', { type: 'number', min: 100, max: 100000, step: 100, value: ctx.backend.profile.shots, id: 'lab-shots' });
+    const shotsInput = h('input', { type: 'number', min: cfg.shots.min, max: cfg.shots.max, step: 100, value: ctx.backend.profile.shots ?? cfg.shots.min, id: 'lab-shots' });
     const seedInput = h('input', { type: 'number', min: 0, step: 1, value: cfg.seed, id: 'lab-seed' });
     const request = () => ({
       module: 'bell',
@@ -160,8 +160,8 @@ export default {
       states: {
         idle: { on: { RUN: 'running' } },
         running: { on: { RESULT: 'replay', FAIL: 'error' } },
-        replay: { on: { TICK: () => (stage >= STAGES.length - 1 ? 'done' : 'replay'), STEP: () => (stage >= STAGES.length - 1 ? 'done' : 'replay'), PAUSE: 'paused', RESET: 'idle' } },
-        paused: { on: { RESUME: 'replay', STEP: () => (stage >= STAGES.length - 1 ? 'done' : 'paused'), RESET: 'idle' } },
+        replay: { on: { TICK: () => (stage >= STAGES.length - 1 ? 'done' : 'replay'), STEP: () => (stage >= STAGES.length - 1 ? 'done' : 'replay'), PAUSE: 'paused', RESET: 'idle', RUN: 'running' } },
+        paused: { on: { RESUME: 'replay', STEP: () => (stage >= STAGES.length - 1 ? 'done' : 'paused'), RESET: 'idle', RUN: 'running' } },
         done: { on: { RUN: 'running', RESET: 'idle' } },
         error: { on: { RUN: 'running', RESET: 'idle' } },
       },
@@ -190,7 +190,7 @@ export default {
         gaugeCard.lastChild.replaceChildren(sVerdict(a));
         qberCard.hidden = false;
         qberCard.replaceChildren(h('h3', null, icon('key'), 'Error rates (BBM92 sifting)'), qberList(a),
-          h('p', { class: 'muted small' }, `Wilson intervals at ${Math.round(100 * (1 - a.delta / 2))}% each; key basis = Alice 0°, Bob 0°.`));
+          h('p', { class: 'muted small' }, `Wilson intervals at ${(100 * (1 - a.delta / 2)).toFixed(1)}% each; key basis = Alice 0°, Bob 0°.`));
         corrCard.hidden = false;
         corrCard.replaceChildren(h('h3', null, icon('table'), 'Correlators'), correlatorTable(rep));
         detail(3, `S = ${num(a.S.point)}, Q_Z = ${pct(a.Q_Z.point)}`);
@@ -242,21 +242,17 @@ export default {
       pauseBtn.replaceChildren(icon(state === 'paused' ? 'player-play' : 'player-pause'), state === 'paused' ? 'Resume' : 'Pause');
       stepBtn.disabled = !(state === 'replay' || state === 'paused');
       resetBtn.disabled = state === 'running' || state === 'idle';
+      if (state !== 'running') updateRunButton();
       if (state === 'running') {
         clearResults();
         errorBox.replaceChildren();
         status.textContent = `Submitting one job to ${ctx.backend.name}…`;
         updateRunButton();
+        last = null;
         try {
-          const rep = await ctx.api.run(request());
-          if (ctx.backend.profile.one_job_per_run) ctx.store.set((st) => ({ ionqJobsUsed: st.ionqJobsUsed + 1 }));
-          last = rep;
-          ctx.store.set((st) => ({ runs: [...st.runs, rep], last: { ...st.last, bell: rep } }));
+          last = await submitRun(ctx, request());
           machine.send('RESULT');
         } catch (err) {
-          if (ctx.backend.profile.one_job_per_run && err.kind !== 'PlanTooLarge' && err.kind !== 'RequestError') {
-            ctx.store.set((st) => ({ ionqJobsUsed: st.ionqJobsUsed + 1 }));
-          }
           errorBox.replaceChildren(errorNote(err));
           machine.send('FAIL');
         }
@@ -282,6 +278,8 @@ export default {
         updateRunButton();
       } else if (state === 'idle') {
         clearResults();
+        errorBox.replaceChildren();
+        last = null;
         status.textContent = 'Ready. Press Run to submit one job.';
         updateRunButton();
       } else if (state === 'error') {
@@ -293,6 +291,9 @@ export default {
     pauseBtn.disabled = true;
     stepBtn.disabled = true;
     resetBtn.disabled = true;
+    ctx.store.subscribe((st, prev) => {
+      if (st.ionqJobsUsed !== prev.ionqJobsUsed || st.jobInFlight !== prev.jobInFlight) updateRunButton();
+    });
     let first = true;
 
     return {
@@ -314,8 +315,7 @@ export default {
       },
       async runAndFinish() {
         if (runBtn.disabled) return runBtn.title || 'Run is not available in this session';
-        machine.send('RUN');
-        await new Promise((resolve) => {
+        const finished = new Promise((resolve) => {
           const off = machine.subscribe((st) => {
             if (st === 'replay') {
               showStage(STAGES.length - 1);
@@ -323,11 +323,14 @@ export default {
             }
             if (st === 'done' || st === 'error') {
               off();
-              resolve();
+              resolve(st);
             }
           });
         });
-        return last ? `S = ${num(last.analysis.S.point)} (interval ${num(last.analysis.S.low)} to ${num(last.analysis.S.high)}), Q_Z = ${pct(last.analysis.Q_Z.point)}.` : null;
+        if (!machine.send('RUN')) return 'Run is not available right now';
+        const outcome = await finished;
+        if (outcome === 'error' || !last) return 'The run did not complete; see the message in the Bell Lab.';
+        return `S = ${num(last.analysis.S.point)} (interval ${num(last.analysis.S.low)} to ${num(last.analysis.S.high)}), Q_Z = ${pct(last.analysis.Q_Z.point)}.`;
       },
       get lastReport() {
         return last;

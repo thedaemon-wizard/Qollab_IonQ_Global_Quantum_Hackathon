@@ -45,6 +45,10 @@ def validate(cfg: dict) -> None:
     profile_ids = [p["id"] for p in cfg["profiles"]] + [cfg["default_profile"]["id"]]
     if len(profile_ids) != len(set(profile_ids)):
         raise ConfigError("profile ids must be unique")
+    if not 0 < cfg["shots"]["min"] <= cfg["shots"]["max"]:
+        raise ConfigError("shots range must be positive and ordered")
+    if not 0.5 <= cfg["canary"]["min_majority_fraction"] <= 1:
+        raise ConfigError("canary threshold must lie in [0.5, 1]")
     if not 0 < cfg["confidence"]["delta"] < 1:
         raise ConfigError("delta must lie in (0, 1)")
 

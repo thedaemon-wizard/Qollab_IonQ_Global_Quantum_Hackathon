@@ -253,7 +253,7 @@
     },
     "ladder_conservative": {
      "witness_fidelity_low": 0.9307667092059708,
-     "witness_fidelity_high": 0.9653833546029854,
+     "witness_fidelity_high": null,
      "entangled_trusted": true,
      "bell_violation": true,
      "kaniewski_extractability": 0.8757027606061396,
@@ -559,7 +559,7 @@
     },
     "ladder_conservative": {
      "witness_fidelity_low": 0.9101917387917801,
-     "witness_fidelity_high": 0.95509586939589,
+     "witness_fidelity_high": null,
      "entangled_trusted": true,
      "bell_violation": true,
      "kaniewski_extractability": 0.7987688944923451,
@@ -830,7 +830,7 @@
     },
     "ladder_conservative": {
      "witness_fidelity_low": 0.7619792812699202,
-     "witness_fidelity_high": 0.8809896406349601,
+     "witness_fidelity_high": null,
      "entangled_trusted": true,
      "bell_violation": true,
      "kaniewski_extractability": 0.5314911337115986,
@@ -1101,7 +1101,7 @@
     },
     "ladder_conservative": {
      "witness_fidelity_low": 0.7369792812699202,
-     "witness_fidelity_high": 0.86848964063496,
+     "witness_fidelity_high": null,
      "entangled_trusted": true,
      "bell_violation": true,
      "kaniewski_extractability": 0.5314911337115983,
@@ -1365,7 +1365,7 @@
     },
     "ladder_conservative": {
      "witness_fidelity_low": 0.8069792812699201,
-     "witness_fidelity_high": 0.9034896406349601,
+     "witness_fidelity_high": null,
      "entangled_trusted": true,
      "bell_violation": true,
      "kaniewski_extractability": 0.5,
@@ -1671,7 +1671,7 @@
     },
     "ladder_conservative": {
      "witness_fidelity_low": 0.89369173879178,
-     "witness_fidelity_high": 0.94684586939589,
+     "witness_fidelity_high": null,
      "entangled_trusted": true,
      "bell_violation": true,
      "kaniewski_extractability": 0.7987688944923451,
@@ -1977,7 +1977,7 @@
     },
     "ladder_conservative": {
      "witness_fidelity_low": 0.41269173879178017,
-     "witness_fidelity_high": 0.7063458693958901,
+     "witness_fidelity_high": null,
      "entangled_trusted": false,
      "bell_violation": false,
      "kaniewski_extractability": 0.5,
@@ -2283,7 +2283,7 @@
     },
     "ladder_conservative": {
      "witness_fidelity_low": 0.4151917387917801,
-     "witness_fidelity_high": 0.70759586939589,
+     "witness_fidelity_high": null,
      "entangled_trusted": false,
      "bell_violation": false,
      "kaniewski_extractability": 0.5,
@@ -2591,7 +2591,7 @@
     },
     "ladder_conservative": {
      "witness_fidelity_low": 0.8501917387917801,
-     "witness_fidelity_high": 0.9250958693958901,
+     "witness_fidelity_high": null,
      "entangled_trusted": true,
      "bell_violation": true,
      "kaniewski_extractability": 0.7240391867622534,
@@ -2676,7 +2676,7 @@
    },
    "layout": "multi_circuit",
    "shots": 2000,
-   "seed": null,
+   "seed": 20261010,
    "seconds": 2.269,
    "canary_fraction": 0.9725,
    "circuits": {
@@ -2891,7 +2891,7 @@
     },
     "ladder_conservative": {
      "witness_fidelity_low": 0.75619173879178,
-     "witness_fidelity_high": 0.87809586939589,
+     "witness_fidelity_high": null,
      "entangled_trusted": true,
      "bell_violation": true,
      "kaniewski_extractability": 0.5178405487662588,

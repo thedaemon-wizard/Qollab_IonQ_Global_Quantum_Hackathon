@@ -44,7 +44,7 @@ export function sGauge({ thresholds }) {
       );
     }
     figure.replaceChildren(svg, h('figcaption', null,
-      est ? `Bar: ${Math.round(100 * (1 - est.delta))}% confidence interval (Hoeffding, i.i.d. rounds). Dashed: Werner-state DI-key threshold.`
+      est ? `Bar: ${(100 * (1 - est.delta / 2)).toFixed(1)}% Hoeffding interval for S (i.i.d. rounds); with an error-rate interval of the same level, a certificate holds at ${Math.round(100 * (1 - est.delta))}%. Dashed: Werner-state DI-key threshold.`
         : 'Run the lab to place S on the scale.'));
   }
   render(null);

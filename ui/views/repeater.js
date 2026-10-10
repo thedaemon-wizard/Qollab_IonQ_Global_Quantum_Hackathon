@@ -9,7 +9,7 @@ import { button, errorNote, note, select, slider } from '../widgets/controls.js'
 import { flowDiagram } from '../widgets/diagram.js';
 import { swimlane } from '../widgets/swimlane.js';
 import { dataTable } from '../widgets/table.js';
-import { channelControls, ladderTable, qberList, runBlocker, sizeNote } from './common.js';
+import { channelControls, ladderTable, qberList, runBlocker, sizeNote, submitRun } from './common.js';
 
 function topology(hops) {
   const nodes = [];
@@ -76,7 +76,7 @@ export default {
     const schedule = () => { clearTimeout(timer); timer = setTimeout(refresh, 300); };
     const hops = slider({ label: 'Number of links', min: cfg.chain.hops.min, max: cfg.chain.hops.max, step: 1, value: cfg.chain.hops.default, format: (v) => String(v), onInput: schedule });
     const channel = channelControls(cfg, schedule, { kind: 'depolarizing', strength: 0.05 });
-    const rotation = select({ label: 'Purification rotation', options: [{ value: 'none', label: 'BBPSSW-style (no rotation)' }, { value: 'dejmps', label: 'DEJMPS (Rx ±π/2 first)' }], value: 'dejmps', onChange: schedule });
+    const rotation = select({ label: 'Purification rotation', options: [{ value: 'none', label: 'No rotation (BBPSSW recurrence, no twirl)' }, { value: 'dejmps', label: 'DEJMPS (Rx ±π/2 first)' }], value: 'dejmps', onChange: schedule });
 
     const topoBox = h('div');
     const timeBox = h('div');
@@ -147,10 +147,8 @@ export default {
         sizeBox.replaceChildren(note(size.ok ? '' : 'warn', size.text, 'cpu'));
         const sizeP = sizeNote(ctx, circP);
         purSizeBox.replaceChildren(note(sizeP.ok ? '' : 'warn', sizeP.text, 'cpu'));
-        const blocker = runBlocker(ctx);
-        chainRun.disabled = Boolean(blocker) || !size.ok;
-        purRun.disabled = Boolean(blocker) || !sizeP.ok;
-        if (blocker) { chainStatus.textContent = blocker; purStatus.textContent = blocker; }
+        sizeOk = { chain: size.ok, purify: sizeP.ok };
+        updateButtons();
         const hc = t.hops_curve;
         budgetBox.replaceChildren(dataTable({
           caption: channel.value().kind === 'none' ? 'Predicted with no added link noise (a noise-model backend adds its own)' : `Predicted for ${channel.value().kind.replace('_', ' ')} noise of strength ${num(channel.value().strength, 2)} per link`,
@@ -208,9 +206,7 @@ export default {
       chainRun.disabled = true;
       purRun.disabled = true;
       try {
-        const rep = await ctx.api.run(req);
-        if (ctx.backend.profile.one_job_per_run) ctx.store.set((st) => ({ ionqJobsUsed: st.ionqJobsUsed + 1 }));
-        ctx.store.set((st) => ({ runs: [...st.runs, rep], last: { ...st.last, [req.module]: rep } }));
+        const rep = await submitRun(ctx, req);
         statusEl.textContent = `Done in ${rep.seconds} s on ${rep.backend.name} (${int(rep.shots)} shots per setting).`;
         const a = rep.analysis;
         const kept = rep.purification
@@ -226,9 +222,6 @@ export default {
           kept, ladderTable(a)));
         return rep;
       } catch (err) {
-        if (ctx.backend.profile.one_job_per_run && err.kind !== 'PlanTooLarge' && err.kind !== 'RequestError') {
-          ctx.store.set((st) => ({ ionqJobsUsed: st.ionqJobsUsed + 1 }));
-        }
         statusEl.textContent = 'The run did not complete.';
         resultEl.append(errorNote(err));
         return null;
@@ -253,6 +246,23 @@ export default {
       return runGeneric(req, purStatus, purResult, `Measured: purification (${req.rotation})`);
     }
 
+    let sizeOk = { chain: false, purify: false };
+    function updateButtons() {
+      const blocker = runBlocker(ctx);
+      chainRun.disabled = Boolean(blocker) || !sizeOk.chain;
+      purRun.disabled = Boolean(blocker) || !sizeOk.purify;
+      chainRun.title = blocker || (sizeOk.chain ? '' : 'Too large for this backend profile');
+      purRun.title = blocker || (sizeOk.purify ? '' : 'Too large for this backend profile');
+      if (blocker) {
+        chainStatus.textContent = blocker;
+        purStatus.textContent = blocker;
+      }
+    }
+    ctx.store.subscribe((st, prev) => {
+      if (st.ionqJobsUsed !== prev.ionqJobsUsed || st.jobInFlight !== prev.jobInFlight) updateButtons();
+    });
+    chainRun.disabled = true;
+    purRun.disabled = true;
     let first = true;
     return {
       element,

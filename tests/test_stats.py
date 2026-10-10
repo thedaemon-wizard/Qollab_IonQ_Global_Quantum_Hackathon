@@ -37,3 +37,22 @@ def test_wilson_coverage_is_close_to_nominal():
 def test_empty_table_is_an_error():
     with pytest.raises(ValueError):
         Table(0, 0, 0, 0).correlator()
+
+
+def test_hoeffding_interval_covers_true_s():
+    """Sampled CHSH runs: the Hoeffding interval contains the true S in >= 1 - delta of runs."""
+    import random
+
+    rng = random.Random(7)
+    true_e = [0.6364, 0.6364, 0.6364, -0.6364]  # Werner v = 0.9 at Tsirelson angles
+    true_s = true_e[0] + true_e[1] + true_e[2] - true_e[3]
+    n, delta, trials, covered = 200, 0.05, 2000, 0
+    half = hoeffding_halfwidth_sum([n] * 4, delta)
+    for _ in range(trials):
+        s = 0.0
+        for k, e in enumerate(true_e):
+            agree = sum(rng.random() < (1 + e) / 2 for _ in range(n))
+            corr = (2 * agree - n) / n
+            s += corr if k < 3 else -corr
+        covered += abs(s - true_s) <= half
+    assert covered / trials >= 1 - delta

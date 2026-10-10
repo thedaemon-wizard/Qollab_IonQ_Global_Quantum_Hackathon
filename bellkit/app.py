@@ -58,6 +58,15 @@ def parse_request(req: dict, cfg: dict) -> Experiment:
     hops = int(req.get("hops", 1))
     if module == "chain":
         _within(hops, cfg["chain"]["hops"], "hops")
+    if req.get("shots") is not None:
+        shots = req["shots"]
+        if isinstance(shots, bool) or not isinstance(shots, int | float) or shots != int(shots):
+            raise RequestError(f"shots={shots!r} must be a whole number")
+        _within(int(shots), cfg["shots"], "shots")
+    if req.get("seed") is not None:
+        seed = req["seed"]
+        if isinstance(seed, bool) or not isinstance(seed, int | float) or seed != int(seed) or seed < 0:
+            raise RequestError(f"seed={seed!r} must be a whole number >= 0")
     return Experiment(
         module=module,
         channel=channel,
@@ -130,7 +139,7 @@ def run_json(backend, request_json: str) -> str:
     units = make_units(exp, config.settings(cfg), _yy_setting(cfg) if exp.include_yy else None)
     plan = build_plan(units, profile["layout"])
     shots = int(req.get("shots") or profile["shots"])
-    seed = req.get("seed", cfg["seed"])
+    seed = int(req["seed"]) if req.get("seed") is not None else cfg["seed"]
     run = execution.run_plan(backend, plan, profile, shots, seed)
 
     canary_counts = run["counts"][plan.canary["circuit_index"]]

@@ -69,8 +69,16 @@ export async function createCorrSet3d(container, { colors, labels }) {
   groups.local.add(new THREE.Mesh(localGeo, material('local', () => new THREE.MeshStandardMaterial({ color: 0x999999, transparent: true, opacity: 0.35, side: THREE.DoubleSide, depthWrite: false }))));
   groups.local.add(new THREE.LineSegments(new THREE.EdgesGeometry(localGeo), material('localEdge', () => new THREE.LineBasicMaterial({ color: 0x999999 }))));
 
+  function disposeGroup(group) {
+    group.traverse((obj) => {
+      if (obj.geometry) obj.geometry.dispose();
+      if (obj.material && !Object.values(mats).includes(obj.material)) obj.material.dispose();
+    });
+    group.clear();
+  }
+
   function setQuantum(mesh) {
-    groups.quantum.clear();
+    disposeGroup(groups.quantum);
     const n = mesh.grid.length;
     for (const sign of [1, -1]) {
       const pos = [];
@@ -100,7 +108,7 @@ export async function createCorrSet3d(container, { colors, labels }) {
   groups.werner.children[0].computeLineDistances();
 
   function setPoints(points) {
-    groups.points.clear();
+    disposeGroup(groups.points);
     for (const p of points) {
       const [e00, e11, m] = p.sym;
       // Drawn on top of the translucent sets so that points inside them stay visible;

@@ -12,7 +12,7 @@ and published device-independent QKD experiments.
 > Demo video (2–3 min): *link added at submission* · Repository:
 > https://github.com/thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon
 
-![The Bell Lab after one run: protocol stages, counts and error rates](https://raw.githubusercontent.com/thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon/v1.0-submission/docs/img/screen_lab.png)
+![The Bell Lab after one run: protocol stages, counts and error rates](docs/img/screen_lab.png)
 
 ## Why this lab
 
@@ -53,7 +53,7 @@ a perfect pair, an entangled state without violation, an intercept-resend eavesd
 realistic noise, the certificate curves, the Munich data, a two-link swap, the correlation
 space and the circuits.
 
-![Correlation space: the local polytope inside the quantum set, with the measured points](https://raw.githubusercontent.com/thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon/v1.0-submission/docs/img/screen_space.png)
+![Correlation space: the local polytope inside the quantum set, with the measured points](docs/img/screen_space.png)
 
 ## Run it
 
@@ -82,7 +82,7 @@ a real simulator (`?backend=basic_simulator` or `?backend=fake_fez`); IonQ needs
 
 ## How it works
 
-![Software architecture](https://raw.githubusercontent.com/thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon/v1.0-submission/docs/img/architecture.png)
+![Software architecture](docs/img/architecture.png)
 
 ```mermaid
 flowchart LR
@@ -108,8 +108,8 @@ flowchart LR
   instead of reporting nonsense.
 - **No mid-circuit feedback**: IonQ targets do not run dynamic circuits, so the repeaters' Bell
   measurements are deferred to the end and Bob's bit is corrected in software (a **Pauli
-  frame**: Z corrections from the repeaters' target bits, X corrections from their control
-  bits). Purification keeps a round only when the measured second pair agrees
+  frame**: his Z-basis bit is flipped by the parity of the repeaters' CNOT-target bits, his
+  X-basis bit by the parity of their control bits). Purification keeps a round only when the measured second pair agrees
   (post-selection), and reports the measured success probability.
 
 ### The physics, briefly
@@ -136,15 +136,15 @@ eight CHSH inequalities. Full derivations and page-level sources: [docs/referenc
 
 ## Results
 
-All runs below were made through this app — on Qollab unless marked local — and are stored in
+All runs below were made through this app — on Qollab, except the local reference row — and are stored in
 [`data/recorded_runs.json`](data/recorded_runs.json) (the analysis is recomputed from the
 captured counts by `scripts/record_runs.py`, with the same code the app runs).
 
-![S on each simulator, with intervals and the exact prediction](https://raw.githubusercontent.com/thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon/v1.0-submission/docs/img/backends.png)
+![S on each simulator, with intervals and the exact prediction](docs/img/backends.png)
 
 | Backend (Qollab) | Experiment | Shots / setting | S [95 % interval] | Exact prediction | Q_Z | DI key rate, point → conservative |
 |---|---|---:|---|---:|---:|---|
-| Built-in ideal (BasicSimulator; identical on Qollab and locally) | Bell, 5 % depolarizing | 10,000 | 2.708 [2.649, 2.767] | 2.687 | 2.36 % | 0.580 → 0.469 |
+| Qiskit BasicSimulator (local reference run) | Bell, 5 % depolarizing | 10,000 | 2.708 [2.649, 2.767] | 2.687 | 2.36 % | 0.580 → 0.469 |
 | AWS Braket local (ideal) | Bell, 5 % depolarizing | 2,000 | 2.670 [2.538, 2.802] | 2.687 | 1.55 % | 0.566 → 0.343 |
 | IBM Fez noise model | Bell, 5 % depolarizing | 2,000 | 2.562 [2.430, 2.694] | 2.687 | 4.75 % | 0.256 → 0.053 |
 | IBM Fez noise model | Bell, no added noise | 2,000 | 2.670 [2.538, 2.802] | 2.828 | 2.90 % | 0.492 → 0.265 |
@@ -159,8 +159,9 @@ What the table shows:
 - **Device noise adds to the channel noise.** On the noise-model backends S falls below the
   channel-only prediction, more so for the swap, whose circuits have more two-qubit gates.
 - **Finite statistics decide the stronger claims.** With 200 shots per setting (IonQ), every
-  run still shows a Bell violation at the conservative end, but no device-independent key: the
-  interval on S is about ±0.42. With 2,000–10,000 shots the same physics certifies a DI key.
+  run keeps S above 2 at the conservative end, but the asymptotic DI-key bound turns negative
+  there: the interval on S is about ±0.42. With 2,000–10,000 shots the same bound stays
+  positive at the conservative end. (These are simulated counts; see Limits.)
 - **The eavesdropper is caught by the second basis**: the key basis looks clean (Q_Z ≈ 2.7 %,
   device noise only) while Q_X ≈ 51 % and S < 2.
 - **Reproducibility**: seeded IBM Fez runs on Qollab (Pyodide in the browser) and the same
@@ -168,7 +169,7 @@ What the table shows:
 
 ### Real data: the Munich 2017 loophole-free Bell test
 
-![Running S for the two Munich runs](https://raw.githubusercontent.com/thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon/v1.0-submission/docs/img/rosenfeld.png)
+![Running S for the two Munich runs](docs/img/rosenfeld.png)
 
 The open event files of Rosenfeld et al. (Phys. Rev. Lett. 119, 010402, 2017; Zenodo
 doi:10.5281/zenodo.22936124, CC BY 4.0) list every valid atom–atom event. Mapped onto this
@@ -181,7 +182,7 @@ contradiction. The data have no key-basis pair, so only CHSH-based certificates 
 
 ### Published DI-QKD experiments
 
-![Published experiments on the S–Q plane with the DI-key boundary](https://raw.githubusercontent.com/thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon/v1.0-submission/docs/img/di_boundary.png)
+![Published experiments on the S–Q plane with the DI-key boundary](docs/img/di_boundary.png)
 
 Quoted S and Q from Nadlinger 2022, Zhang 2022, Liu 2026 (10 km and 101 km) and Meiers 2026
 are evaluated with the same asymptotic bounds, at the central values and at the corner
@@ -196,7 +197,7 @@ its exact formula, so the lab reports the difference rather than claiming a repr
   to $10^{-9}$ using exact output distributions (Bell with each channel and the eavesdropper,
   1–3-hop chains with and without the Pauli frame, purification with both rotations, the packed
   IonQ layout); bounds and thresholds against published values; Hoeffding and Wilson
-  coverage; the correlation-set membership tests (including Monte-Carlo volume ratios 2/3 and
+  coverage (by simulation); the correlation-set membership tests (including Monte-Carlo volume ratios 2/3 and
   $3\pi^2/32$); the Munich re-analysis against the paper's tables; the published-rate
   recomputation; and static checks of the Qollab rules (no Sampler/Estimator, no dynamic
   circuits, literal data paths, upload limits, a single Python bridge in the browser code).
