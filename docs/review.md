@@ -131,3 +131,21 @@ reviewer re-checked each finding before it was fixed.
 The video was re-recorded in one colour scheme (light) with no still stretch longer than about
 four seconds; the finished file has no decode errors, a constant 30 fps and played in Chrome in
 real time with no stall or dropped frame.
+
+## Round 4 (2026-10-11 afternoon): figure text, run console, Repeater
+
+A detector measured every SVG label against its box in all views, before and after runs, at
+widths from 1280 to 320 px, in light and dark, with the default font, a wider sans (DejaVu Sans)
+and text at 110 %; an independent pass re-ran it on the result.
+
+| ID | Severity | Finding | Resolution |
+|---|---|---|---|
+| F1 | HIGH | "DI randomness" ran past its box in the protocol diagram with a wider font (also "Entanglement", the Overview's "DI key (Acín 2007)", a chart's last x tick and band labels in the circuit drawing) | Labels are measured in the browser's own font and shrink to fit their box (never below 10 px; the certificate column shrinks together); boxes and bands are widened where there is room; 0 findings in all 3 fonts × 6 widths × 2 schemes |
+| F2 | HIGH | Real data: at about 1,000 px the value column of the Munich cards was 14 px wide, so values printed one character per line | `.kv` columns `fit-content(55%) minmax(0, 1fr)`; the cards are 444 and 509 px tall instead of about 2,000 |
+| F3 | MEDIUM | Repeater: after the link noise changed, the "Measured" card still showed the old run under the new settings | The heading names the noise it ran with; once the settings change the card is marked and says to run again |
+| F4 | MEDIUM | `scripts/record_runs.py` stopped on `results/qollab/video_run_20261010.json` (a note, not counts) | Files without captured counts are skipped and listed; `data/recorded_runs.json` rebuilds unchanged |
+| F5 | LOW | "CERTIFICATES · 5" read as a count of certificates | The group carries the stage mark in its corner like the other stages (5, ▶, ✓) |
+| F6 | LOW | The console's percentages rounded ties to even, the page up | Both round ties up; `num()` also nudges decimal ties (0.9625 showed as 0.962 in one view and 0.963 in another) |
+| F7 | LOW | The mouse wheel over the 3D correlation space zoomed it instead of scrolling the page | Wheel zoom off (the Zoom buttons remain); vertical swipes scroll on touch screens |
+| F8 | LOW | Qiskit's text drawings fell back to a CJK monospace font on some systems, misaligning box-drawing characters | Monospace stack with DejaVu Sans Mono and Liberation Mono before the generic family |
+| F9 | LOW | The shared-code disclosure named the Temml helper (each entry has its own) and missed the harness shim and the write-up converter | Corrected in the README |

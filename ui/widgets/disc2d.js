@@ -21,20 +21,25 @@ export function xzDisc() {
       s('circle', { cx, cy, r: R, fill: 'none', style: 'stroke:var(--border);stroke-width:1.5' }),
       s('line', { x1: cx - R - 8, x2: cx + R + 8, y1: cy, y2: cy, style: 'stroke:var(--border)' }),
       s('line', { x1: cx, x2: cx, y1: cy - R - 8, y2: cy + R + 8, style: 'stroke:var(--border)' }),
-      s('text', { x: cx - 8, y: cy - R + 14, 'text-anchor': 'end', style: 'fill:var(--muted)' }, '+Z'),
-      s('text', { x: cx + R - 4, y: cy + 18, 'text-anchor': 'end', style: 'fill:var(--muted)' }, '+X'),
+      s('text', { x: cx - 8, y: cy - R + 18, 'text-anchor': 'end', style: 'fill:var(--muted)' }, '+Z'),
+      s('text', { x: cx + R - 8, y: cy + 17, 'text-anchor': 'end', style: 'fill:var(--muted)' }, '+X'),
     );
-    const arrow = (deg, color, dash, label, offset) => {
+    // Labels sit 18 beyond the rim. Where Alice and Bob share a direction, their labels sit side
+    // by side across the arrow (shifted along the rim), which works for any angle and font.
+    const arrow = (deg, color, dash, label, shift) => {
       const [x, y] = pt(deg, R - 4);
-      const [lx, ly] = pt(deg, R + 18 + offset);
+      const [px, py] = pt(deg, R + 18);
+      const rad = (deg * Math.PI) / 180;
+      const [lx, ly] = [px + shift * Math.cos(rad), py + shift * Math.sin(rad)];
       svg.append(
         s('line', { x1: cx, y1: cy, x2: x, y2: y, style: `stroke:${color};stroke-width:2.6;stroke-dasharray:${dash}` }),
         s('circle', { cx: x, cy: y, r: 4, style: `fill:${color}` }),
         s('text', { x: lx, y: ly + 4, 'text-anchor': 'middle', style: `fill:${color};font-weight:600` }, label),
       );
     };
-    alice.forEach((a) => arrow(a.deg, 'var(--c1)', 'none', `A:${a.short}`, 0));
-    bob.forEach((b) => arrow(b.deg, 'var(--c2)', '6 4', `B:${b.short}`, 20));
+    const shared = (deg) => alice.some((a) => Math.abs(a.deg - deg) < 1) && bob.some((b) => Math.abs(b.deg - deg) < 1);
+    alice.forEach((a) => arrow(a.deg, 'var(--c1)', 'none', `A:${a.short}`, shared(a.deg) ? -15 : 0));
+    bob.forEach((b) => arrow(b.deg, 'var(--c2)', '6 4', `B:${b.short}`, shared(b.deg) ? 15 : 0));
     const eve = evePhi !== null && evePhi !== undefined
       ? ` Eve is not a direction here: she couples to Bob's qubit with a controlled rotation of ${evePhi}° (180° copies the Z value completely).`
       : '';

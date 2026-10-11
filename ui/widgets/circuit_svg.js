@@ -1,7 +1,7 @@
 // Circuit diagram drawn from the gate list that Python sends (bellkit.app.circuits_json).
 // Teaching sections (source, eavesdropper, link noise, Bell measurement, purification, basis,
 // measurement) are shaded and labelled; a barrier is implied between sections.
-import { h, s, scrollableWhenNeeded, uid } from '../core/dom.js';
+import { fitWhenShown, h, s, scrollableWhenNeeded, uid } from '../core/dom.js';
 
 const SECTION = {
   source: { label: 'pair source', fill: 'var(--sec-source)' },
@@ -44,9 +44,29 @@ export function circuitSvg(unit, labels) {
   const left = 78;
   const top = 30;
   const busY = top + unit.num_qubits * RH + 6;
-  const W = left + width * CW + 24;
+  // One band per run of operations from the same section (sections never share a column, and
+  // a chain repeats source and link noise for every link). A run whose label is wider than its
+  // columns gets wider columns, so the label stays inside its band.
+  const runs = [];
+  unit.ops.forEach((op, i) => {
+    const last = runs[runs.length - 1];
+    if (last && last.sec === op.section) {
+      last.min = Math.min(last.min, cols[i]);
+      last.max = Math.max(last.max, cols[i]);
+    } else runs.push({ sec: op.section, min: cols[i], max: cols[i] });
+  });
+  const colW = new Array(width).fill(CW);
+  for (const r of runs) {
+    const need = SECTION[r.sec].label.length * 6.5 + 14; // 10.5px label, generous for wide fonts
+    const n = r.max - r.min + 1;
+    const have = colW.slice(r.min, r.max + 1).reduce((a, b) => a + b, 0);
+    if (need > have) for (let c = r.min; c <= r.max; c += 1) colW[c] += (need - have) / n;
+  }
+  const colX = [left];
+  colW.forEach((w, c) => colX.push(colX[c] + w));
+  const W = colX[width] + 24;
   const H = busY + 30;
-  const cx = (c) => left + c * CW + CW / 2;
+  const cx = (c) => colX[c] + colW[c] / 2;
   const wy = (q) => top + q * RH + RH / 2;
   const tId = uid('ct');
   const counts = {};
@@ -55,18 +75,11 @@ export function circuitSvg(unit, labels) {
     s('title', { id: tId }, `Circuit ${unit.name}: ${unit.num_qubits} qubits, ${unit.ops.length} operations; sections ${Object.keys(counts).map((k) => `${SECTION[k].label} (${counts[k]})`).join(', ')}`));
 
   // section bands
-  const ranges = {};
-  unit.ops.forEach((op, i) => {
-    const key = `${op.section}`;
-    const r = ranges[key] || (ranges[key] = { min: Infinity, max: -Infinity });
-    r.min = Math.min(r.min, cols[i]);
-    r.max = Math.max(r.max, cols[i]);
-  });
-  for (const [sec, r] of Object.entries(ranges)) {
-    const x0 = left + r.min * CW + 2;
-    const x1 = left + (r.max + 1) * CW - 2;
-    svg.append(s('rect', { x: x0, y: 4, width: x1 - x0, height: busY - 4, rx: 6, style: `fill:${SECTION[sec].fill}` }),
-      s('text', { x: (x0 + x1) / 2, y: 18, 'text-anchor': 'middle', style: 'font-size:10.5px;fill:var(--muted)' }, SECTION[sec].label));
+  for (const r of runs) {
+    const x0 = colX[r.min] + 2;
+    const x1 = colX[r.max + 1] - 2;
+    svg.append(s('rect', { x: x0, y: 4, width: x1 - x0, height: busY - 4, rx: 6, style: `fill:${SECTION[r.sec].fill}` }),
+      s('text', { x: (x0 + x1) / 2, y: 18, 'text-anchor': 'middle', 'data-fit': x1 - x0 - 10, style: 'font-size:10.5px;fill:var(--muted)' }, SECTION[r.sec].label));
   }
   // wires
   for (let q = 0; q < unit.num_qubits; q += 1) {
@@ -110,7 +123,7 @@ export function circuitSvg(unit, labels) {
       svg.append(box(x, wy(q0), name, op.params.length ? deg(op.params[0]) : ''));
     }
   });
-  return svg;
+  return fitWhenShown(svg);
 }
 
 export function circuitFigure(unit, labels, caption) {

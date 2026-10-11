@@ -31,12 +31,23 @@ export function createTour(ctx) {
     highlighted = null;
   }
 
+  // Scroll the target so that its top (or, if the page cannot scroll that far, its bottom)
+  // leaves `room` pixels free at that edge of the frame.
+  function scrollClear(target, edge, room) {
+    const key = edge === 'top' ? 'scrollMarginTop' : 'scrollMarginBottom';
+    target.style[key] = `${room}px`;
+    target.scrollIntoView({ block: edge === 'top' ? 'start' : 'end', behavior: 'auto' });
+    target.style[key] = '';
+    return target.getBoundingClientRect();
+  }
+
   // Put the box next to its target without covering it: below, above, left or right,
-  // whichever has room; otherwise the bottom-right corner (the frame on Qollab is short).
+  // whichever has room. If none has (a tall target, a short frame on Qollab, a phone), the box
+  // goes to the top of the frame and the target is scrolled to start just under it, or, near the
+  // top of the page, the box goes to the bottom and the target ends just above it.
   function place(target) {
     Object.assign(box.style, { left: '', top: '', right: '16px', bottom: '16px' });
     if (!target) return;
-    const r = target.getBoundingClientRect();
     const w = box.offsetWidth;
     const hgt = box.offsetHeight;
     const vw = window.innerWidth;
@@ -44,12 +55,25 @@ export function createTour(ctx) {
     const m = 12;
     const clampX = (x) => Math.min(Math.max(m, x), vw - w - m);
     const clampY = (y) => Math.min(Math.max(m, y), vh - hgt - m);
+    let r = target.getBoundingClientRect();
+    // after a resize the target may have moved out of view
+    if (r.bottom <= 0 || r.top >= vh) {
+      target.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+      r = target.getBoundingClientRect();
+    }
     let pos = null;
     if (vh - r.bottom >= hgt + 2 * m) pos = { left: clampX(r.left), top: r.bottom + m };
     else if (r.top >= hgt + 2 * m) pos = { left: clampX(r.left), top: r.top - hgt - m };
     else if (r.left >= w + 2 * m) pos = { left: r.left - w - m, top: clampY(r.top) };
     else if (vw - r.right >= w + 2 * m) pos = { left: r.right + m, top: clampY(r.top) };
-    if (!pos) return;
+    else {
+      r = scrollClear(target, 'top', hgt + 2 * m);
+      if (r.top >= hgt + 2 * m - 1) pos = { left: clampX(r.left), top: m };
+      else {
+        r = scrollClear(target, 'bottom', hgt + 2 * m);
+        pos = { left: clampX(r.left), top: clampY(r.bottom + m) };
+      }
+    }
     Object.assign(box.style, { right: '', bottom: '', left: `${pos.left}px`, top: `${pos.top}px` });
   }
 

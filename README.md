@@ -329,8 +329,10 @@ The author previously showed an E91/CHSH Werner-state model in a separate public
 the idea of the step-by-step flow pages in the author's earlier QKD testbed demo; it was
 written new during the window, again with no code reused. During the window the author also
 built a second, separate entry, *Entangled Compass* (Quantum Playground: GHZ sensors tracking
-real geomagnetic data). Apart from a small formula helper for Temml and its font declaration,
-written for both during the window, the two entries share no code.
+real geomagnetic data). The two entries share no app code; each has its own Temml formula
+helper. A few small pieces were written for both during the window and are alike: the math font
+declaration, the local harness's response shim, and the link and math conversion in
+`scripts/make_writeup.py`.
 
 ## Extending it
 

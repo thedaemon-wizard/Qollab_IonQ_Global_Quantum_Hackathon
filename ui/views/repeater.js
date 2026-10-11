@@ -10,7 +10,7 @@ import { button, errorNote, note, select, slider } from '../widgets/controls.js'
 import { flowDiagram } from '../widgets/diagram.js';
 import { swimlane } from '../widgets/swimlane.js';
 import { dataTable } from '../widgets/table.js';
-import { channelControls, ladderTable, qberList, runBlocker, sizeNote, submitRun } from './common.js';
+import { CHANNELS, channelControls, ladderTable, qberList, runBlocker, sizeNote, submitRun } from './common.js';
 
 function topology(hops) {
   const nodes = [];
@@ -143,8 +143,31 @@ export default {
       }
     }
 
+    // A measured result belongs to the settings it ran with: name them in its heading and mark the
+    // card once the settings change, so a paused screen never pairs old numbers with new settings.
+    const noiseText = (ch) => (ch.kind === 'none' ? 'no added noise'
+      : `${CHANNELS.find((c) => c.value === ch.kind).label.replace(/^./, (c) => c.toLowerCase())} ${ch.strength.toFixed(2)}`);
+    const shown = new Map(); // result element -> settings key of its run
+    function markStale() {
+      const now = new Map([[chainResult, JSON.stringify({ hops: hops.value, ch: channel.value() })],
+        [purResult, JSON.stringify({ rot: rotation.value, ch: channel.value() })]]);
+      for (const [el, key] of shown) {
+        const card = el.firstElementChild;
+        if (!card) continue;
+        const stale = key !== now.get(el);
+        card.classList.toggle('stale', stale);
+        let msg = card.querySelector(':scope > .stale-note');
+        if (stale && !msg) {
+          msg = h('p', { class: 'stale-note small' }, icon('alert-triangle'),
+            `Measured with the earlier settings named above; press ${el === chainResult ? 'Run the chain' : 'Run purification'} to measure the current ones.`);
+          card.firstElementChild.after(msg);
+        } else if (!stale && msg) msg.remove();
+      }
+    }
+
     async function refresh() {
       await loadRecorded();
+      markStale();
       const n = hops.value;
       topoBox.replaceChildren(topology(n).element);
       timeBox.replaceChildren(timeline(n));
@@ -221,6 +244,7 @@ export default {
 
     async function runGeneric(req, statusEl, resultEl, title) {
       resultEl.replaceChildren();
+      shown.delete(resultEl);
       busy = true;
       lastRun = statusEl;
       statusEl.textContent = `Submitting one job to ${ctx.backend.name}…`;
@@ -241,6 +265,7 @@ export default {
               h('dt', null, 'Fidelity predicted'), h('dd', null, num(rep.prediction.fidelity))),
             qberList(a)),
           kept, ladderTable(a)));
+        shown.set(resultEl, JSON.stringify(req.module === 'purify' ? { rot: req.rotation, ch: req.channel } : { hops: req.hops, ch: req.channel }));
         return rep;
       } catch (err) {
         statusEl.textContent = 'The run did not complete.';
@@ -254,7 +279,7 @@ export default {
 
     async function runChain() {
       const req = { module: 'chain', hops: hops.value, channel: channel.value() };
-      const rep = await runGeneric(req, chainStatus, chainResult, `Measured: ${req.hops} link${req.hops > 1 ? 's' : ''}`);
+      const rep = await runGeneric(req, chainStatus, chainResult, `Measured: ${req.hops} link${req.hops > 1 ? 's' : ''}, ${noiseText(req.channel)}`);
       if (rep) {
         const a = rep.analysis;
         measured.push({ kind: req.channel.kind, strength: req.channel.strength, hops: req.hops, S: a.S.point, S_low: a.S.low, S_high: a.S.high, Q_Z: a.Q_Z.point, Q_Z_low: a.Q_Z.low, Q_Z_high: a.Q_Z.high });
@@ -265,7 +290,7 @@ export default {
 
     async function runPurify() {
       const req = { module: 'purify', rotation: rotation.value, channel: channel.value() };
-      return runGeneric(req, purStatus, purResult, `Measured: purification (${req.rotation})`);
+      return runGeneric(req, purStatus, purResult, `Measured: purification (${req.rotation}), ${noiseText(req.channel)}`);
     }
 
     let sizeOk = { chain: false, purify: false };

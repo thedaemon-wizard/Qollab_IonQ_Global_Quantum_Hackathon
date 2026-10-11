@@ -36,6 +36,8 @@ export async function createCorrSet3d(container, { colors, labels }) {
   controls.target.set(0, 0, 0);
   controls.minDistance = 2;
   controls.maxDistance = 9;
+  controls.enableZoom = false; // the wheel scrolls the page; the Zoom buttons zoom
+  renderer.domElement.style.touchAction = 'pan-y'; // a vertical swipe scrolls, a sideways drag turns
 
   const groups = { ns: new THREE.Group(), local: new THREE.Group(), quantum: new THREE.Group(), points: new THREE.Group(), werner: new THREE.Group() };
   Object.values(groups).forEach((g) => scene.add(g));

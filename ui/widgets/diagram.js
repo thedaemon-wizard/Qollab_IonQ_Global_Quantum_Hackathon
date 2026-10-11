@@ -1,7 +1,8 @@
 // Box-and-arrow diagrams with icons (architecture and protocol flow). Coordinates are given by
 // the caller in a fixed viewBox; the SVG scales to the container width. Optional per-node and
-// per-edge `status`, `dash`, `mark` and widths let a caller show progress (the Bell Lab run).
-import { h, s, uid } from '../core/dom.js';
+// per-edge `status`, `dash`, `mark` and widths let a caller show progress (the Bell Lab run);
+// nodes with the same `fitGroup` shrink their titles together when a font needs it.
+import { fitWhenShown, h, s, uid } from '../core/dom.js';
 import { iconMarkup } from '../core/icons.js';
 
 function anchor(n, side) {
@@ -35,6 +36,8 @@ export function flowDiagram(spec) {
   for (const g of spec.groups || []) {
     svg.append(s('rect', { x: g.x, y: g.y, width: g.w, height: g.h, rx: 12, style: 'fill:none;stroke:var(--border);stroke-dasharray:6 5;stroke-width:1.5' }),
       s('text', { x: g.x + 10, y: g.y + 16, style: 'fill:var(--muted);font-size:11px;font-weight:600;letter-spacing:0.04em' }, g.label));
+    // a group can carry a stage mark in its corner, drawn like a node's
+    if (g.mark) svg.append(s('text', { x: g.x + g.w - 9, y: g.y + 18, 'text-anchor': 'end', style: `font-weight:700;font-size:12.5px;fill:${g.markTone || g.tone || 'var(--muted)'}` }, g.mark));
   }
   const byId = Object.fromEntries(spec.nodes.map((n) => [n.id, n]));
   for (const e of spec.edges || []) {
@@ -77,13 +80,22 @@ export function flowDiagram(spec) {
       ic.innerHTML = iconMarkup(n.icon);
       g.append(ic);
     }
+    // Text keeps 6 units clear of the inner edge of the border (and of the corner mark); the
+    // room is passed to fitSvgText, which shrinks a label only if the viewer's font needs it.
+    const inner = n.x + n.w - (n.strokeWidth || 1.8) / 2 - 6;
     const tx = n.icon ? n.x + 37 : n.x + 10;
-    g.append(s('text', { x: tx, y: n.y + 25, style: 'font-weight:650;font-size:12.5px' }, n.title));
-    (n.sub || '').split('\n').filter(Boolean).forEach((line, i) => {
-      g.append(s('text', { x: n.x + 10, y: n.y + 44 + i * 14, style: 'fill:var(--muted);font-size:11px' }, line));
+    const titleEnd = n.mark ? n.x + n.w - 24 : inner;
+    g.append(s('text', { x: tx, y: n.y + 25, 'data-fit': titleEnd - tx, 'data-fit-group': n.fitGroup, style: 'font-weight:650;font-size:12.5px' }, n.title));
+    // Sub-lines start 44 below the top, 14 apart, but move up so the last baseline stays 8
+    // above the bottom edge (room for descenders).
+    const lines = (n.sub || '').split('\n').filter(Boolean);
+    lines.forEach((line, i) => {
+      const y = n.y + Math.min(44 + i * 14, n.h - 8 - (lines.length - 1 - i) * 14);
+      g.append(s('text', { x: n.x + 10, y, 'data-fit': inner - n.x - 10, style: 'fill:var(--muted);font-size:11px' }, line));
     });
     svg.append(g);
   }
+  fitWhenShown(svg);
   const figure = h('figure', { class: spec.className ? `diagram ${spec.className}` : 'diagram' }, svg, spec.caption ? h('figcaption', null, spec.caption) : null);
   return { element: figure, svg };
 }

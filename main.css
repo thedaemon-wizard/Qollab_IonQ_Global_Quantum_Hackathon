@@ -132,7 +132,7 @@ body { background: #0e1320; }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
 
 a { color: var(--accent); }
-code, pre, .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.86em; }
+code, pre, .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', 'Cascadia Mono', 'Liberation Mono', monospace; font-size: 0.86em; }
 h1, h2, h3, h4 { line-height: 1.25; margin: 0 0 0.5rem; }
 h2 { font-size: 1.35rem; }
 h3 { font-size: 1.05rem; }
@@ -279,7 +279,7 @@ figcaption { font-size: 0.84rem; color: var(--muted); margin-top: 0.3rem; }
 .diagram.flow[data-playing='true'] .edge[data-status='active'] { animation: flow-dash 0.8s linear infinite; }
 @keyframes flow-glow { from { filter: drop-shadow(0 0 1px var(--accent)); } to { filter: drop-shadow(0 0 9px var(--accent)); } }
 @keyframes flow-dash { to { stroke-dashoffset: -28; } }
-.kv { display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.8rem; font-size: 0.9rem; }
+.kv { display: grid; grid-template-columns: fit-content(55%) minmax(0, 1fr); gap: 0.15rem 0.8rem; font-size: 0.9rem; }
 .kv dt { color: var(--muted); }
 .kv dd { margin: 0; font-variant-numeric: tabular-nums; }
 .ladder { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.35rem; }
@@ -355,9 +355,20 @@ figcaption { font-size: 0.84rem; color: var(--muted); margin-top: 0.3rem; }
 input[type='number'] { width: 100%; min-width: 0; }
 select { max-width: 100%; }
 .field { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+/* DOIs have no break opportunities of their own */
+.refs { overflow-wrap: break-word; }
 @media (max-width: 480px) {
   .legend span { white-space: normal; }
   /* one column for term lists, so a formula that cannot break still fits at 320 px */
   .kv { grid-template-columns: minmax(0, 1fr); }
   .kv dd { margin-bottom: 0.35rem; }
 }
+/* Inline formulas cannot wrap in Chromium or Safari; on a phone they are set at text size. */
+@media (max-width: 400px) {
+  .bk-root math { font-size: 1em; }
+}
+
+/* a measured result whose settings have changed since it ran (Repeater) */
+.card.stale { border-style: dashed; border-color: var(--warn); }
+.stale-note { display: flex; gap: 0.4rem; align-items: center; color: var(--warn, var(--text)); font-weight: 600; margin: 0.2rem 0 0.4rem; }
+.stale-note svg { width: 1.1em; height: 1.1em; flex: none; }

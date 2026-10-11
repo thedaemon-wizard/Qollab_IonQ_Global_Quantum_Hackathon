@@ -71,6 +71,9 @@ def main() -> int:
     for path in SOURCES:
         data = json.loads(path.read_text(encoding="utf-8"))
         items = data.get("runs", [data])
+        if not all("request" in item for item in items):
+            print(f"  skipped {path.name}: a note, not captured counts")
+            continue
         for item in items:
             origin = {
                 "where": "Qollab" if path.parent.name == "qollab" else "local",

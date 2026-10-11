@@ -8,7 +8,9 @@ import { flowDiagram } from '../widgets/diagram.js';
 import { dataTable } from '../widgets/table.js';
 
 function protocolDiagram() {
-  const n = (id, x, y, w, ic, title, sub, tone) => ({ id, x, y, w, h: sub ? 62 : 40, icon: ic, title, sub, tone });
+  // Boxes with two sub-lines are taller; the six certificate boxes (title only) shrink their
+  // titles together if the viewer's font needs it.
+  const n = (id, x, y, w, ic, title, sub, tone) => ({ id, x, y, w, h: sub ? (sub.includes('\n') ? 66 : 62) : 40, icon: ic, title, sub, tone, fitGroup: sub ? undefined : 'cert' });
   return flowDiagram({
     width: 820,
     height: 342,
@@ -21,12 +23,12 @@ function protocolDiagram() {
       n('bob', 210, 220, 140, 'user', 'Bob', 'Z, X', 'var(--c2)'),
       n('eve', 10, 272, 140, 'eye', 'Eve (optional)', 'controlled-Ry(φ)', 'var(--bad)'),
       n('est', 400, 130, 160, 'filter', 'Sift & estimate', 'S, Q_Z, Q_X\nwith confidence', 'var(--c3)'),
-      n('bell', 620, 36, 160, 'chart-dots', 'Bell violation', '', 'var(--c3)'),
-      n('wit', 620, 84, 160, 'eye', 'Entanglement', '', 'var(--c3)'),
-      n('bbm', 620, 132, 160, 'key', 'BBM92 key', '', 'var(--c3)'),
-      n('self', 620, 180, 160, 'fingerprint', 'Self-test', '', 'var(--c3)'),
-      n('rnd', 620, 228, 160, 'dice-5', 'DI randomness', '', 'var(--c3)'),
-      n('di', 620, 276, 160, 'shield-lock', 'DI key (Acín 2007)', '', 'var(--c3)'),
+      n('bell', 615, 36, 180, 'chart-dots', 'Bell violation', '', 'var(--c3)'),
+      n('wit', 615, 84, 180, 'eye', 'Entanglement', '', 'var(--c3)'),
+      n('bbm', 615, 132, 180, 'key', 'BBM92 key', '', 'var(--c3)'),
+      n('self', 615, 180, 180, 'fingerprint', 'Self-test', '', 'var(--c3)'),
+      n('rnd', 615, 228, 180, 'dice-5', 'DI randomness', '', 'var(--c3)'),
+      n('di', 615, 276, 180, 'shield-lock', 'DI key (Acín 2007)', '', 'var(--c3)'),
     ],
     edges: [
       { from: 'src', to: 'alice', route: 'elbow', label: 'link', labelAt: [162, 121] },
@@ -46,7 +48,7 @@ function protocolDiagram() {
 }
 
 function softwareDiagram() {
-  const n = (id, x, y, w, ic, title, sub, tone) => ({ id, x, y, w, h: 62, icon: ic, title, sub, tone });
+  const n = (id, x, y, w, ic, title, sub, tone) => ({ id, x, y, w, h: sub.includes('\n') ? 66 : 62, icon: ic, title, sub, tone });
   return flowDiagram({
     width: 980,
     height: 250,

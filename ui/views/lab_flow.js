@@ -88,9 +88,10 @@ export function labFlow(stageTitles) {
     RUNG_INFO.forEach((r, i) => {
       const out = seen('cert') ? OUTCOME[rungOutcome(r, a)] : null;
       const n = node(`cert-${r.key}`, 'cert', 852, 32 + i * 62, 136, 54, r.icon, SHORT[r.key], out ? out.text : 'pending', out ? out.tone : 'var(--c3)');
-      // no corner mark here (the titles are long): the group label carries the stage number
+      // no corner mark here (the titles are long): the group carries the stage mark
       // and the second line says whether the certificate holds
       n.mark = '';
+      n.fitGroup = 'cert';
       if (out && st('cert') === 'done') n.tone = out.tone;
       nodes.push(n);
     });
@@ -121,7 +122,7 @@ export function labFlow(stageTitles) {
       className: 'flow',
       title: 'Protocol diagram of this run',
       desc: `A source sends |Φ+⟩ pairs to Alice and Bob; Bob's link: ${channelLabel(channel)}${evePhi !== null && evePhi !== undefined ? ` and Eve couples a probe to Bob's qubit with angle ${evePhi}°` : ''}. Both measure in their settings inside one job; the counts are sifted and estimated in Python and feed six certificates. ${where} ${values}`.trim(),
-      groups: [{ x: 845, y: 8, w: 150, h: 394, label: 'CERTIFICATES · 5' }],
+      groups: [{ x: 845, y: 8, w: 150, h: 394, label: 'CERTIFICATES', ...look('cert', 'var(--c3)') }],
       nodes,
       edges,
       caption: rep

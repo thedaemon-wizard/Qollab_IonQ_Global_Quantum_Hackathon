@@ -105,3 +105,56 @@ export function scrollableWhenNeeded(el, label) {
   requestAnimationFrame(update);
   return el;
 }
+
+/**
+ * Fit SVG labels into the room they have, in whatever font the viewer's browser uses. A <text>
+ * with data-fit="<room in user units>" is shrunk until it fits, down to 10 px, and condensed
+ * with textLength if it is still too long. Labels that fit keep their size; labels with the same
+ * data-fit-group (a column of boxes) all take the smallest scale any of them needs.
+ */
+export function fitSvgText(svg) {
+  const scale = new Map();
+  const groupScale = new Map();
+  for (const t of svg.querySelectorAll('text[data-fit]')) {
+    if (!t.dataset.fitPx) t.dataset.fitPx = String(parseFloat(getComputedStyle(t).fontSize));
+    t.style.fontSize = `${t.dataset.fitPx}px`;
+    t.removeAttribute('textLength');
+    t.removeAttribute('lengthAdjust');
+    const len = t.getComputedTextLength();
+    const room = Number(t.dataset.fit);
+    const k = len > room ? room / len : 1; // len is 0 without layout (a hidden view): keep it
+    scale.set(t, k);
+    const g = t.dataset.fitGroup;
+    if (g) groupScale.set(g, Math.min(groupScale.get(g) ?? 1, k));
+  }
+  for (const [t, own] of scale) {
+    const k = t.dataset.fitGroup ? groupScale.get(t.dataset.fitGroup) : own;
+    if (k >= 1) continue;
+    const base = Number(t.dataset.fitPx);
+    t.style.fontSize = `${Math.max(10, Math.floor(base * k * 10) / 10)}px`;
+    const room = Number(t.dataset.fit);
+    if (t.getComputedTextLength() > room) {
+      t.setAttribute('textLength', String(room));
+      t.setAttribute('lengthAdjust', 'spacingAndGlyphs');
+    }
+  }
+}
+
+let fitObserver = null;
+/**
+ * Run fitSvgText whenever the figure is laid out at a new size: when it is first shown (a view
+ * that is hidden has no layout to measure) and when the frame is resized.
+ */
+export function fitWhenShown(svg) {
+  if (typeof ResizeObserver !== 'function') return svg;
+  if (!fitObserver) {
+    fitObserver = new ResizeObserver((entries) => {
+      for (const e of entries) {
+        if (e.target.isConnected) fitSvgText(e.target);
+        else fitObserver.unobserve(e.target);
+      }
+    });
+  }
+  fitObserver.observe(svg);
+  return svg;
+}

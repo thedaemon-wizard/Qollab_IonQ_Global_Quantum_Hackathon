@@ -51,20 +51,29 @@ export function lineChart(initial) {
   function render(spec) {
     const W = spec.width || 560;
     const H = spec.height || 300;
-    const iw = W - PAD.left - PAD.right;
-    const ih = H - PAD.top - PAD.bottom;
     const { x: X, y: Y } = spec;
-    const sx = (v) => PAD.left + ((v - X.min) / (X.max - X.min)) * iw;
-    const sy = (v) => PAD.top + ih - ((v - Y.min) / (Y.max - Y.min)) * ih;
     const fx = X.format || ((v) => String(v));
     const fy = Y.format || ((v) => String(v));
+    const xTicks = Array.isArray(X.ticks) ? X.ticks : ticksFor(X.min, X.max, X.ticks || 6);
+    // Tick labels are centred on their tick: a last tick at (or near) the right edge of the plot
+    // needs room for half its label (12px digits, generous for wide fonts).
+    let right = PAD.right;
+    if (xTicks.length) {
+      const last = xTicks[xTicks.length - 1];
+      const gap = ((X.max - last) / (X.max - X.min)) * (W - PAD.left - PAD.right);
+      right = Math.max(right, Math.ceil(String(fx(last)).length * 3.8 + 4 - gap));
+    }
+    const iw = W - PAD.left - right;
+    const ih = H - PAD.top - PAD.bottom;
+    const sx = (v) => PAD.left + ((v - X.min) / (X.max - X.min)) * iw;
+    const sy = (v) => PAD.top + ih - ((v - Y.min) / (Y.max - Y.min)) * ih;
     const svg = s('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-labelledby': `${titleId} ${descId}` },
       s('title', { id: titleId }, spec.title), s('desc', { id: descId }, spec.desc || ''));
     svg.append(s('defs', null, s('clipPath', { id: clipId }, s('rect', { x: PAD.left, y: PAD.top, width: iw, height: ih }))));
 
     const grid = s('g', { class: 'grid' });
     const axes = s('g', { class: 'axis' });
-    for (const t of Array.isArray(X.ticks) ? X.ticks : ticksFor(X.min, X.max, X.ticks || 6)) {
+    for (const t of xTicks) {
       grid.append(s('line', { x1: sx(t), x2: sx(t), y1: PAD.top, y2: PAD.top + ih }));
       axes.append(s('text', { class: 'tick', x: sx(t), y: PAD.top + ih + 16, 'text-anchor': 'middle' }, fx(t)));
     }
@@ -86,9 +95,12 @@ export function lineChart(initial) {
       plot.append(s('rect', { x: Math.min(x0, x1), y: Math.min(y0, y1), width: Math.abs(x1 - x0), height: Math.abs(y1 - y0), style: `fill:${b.fill}` }));
       if (b.label) plot.append(s('text', { x: Math.min(x0, x1) + 4, y: Math.min(y0, y1) + 13, class: 'tick' }, b.label));
     }
+    // Reference-line labels sit above their line, outside the plot clip, so a line close to the
+    // top of the plot does not cut off the top of its label.
+    const lineLabels = s('g');
     for (const l of spec.hlines || []) {
       plot.append(s('line', { x1: PAD.left, x2: PAD.left + iw, y1: sy(l.y), y2: sy(l.y), style: `stroke:${l.color || 'var(--muted)'};stroke-width:1.4;stroke-dasharray:${l.dash || '5 4'}` }));
-      if (l.label) plot.append(s('text', { x: PAD.left + iw - 4, y: sy(l.y) - 4, 'text-anchor': 'end', class: 'tick' }, l.label));
+      if (l.label && l.y >= Y.min && l.y <= Y.max) lineLabels.append(s('text', { x: PAD.left + iw - 4, y: Math.max(sy(l.y) - 4, 12), 'text-anchor': 'end', class: 'tick' }, l.label));
     }
     for (const l of spec.vlines || []) {
       plot.append(s('line', { x1: sx(l.x), x2: sx(l.x), y1: PAD.top, y2: PAD.top + ih, style: `stroke:${l.color || 'var(--muted)'};stroke-width:1.4;stroke-dasharray:${l.dash || '5 4'}` }));
@@ -105,7 +117,7 @@ export function lineChart(initial) {
         });
       }
     }
-    svg.append(plot);
+    svg.append(plot, lineLabels);
     // Error-bar markers are drawn unclipped so that points at the edge stay visible.
     const marks = s('g');
     const clampX = (v) => Math.min(Math.max(v, X.min), X.max);

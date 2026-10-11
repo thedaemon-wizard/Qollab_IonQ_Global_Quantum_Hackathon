@@ -104,7 +104,7 @@ export default {
         h('p', null, 'Third-party: Qiskit (Apache-2.0); three.js (MIT, loaded through Qollab); Tabler Icons subset (MIT); Munich Bell-test event files (CC BY 4.0, Rosenfeld et al., Zenodo 10.5281/zenodo.22936124). Published values from Lu et al. and Liu et al. come from their CC BY 4.0 data records. Details in THIRD_PARTY_NOTICES.md.')),
       sec('References', 'books',
         note('', 'Links cannot open from inside this frame, so DOIs are given as text.'),
-        h('ol', { class: 'small' }, REFS.map(([cite, doi]) => h('li', null, cite, doi ? h('span', { class: 'muted' }, ` — doi:${doi}`) : '')))),
+        h('ol', { class: 'small refs' }, REFS.map(([cite, doi]) => h('li', null, cite, doi ? h('span', { class: 'muted' }, ` — doi:${doi}`) : '')))),
     );
     return { element };
   },
