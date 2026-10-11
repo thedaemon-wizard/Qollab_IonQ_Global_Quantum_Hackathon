@@ -66,7 +66,8 @@ def main() -> int:
                 zf.write(f, f.relative_to(ROOT).as_posix())
             if args.card:
                 zf.write(args.card, "README.md")
-        print(f"wrote {out.relative_to(ROOT)}" + (f" with {args.card} as README.md" if args.card else " (no README.md)"))
+        note = f" with {args.card} as README.md" if args.card else " (no README.md)"
+        print(f"wrote {out.relative_to(ROOT)}{note}")
     return 0
 
 
