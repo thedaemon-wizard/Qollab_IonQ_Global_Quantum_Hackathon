@@ -5,7 +5,8 @@ Usage: python scripts/make_writeup.py [git-ref] [--no-images]   (default ref: v1
 Qollab's write-up renders Markdown and KaTeX but not Mermaid, and shows images only from
 allowed hosts. This script points relative images and links at the public repository at the
 given ref, drops the Mermaid block (the PNG above it carries the same diagram), turns a YouTube
-link that stands alone on its line into Qollab's embedded player, and checks the length limit.
+link that stands alone on its line into Qollab's embedded player, drops the README title (Qollab
+shows the project title above the write-up), and checks the length limit.
 Output: dist/writeup.md.
 """
 
@@ -31,6 +32,8 @@ def convert(text: str, ref: str, images: bool = True) -> str:
     raw = f"https://raw.githubusercontent.com/{REPO}/{ref}/"
     blob = f"https://github.com/{REPO}/blob/{ref}/"
     text = text.replace("\r\n", "\n")
+    # Qollab shows the project title above the write-up, so the README's own title would repeat.
+    text = re.sub(r"\A# [^\n]*\n+", "", text)
     text = re.sub(r"```mermaid\n.*?```\n\n?", "", text, flags=re.S)
     # GitHub needs ```math blocks (it would eat * and backslash escapes inside $$...$$);
     # Qollab's write-up renders $$...$$.

@@ -648,7 +648,7 @@ Notation: $`h(x) = -x\log_2 x - (1-x)\log_2(1-x)`$.
 - **F7. Asymmetric errors.** $`r = 1 - h(Q_Z) - h(Q_X)`$.
   - With real error correction, use $`f\,h(Q_Z)`$ with $`f \ge 1`$.
   - Source: Scarani 2009.
-- **F8. Qiskit Aer depolarising noise.** The channel is $`\mathcal{E}(\rho) = (1-\lambda)\,\rho + \lambda\,\operatorname{Tr}(\rho)\,I/2^n`$.
+- **F8. Qiskit Aer depolarising noise.** The channel is $`\mathcal{E}(\rho) = (1-\lambda)\,\rho + \lambda\,\mathrm{Tr}(\rho)\,I/2^n`$.
   - Applied *after* the Bell pair is prepared:
     - A two-qubit error gives $`v = 1 - \lambda`$.
     - One-qubit errors on each half give $`v = (1-\lambda_A)(1-\lambda_B)`$.

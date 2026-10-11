@@ -48,5 +48,14 @@ def test_writeup_converts_every_formula():
     for images in (True, False):
         out = mw.convert(readme, "v1.0-submission", images)
         assert OPEN not in out and CLOSE not in out and "```math" not in out
+        assert not out.startswith("# ")  # Qollab shows the project title above the write-up
         assert out.count("$$") == 2 * fences
         assert out.replace("$$", "").count("$") == 2 * inline
+
+
+def test_markdown_math_uses_github_safe_macros():
+    # GitHub's math renderer rejects \\operatorname ("The following macros are not allowed").
+    docs = sorted((ROOT / "docs").glob("*.md"))
+    paths = [ROOT / "README.md", *docs, ROOT / "results" / "a11y" / "README.md"]
+    for path in paths:
+        assert "\\operatorname" not in path.read_text(encoding="utf-8"), path.name
