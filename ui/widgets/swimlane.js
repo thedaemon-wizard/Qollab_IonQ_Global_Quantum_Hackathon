@@ -45,9 +45,9 @@ export function swimlane({ title, desc, lanes, steps, messages, caption }) {
     if (blocked(m)) {
       const y = ly(near(m)) + laneH / 2;
       const x = (y1 === y0 ? (x0 + x1) / 2 : x0 + ((x1 - x0) * (y - y0)) / (y1 - y0)) + 8;
-      svg.append(s('text', { x, y: y + 3.5, style: 'fill:var(--c4);font-size:10.5px' }, m.label));
+      svg.append(s('text', { x, y: y + 3.5, class: 'halo', style: 'fill:var(--c4);font-size:10.5px' }, m.label));
     } else {
-      svg.append(s('text', { x: (tx(m.t0) + tx(m.t1)) / 2 + 14, y: (y0 + y1) / 2 - 6, 'text-anchor': 'middle', style: 'fill:var(--c4);font-size:10.5px' }, m.label));
+      svg.append(s('text', { x: (tx(m.t0) + tx(m.t1)) / 2 + 14, y: (y0 + y1) / 2 - 6, 'text-anchor': 'middle', class: 'halo', style: 'fill:var(--c4);font-size:10.5px' }, m.label));
     }
   }
   for (const st of steps) {

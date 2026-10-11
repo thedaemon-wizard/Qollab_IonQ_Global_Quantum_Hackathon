@@ -40,6 +40,7 @@ export function flowDiagram(spec) {
     if (g.mark) svg.append(s('text', { x: g.x + g.w - 9, y: g.y + 18, 'text-anchor': 'end', style: `font-weight:700;font-size:12.5px;fill:${g.markTone || g.tone || 'var(--muted)'}` }, g.mark));
   }
   const byId = Object.fromEntries(spec.nodes.map((n) => [n.id, n]));
+  const edgeLabels = [];
   for (const e of spec.edges || []) {
     const a = anchor(byId[e.from], e.fromSide || 'right');
     const b = anchor(byId[e.to], e.toSide || 'left');
@@ -64,9 +65,10 @@ export function flowDiagram(spec) {
     if (e.label) {
       const lx = e.labelAt ? e.labelAt[0] : (a[0] + b[0]) / 2;
       const ly = e.labelAt ? e.labelAt[1] : (a[1] + b[1]) / 2 - 6;
-      svg.append(s('text', { x: lx, y: ly, 'text-anchor': 'middle', style: 'fill:var(--muted);font-size:11px' }, e.label));
+      edgeLabels.push(s('text', { x: lx, y: ly, 'text-anchor': 'middle', class: 'halo', style: 'fill:var(--muted);font-size:11px' }, e.label));
     }
   }
+  svg.append(...edgeLabels); // after every edge, so no later line crosses a label
   for (const n of spec.nodes) {
     const tone = n.tone || 'var(--accent)';
     const g = s('g', n.status ? { class: 'node', 'data-status': n.status } : null);

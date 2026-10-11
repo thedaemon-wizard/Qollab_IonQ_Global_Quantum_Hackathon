@@ -372,3 +372,5 @@ select { max-width: 100%; }
 .card.stale { border-style: dashed; border-color: var(--warn); }
 .stale-note { display: flex; gap: 0.4rem; align-items: center; color: var(--warn, var(--text)); font-weight: 600; margin: 0.2rem 0 0.4rem; }
 .stale-note svg { width: 1.1em; height: 1.1em; flex: none; }
+/* labels on lines: a halo in the card colour keeps a passing line from striking through them */
+.halo { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
