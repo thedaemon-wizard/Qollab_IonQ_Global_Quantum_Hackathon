@@ -12,6 +12,10 @@ from decimal import ROUND_HALF_UP, Decimal
 
 TAG = "[Bell-Test Lab]"
 
+# Purification keeps only some rounds; the device-independent certificates computed on them
+# assume that the keep/discard decision does not depend on the measurement settings.
+POST_SELECTED = " (post-selected; device-independent rungs assume a setting-independent herald)"
+
 # Certificates in the order of the ladder, with the report key that says whether each holds.
 CERTIFICATES = (
     ("bell_violation", "Bell violation"),
@@ -51,8 +55,10 @@ def run_summary(report: dict) -> str:
         f"S = {s['point']:.3f} ({level}% interval {s['low']:.3f} to {s['high']:.3f});",
         f"Q_Z = {_pct(qz['point'], 2)}, Q_X = {_pct(qx['point'], 2)}.",
     ]
+    holding = f"Holding at the conservative end: {', '.join(held) if held else 'none'}"
     if "purification" in report:
         p = report["purification"]
         parts.append(f"Kept {p['kept']} of {p['total']} rounds.")
-    parts.append(f"Holding at the conservative end: {', '.join(held) if held else 'none'}.")
+        holding += POST_SELECTED
+    parts.append(f"{holding}.")
     return " ".join(parts)

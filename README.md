@@ -1,6 +1,8 @@
 # Bell-Test Lab: one CHSH experiment, a ladder of certificates
 
-An entry for the **Qollab × IonQ Global Quantum Hackathon** — theme **Quantum Unlocked**.
+An entry for the **Qollab × IonQ Global Quantum Hackathon** — theme **Quantum Unlocked**, on a
+quantum-networking topic: entanglement-based and device-independent QKD, entanglement swapping
+and purification.
 
 Run a CHSH Bell test on any of Qollab's simulators — ideal, IBM noise models or IonQ noise
 models — and see **which claims the same counts support**: "this is not classical", an
@@ -9,7 +11,27 @@ self-test. Then add noise or an eavesdropper, stretch the link with entanglement
 try purification, and check the formulas against **open data from a loophole-free Bell test**
 and published device-independent QKD experiments.
 
-> Demo video (2:40, YouTube; one continuous take on Qollab's free built-in simulator, synthetic narration, English captions): https://youtu.be/6xn-xtrTqRE · Repository:
+## In one minute
+
+[Demo video (2:40)](https://youtu.be/6xn-xtrTqRE)
+
+- **What it is:** one CHSH run feeds a ladder of six certificates (Bell violation, entanglement
+  witness, BBM92 key, self-test, DI randomness, DI key), each with the assumption it needs and
+  each shown at its point estimate and at a conservative confidence end.
+- **On Qollab's built-in simulator** (5 % depolarizing, 10,000 shots per setting):
+  $`S = 2.708`$ [2.649, 2.767], and all six rungs hold at the conservative end for these simulated
+  counts (run console, [`results/qollab/video_take_20261011.json`](results/qollab/video_take_20261011.json)).
+- **On real data:** the open event files of the Munich loophole-free Bell test, read with the same
+  estimator, give $`S = 2.2213 \pm 0.0332`$ for the April 2016 run; the paper gives 2.221 ± 0.033.
+- **On IonQ noise models:** all six settings run as one packed 25-qubit circuit with a bit-order
+  canary, because Qollab allows one IonQ job per run; at the 200-shot default the DI-key bound
+  does not survive the conservative end (see Results).
+- **Run it on Qollab:** Code → **Run Project** → **Run** → pick a free simulator (*Built-in
+  simulator*) → **Run**; then start the guided tour.
+- The demo video is one continuous take on Qollab's free built-in simulator, with synthetic
+  narration and English captions.
+
+> Repository:
 > https://github.com/thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon
 
 ![The Bell Lab after one run: the protocol diagram with each stage's numbers, and the list of stages](docs/img/screen_lab.png)
@@ -23,7 +45,7 @@ different amount of evidence:
 | Claim | What it assumes about the devices | Threshold (Werner states) |
 |---|---|---|
 | Bell violation | nothing | $`S > 2`$ |
-| Entanglement witness | trusted, calibrated measurements | visibility $`v > 1/2`$ |
+| Entanglement witness, $`(\langle XX\rangle + \langle ZZ\rangle)/2`$ (two settings) | trusted, calibrated measurements | visibility $`v > 1/2`$ for this witness (the state itself is entangled for $`v > 1/3`$) |
 | BBM92 key (asymptotic) | trusted qubit measurements | QBER $`Q < 11.0\,\%`$ |
 | Self-test, non-trivial (Kaniewski 2016) | nothing; i.i.d. rounds | $`S > 2.106`$ |
 | DI randomness (Pironio et al. 2010) | nothing; i.i.d. rounds | $`S > 2`$ |
@@ -32,8 +54,8 @@ different amount of evidence:
 The lab makes this ladder visible. Every run shows each certificate twice: at the **point
 estimate**, and at the **conservative end** ($`S`$ at the lower end of its interval, error rates at
 the upper ends of theirs; each interval is at 97.5 %, so every claim holds at 95 %). With 10,000
-shots per setting most claims survive; with the 200 shots of an IonQ noise-model run, the
-device-independent key does not — finite statistics are part of the lesson, not a footnote.
+shots per setting most claims survive; at the IonQ profile's default of 200 shots per setting,
+the device-independent key does not — finite statistics are part of the lesson, not a footnote.
 
 **Terms used here.**
 
@@ -60,30 +82,34 @@ device-independent key does not — finite statistics are part of the lesson, no
 | **Certificates** | Key rate against QBER (BBM92 and DI), what $`S`$ alone certifies (min-entropy, von Neumann entropy, self-test bound), noise sweeps for each channel type, and a threshold table — with your latest run placed on the curves. |
 | **Real data** | The **Munich 2017 event-ready Bell test** (Rosenfeld et al., open event files) re-analysed with the same estimator; published DI-QKD experiments on the $`S`$–$`Q`$ plane against the DI-key boundary (plus one $`S`$-only result); a distance series (Lu et al. 2026) next to our recomputation. |
 | **Repeater** | 1–4 links joined by entanglement swapping (topology diagram, timeline of classical messages, link budget, $`S`$ and QBER against the number of links), and one round of BBPSSW/DEJMPS purification with post-selection. |
-| **Correlation space** | A three.js view of the CHSH correlation sets — no-signalling cube, local polytope, curved quantum boundary — with your run, the Munich runs and reference points; plus an exact 2D slice ($`\text{diamond} \subset \text{disc} \subset \text{square}`$) and a membership table for keyboard and screen-reader users. |
+| **Correlation space** | A three.js view of the CHSH correlation sets — no-signalling cube, local polytope, curved quantum boundary — with your run, the Munich runs and reference points; plus a 2D slice ($`\text{diamond} \subset \text{disc} \subset \text{square}`$; the diamond is exact for $`E_{11} = -E_{00}`$, the disc when also $`E_{01} = E_{10}`$, as for the lab's Werner settings) and a membership table for keyboard and screen-reader users. |
 | **Backends & circuits** | Every circuit of the run as a diagram with shaded protocol sections, or Qiskit's own text drawing; how the plan is laid out for the backend; transpiled depth and gate counts; a comparison of runs across backends. |
 | **Method & sources** | Formulas (MathML), finite-statistics method, limits, disclosure and references. |
 
-A **guided tour** (10 steps, keyboard: Enter/→ next, ← back, Esc close) runs the real circuits:
-a perfect pair, an entangled state without violation, an intercept-resend eavesdropper,
-realistic noise, the certificate curves, the Munich data, a two-link swap, the correlation
-space and the circuits.
+A **guided tour** (10 steps, keyboard: Enter/→ next, ← back, Esc close) covers a perfect pair,
+an entangled state without violation, an intercept-resend eavesdropper, realistic noise, the
+certificate curves, the Munich data, a two-link swap, the correlation space and the circuits.
+Five of the steps (the four Bell runs and the swap) run real Qiskit circuits on the chosen
+backend; on IonQ, where a Qollab run allows one job, the tour sets them up and leaves Run to you.
 
 ![Correlation space: the local polytope inside the quantum set, with the measured points](docs/img/screen_space.png)
 
 ## Run it
 
-**On Qollab.** Open the project, press **Run** and pick a simulator in the Run dialog:
-*Built-in simulator* or *AWS Braket local simulator* (ideal), any *IBM* noise model, or an
-*IonQ* noise model (Aria 1/2, Forte 1, Forte Enterprise 1). Then start the guided tour or
-open the Bell Lab. Notes:
+**On Qollab.** On the project's Code tab click **Run Project**, then **Run**; in **Select QPU**
+keep *Built-in simulator* or pick another free simulator — *AWS Braket local simulator*
+(ideal), any *IBM* noise model, or an *IonQ* noise model (Forte 1, Forte Enterprise 1, or
+Aria 1/2: IonQ has retired the Aria QPUs but keeps their noise models) — and click **Run**
+again. Then start the guided tour or open the Bell Lab. Notes:
 
 - Qollab allows **one IonQ job per project run**. On IonQ the lab packs all six settings into
   one 25-qubit circuit, submits it once, and then disables Run with an explanation; the tour
   only configures experiments there. Press Run in Qollab again for another IonQ experiment.
-- The lab **never submits to quantum hardware**: a QPU backend gets a refusal profile.
+- The lab is meant for Qollab's free simulators. A backend whose name or class contains `qpu`
+  (IonQ's hardware names and class do) gets a refusal profile and nothing is submitted; a
+  backend it does not recognise runs with a conservative default profile that the UI names.
 - Qollab's **run console** gets one line per result: the backend at start-up, the formula
-  self-check, then every run (S with its interval, Q_Z, Q_X and the certificates that hold),
+  self-check, then every run ($`S`$ with its interval, $`Q_Z`$, $`Q_X`$ and the certificates that hold),
   for example `[Bell-Test Lab] Bell Lab run on basic_simulator: 10000 shots per setting, …
   S = 2.708 (97.5% interval 2.649 to 2.767); Q_Z = 2.36%, Q_X = 2.47%. …`.
 - Exports (JSON, CSV, PNG) appear in the same console, from where they can be downloaded (the
@@ -104,6 +130,44 @@ a real simulator (`?backend=basic_simulator` or `?backend=fake_fez`); IonQ needs
 an executed notebook that calls the same `bellkit` package (one Bell run, the certificate
 ladder, a circuit, thresholds, a noise sweep, the swap chain, the Munich data and the packed
 IonQ layout). Rebuild it with `.venv/bin/python scripts/make_notebook.py`.
+
+## Who it is for and how to use it
+
+**Audience:** upper-undergraduate and graduate courses in quantum information or quantum
+networking, and engineers who need to tell device-independent claims from trusted-device ones.
+The topic is current: device-independent QKD was demonstrated in 2022 (Nadlinger et al., Zhang
+et al.) and over 100 km with single atoms in 2026 (Lu et al.); the Real data view sets these
+published results next to the lab's own formulas.
+
+**Learning objectives.** After a session a learner can
+
+1. name the assumptions behind each claim, from "not classical" to a device-independent key, and
+   say why the same counts support some claims and not others;
+2. explain why the number of shots decides the stronger claims, using the point estimate and the
+   conservative end;
+3. predict how link noise, an eavesdropper, entanglement swapping and purification change $`S`$
+   and the error rates of an entanglement-based (BBM92) or device-independent QKD link.
+
+**Three exercises** on the built-in simulator with the app's default seed. The answers come from
+the app's own code and are checked by `tests/test_exercises.py`
+(`.venv/bin/python -m pytest tests/test_exercises.py`).
+
+1. *Finite statistics in DI-QKD.* In the Bell Lab, choose depolarizing link noise and raise its
+   strength in 1 % steps. At which strength does the DI key first fail at the conservative end
+   with 10,000 shots per setting, and with 2,000? — **14 % and 10 %.** The asymptotic formula
+   alone turns negative between 14 % and 15 %, where $`Q = \lambda/2`$ passes 7.15 %.
+2. *An eavesdropper in BBM92.* Keep the default 5 % depolarizing noise and turn on the
+   eavesdropper at $`\varphi = 180^\circ`$. Which error rate reveals her? — **$`Q_X`$**: it rises
+   to 50.1 % while $`Q_Z`$ stays at 2.36 %, the value without her, and $`S = 1.355`$, so no
+   certificate holds. At this angle her controlled rotation copies the key-basis bit, which
+   leaves the Z basis intact and randomises the X basis.
+3. *Entanglement swapping and purification.* In the Repeater view, keep 5 % depolarizing noise per
+   link and run the chain with 1 to 4 links. Up to how many links does the DI key hold at the
+   conservative end, and the BBM92 key? — **The DI key holds for 1 and 2 links and fails at 3**
+   ($`Q_Z = 7.44\,\%`$); **BBM92 still holds at 4 links** (conservative rate 0.054), and $`S`$ stays
+   above 2 at the conservative end throughout. Then run one DEJMPS purification round at the
+   same noise: 57,107 of 60,000 rounds are kept and $`Q_Z`$ is 0.03 %, against 2.36 % for the
+   unpurified Bell Lab run (its device-independent rungs assume a setting-independent herald).
 
 ## How it works
 
@@ -126,6 +190,10 @@ flowchart LR
   (10,000 shots, one circuit per setting), IBM noise models (2,000 shots, transpiled to the
   device), Braket (2,000 shots, plain gate basis), IonQ (200 shots, **one packed circuit**),
   quantum hardware (refused), anything else (a conservative default, named in the UI).
+  IonQ defaults to 200 shots because its noise-model simulation runs one simulation per shot
+  ([IonQ docs](https://docs.ionq.com/features/simulation-with-noise-models)): a 200-shot packed
+  job took 22.8–26.9 s on Qollab (the `seconds` field in `results/qollab/*ionq*.json`). The Bell
+  Lab's *Shots per setting* field accepts 100–100,000 on every backend.
 - **On Qollab, the IonQ simulator accepts one circuit per job** (a job with several circuits
   was rejected when we tested it), so every setting gets its own qubits and classical register in a
   single circuit; the counts keys come back space-separated, last register first. Each job also
@@ -135,7 +203,10 @@ flowchart LR
   measurements are deferred to the end and Bob's bit is corrected in software (a **Pauli
   frame**: his Z-basis bit is flipped by the parity of the repeaters' CNOT-target bits, his
   X-basis bit by the parity of their control bits). Purification keeps a round only when the measured second pair agrees
-  (post-selection), and reports the measured success probability.
+  (post-selection), and reports the measured success probability. On these post-selected rounds
+  the device-independent rungs (Bell violation, self-test, DI randomness, DI key) are conditional:
+  they assume the keep/discard decision (the herald) does not depend on the measurement settings,
+  and the ladder and the console line say so.
 
 ### The physics, briefly
 
@@ -157,8 +228,11 @@ r_\text{BBM92}=1-h(Q_Z)-h(Q_X),\qquad r_\text{DI}=1-h(Q)-h\!\left(\tfrac{1+\sqrt
 ```
 
 ```math
-H_\text{min}\ge 1-\log_2\!\left(1+\sqrt{2-S^2/4}\right),\qquad F\ge\tfrac12+\tfrac12\,\frac{S-\beta^{\ast}}{2\sqrt2-\beta^{\ast}},\ \ \beta^{\ast}=\tfrac{16+14\sqrt2}{17}.
+H_\text{min}\ge 1-\log_2\!\left(1+\sqrt{2-S^2/4}\right),\qquad F_\text{ext}\ge\tfrac12+\tfrac12\,\frac{S-\beta^{\ast}}{2\sqrt2-\beta^{\ast}},\ \ \beta^{\ast}=\tfrac{16+14\sqrt2}{17}.
 ```
+
+$`F_\text{ext}`$ is Kaniewski's singlet extractability (the largest fidelity with a singlet that local
+channels can reach from the state), not the fidelity of the physical state.
 
 $`S`$ gets a two-sided **Hoeffding** interval and the error rates **Wilson** intervals, with the
 risk $`\delta = 0.05`$ split equally between them. A vector of correlators (all $`\lvert E_{xy}\rvert \le 1`$) is
@@ -173,9 +247,11 @@ All runs below were made through this app — on Qollab, except the local refere
 captured counts by `scripts/record_runs.py`, with the same code the app runs). The counts were
 captured on 2026-10-10 between 00:40 and 03:54 UTC; the circuits and the decoding have not changed
 since (later commits changed run gating, input validation and the canary threshold, which every
-captured run passes: canary fraction 0.9725 on IBM Fez and 1 elsewhere, threshold 0.75).
+captured run passes: canary fraction 0.9725 on IBM Fez and 1 elsewhere, threshold 0.75). The
+saved Qollab runs (`results/qollab/`) also ship in the Qollab project, so judges can check them
+there.
 
-![S on each simulator, with intervals and the exact prediction](docs/img/backends.png)
+![S on each simulator, with intervals and the exact prediction; unequal shots per setting: 10,000 (local ideal), 2,000 (Braket, IBM Fez), 200 (IonQ)](docs/img/backends.png)
 
 | Backend (Qollab) | Experiment | Shots / setting | $`S`$ [97.5 % interval] | Exact prediction | $`Q_Z`$ | DI key rate, point → conservative |
 |---|---|---:|---|---:|---:|---|
@@ -205,10 +281,10 @@ What the table shows:
   channel-only prediction. Within one backend the swap loses more than the Bell test (IBM Fez:
   0.29 against 0.13), since its circuits have more two-qubit gates; the 200-shot IonQ gaps are
   within their intervals.
-- **Finite statistics decide the stronger claims.** With 200 shots per setting (IonQ) the
-  interval on $`S`$ is about ±0.42. The Aria 1 and Forte 1 runs keep $`S`$ above 2 at the conservative
-  end, but the asymptotic DI-key bound turns negative there; the Forte Enterprise 1 run shows a
-  Bell violation only at its point estimate ($`S = 2.320`$, lower end 1.901). One 200-shot run per
+- **Finite statistics decide the stronger claims.** At the IonQ default of 200 shots per setting
+  the interval on $`S`$ is about ±0.42. The Aria 1 and Forte 1 runs keep $`S`$ above 2 at the conservative
+  end, but the asymptotic DI-key bound turns negative there; the Forte Enterprise 1 run has
+  $`S`$ above 2 only at its point estimate ($`S = 2.320`$, lower end 1.901). One 200-shot run per
   model cannot rank the models: its $`S`$ differs from the Forte 1 run's by 0.25, about 1.6 combined
   standard errors. With 2,000–10,000 shots the DI-key bound for the same experiment stays
   positive at the conservative end. (These are simulated counts; see Limits.)
@@ -225,8 +301,10 @@ The open event files of Rosenfeld et al. (Phys. Rev. Lett. 119, 010402, 2017; Ze
 doi:10.5281/zenodo.22936124, CC BY 4.0) list every valid atom–atom event. Mapped onto this
 lab's CHSH form, the first 5,000 events per heralded state give **$`S = 2.2213 \pm 0.0332`$** for
 the 15 April 2016 run, the paper's 2.221 ± 0.033, and match the paper's published count tables
-(Supplement Tables S8 and S10; one cell is kept as a regression test). The public 14 June 2016 run gives 2.0957 ± 0.0340. Under this lab's conservative
-i.i.d. Hoeffding bound the April run clears 2 ($`S \ge 2.113`$) and the June run does not
+(Supplement Tables S8 and S10; one cell is kept as a regression test). The ± values are i.i.d.
+standard errors, as in the paper. The public 14 June 2016 run gives 2.0957 ± 0.0340. Under this
+lab's conservative i.i.d. Hoeffding bound at 95 % (all of $`\delta = 0.05`$ on $`S`$, since these
+data give no error rate) the April run clears 2 ($`S \ge 2.113`$) and the June run does not
 ($`S \ge 1.987`$) — the paper's own tests do not assume i.i.d. trials, so this is our reading, not a
 contradiction. The data have no key-basis pair, so only CHSH-based certificates apply.
 
@@ -236,8 +314,8 @@ contradiction. The data have no key-basis pair, so only CHSH-based certificates 
 
 Quoted $`S`$ and $`Q`$ from Nadlinger 2022, Zhang 2022 and Liu 2026 (10 km and 101 km) are evaluated
 with the same asymptotic bounds, at the central values and at the corner $`(S - \sigma, Q + \sigma)`$;
-Meiers 2026 (a preprint that makes no device-independent claim) reports $`S`$ only and is listed
-without a rate. For Liu 2026 at 101 km the rate is 0.087 at the centre and −0.038 at that
+Meiers 2026 (a preprint that makes no device-independent key-generation claim, since its time
+window was optimised on the same data) reports $`S`$ only and is listed without a rate. For Liu 2026 at 101 km the rate is 0.087 at the centre and −0.038 at that
 corner. For Lu et al. 2026 (Science 391, 592), our $`(1 - \gamma)\,r_\text{DI}`$ with
 $`\gamma = 10^{-3}`$ is 0.0008–0.0015 above every deposited Fig. 5C value; the paper does not print
 its exact formula, so the lab reports the difference rather than claiming a reproduction.
@@ -262,12 +340,14 @@ its exact formula, so the lab reports the difference rather than claiming a repr
 
 ## Accessibility
 
-The terms ask for UI accessibility best practice, so it was tested, not assumed
-([results/a11y/](results/a11y/README.md)):
+The terms ask for UI accessibility best practice, so it was tested, not assumed. The
+automated results below hold in the states listed in
+[results/a11y/README.md](results/a11y/README.md) (which views, after which runs, at which
+widths); other reachable states were not all measured.
 
 - **Automated**: axe-core 4.14.0 (WCAG 2.0–2.2 A/AA and best practice) reports 0 violations on all
-  8 views in the dark and the light scheme; Lighthouse accessibility score 100 in both (re-run
-  on 2026-10-11, after the formula change).
+  8 views in the dark and the light scheme in those states; Lighthouse (snapshot of the Bell Lab
+  after a run) scores accessibility 100 in both schemes. Dates and files are in the record.
 - **Keyboard**: skip link, visible focus, every control reachable; the guided tour works with
   Enter/→/←/Esc and keeps focus while a step runs; the 3D view turns with buttons; sideways
   scroll boxes are focusable.
@@ -295,9 +375,9 @@ The terms ask for UI accessibility best practice, so it was tested, not assumed
 - **WebGPU** is not exposed inside the project frame, so the 3D view uses WebGL 2 (D10);
   **JupyterLite and PyVista/VTK.wasm** cannot run under the frame's sandbox and file limits
   (D2, D3). **Downloads** from the frame are blocked, so exports go to Qollab's run console.
-- **200 shots per setting** (IonQ) are too few for the DI-key bound to survive at the
-  conservative end, and on the Forte Enterprise 1 model even the Bell violation did not: the
-  IonQ runs here illustrate finite statistics, not a device-independent key.
+- **At the default 200 shots per setting** (IonQ) the DI-key bound did not survive at the
+  conservative end, and on the Forte Enterprise 1 model $`S`$ was above 2 only at its point
+  estimate: the IonQ runs here illustrate finite statistics, not a device-independent key.
 
 ## Limits — what this lab does not claim
 
@@ -316,12 +396,22 @@ The terms ask for UI accessibility best practice, so it was tested, not assumed
 ## Prior work and what is new here
 
 CHSH simulations, entanglement swapping and DI-QKD rate formulas exist in several public
-repositories (some are listed in [docs/references.md](docs/references.md) §7), and Qollab hosts
-teleportation and entanglement examples. This lab's contribution is the **teaching design**:
-one estimator feeding a ladder of certificates with explicit assumptions; point and
-conservative values side by side; the same code applied to open experimental data and to
-published experiments; the IonQ one-job constraint handled by a packed, self-checking circuit;
-and an accessible interface (keyboard tour, text alternatives for every chart and the 3D view).
+repositories (some are listed in [docs/references.md](docs/references.md) §7), Qollab hosts
+teleportation and entanglement examples, and several public Qollab entries built during this
+hackathon also use CHSH or QKD. This lab's contribution is the **teaching design**:
+
+- **One estimator, six certificates.** The same counts feed six assumption-labelled certificates
+  (Bell violation, entanglement witness, BBM92 key, self-test, DI randomness, DI key), each at
+  its point estimate and at a conservative confidence end.
+- **Open experimental data.** The same estimator re-analyses the open event files of the Munich
+  loophole-free Bell test and gives $`S = 2.2213 \pm 0.0332`$ for the April 2016 run, against the
+  published 2.221 ± 0.033, and matches the paper's count tables (Supplement Tables S8 and S10).
+- **Published DI-QKD experiments** (Nadlinger 2022, Zhang 2022, Liu 2026) are placed on the
+  $`S`$–$`Q`$ plane against the same DI-key boundary, with a recomputation of the Lu et al. 2026
+  distance series.
+
+The lab also handles the IonQ one-job constraint with a packed, self-checking circuit and has an
+accessible interface (keyboard tour, text alternatives for every chart and the 3D view).
 In the terms' categories, it is meant as "an original analytical or educational contribution"
 (a new way of showing what one Bell test can and cannot certify) and "a technical extension"
 (comparative benchmarking across ideal, IBM and IonQ noise-model simulators, with finite
@@ -357,12 +447,12 @@ declaration, the local harness's response shim, and the link and math conversion
 | `ui/`, `index.html`, `main.js`, `main.css` | The interface: core (router, state machine, tour, API bridge, icons), widgets (charts, gauge, circuit and flow diagrams, 3D), eight views |
 | `config/defaults.json` | All defaults and run profiles |
 | `data/` | Munich event files (CC BY 4.0, with NOTICE), published values, recorded runs |
-| `tests/` | Unit, exact-distribution, golden-value and conformance tests |
+| `tests/` | Unit, exact-distribution, golden-value and conformance tests, and the answers to the exercises above |
 | `scripts/` | Upload bundle, recorded-run rebuild, README figures, write-up and notebook builders |
 | `notebooks/` | Executed walkthrough notebook (repository only) |
 | `tools/` | Local harness, icon vendoring, screenshots, environment check |
 | `docs/` | References and fact-check notes, design decisions, diagrams and figures |
-| `results/` | Captured runs from Qollab and locally, environment check |
+| `results/` | Captured runs from Qollab and locally, accessibility records, environment check; the saved Qollab runs (`results/qollab/*.json`) also ship in the Qollab project so judges can check them |
 
 ## Pre-window material
 
@@ -370,8 +460,8 @@ The build window ran from 2026-10-10 08:00 JST (2026-10-09 23:00 UTC) to 2026-10
 The following existed before it and is disclosed here, as the hackathon terms require.
 Everything else was written during the window. The annotated tag `pre-window` marks the
 boundary, so `git diff pre-window HEAD` (or `git log --stat pre-window..HEAD`) shows exactly
-what was added; GitHub's event log for this repository records the first push of `main`, with
-the pre-window commits, at 2026-10-09 10:44 UTC. Commits made in the window are batched
+what was added. As a disclosure (commit times are set by the author, so this is not proof): the
+tag points to commit `6b56cf4`, dated 2026-10-09 10:44 UTC. Commits made in the window are batched
 snapshots rather than one commit per change; `e93f76a` ("Apply pre-window audit fixes",
 08:56 JST) is in-window corrections to the pre-window text.
 
@@ -383,7 +473,7 @@ snapshots rather than one commit per change; `e93f76a` ("Apply pre-window audit 
 | `docs/references.md` | Literature and software fact-check notes (corrected during the window) |
 | `docs/decisions.md` | Design decisions taken before the window, with the evidence behind them (extended during the window) |
 | A README skeleton and idea summary | Project plan |
-| A throwaway Qollab test project (private draft, 2026-10-09 23:15–23:40 JST; not this entry) | Checked what Qollab's JavaScript runtime allows: static imports, `sendFile`, downloads, three.js and WebGL, and that an IonQ job with several circuits is rejected (see D4). Its probe code is not in this repository and none of it is reused; it was reused once in the window for a WebGPU check (D10). |
+| A throwaway Qollab test project (private draft, 2026-10-09 23:15–23:40 JST; not this entry) | Checked what Qollab's JavaScript runtime allows: static imports, `sendFile`, downloads, three.js and WebGL, and that an IonQ job with several circuits is rejected (see D4). Its probe code is not in this repository and none of it is reused. The test project itself (not its code) was used once more in the window for the WebGPU check (D10). |
 | Private design plan (not in this repository): views, module layout, physics model and test plan | Planning notes prepared with generative-AI assistance; no project code |
 
 ## Use of AI

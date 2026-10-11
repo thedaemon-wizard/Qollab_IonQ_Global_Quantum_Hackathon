@@ -13,7 +13,7 @@ HIGH findings survived. Three reported findings were refuted and are not listed.
 | 4 | MEDIUM | runtime | Guided tour's runAndFinish can hang, block the tour, or report numbers from an earlier run | `ui/views/lab.js`:317 | Fixed: the tour waits for done or error, reports only the run it started, and says so when the run fails. |
 | 5 | MEDIUM | runtime | Tour on one-job (IonQ/unknown) profiles shows results from a different experiment and an impossible repeater setup | `ui/views/tour_steps.js`:138 | Fixed: on one-job profiles the tour configures a two-link swap without added noise (25 qubits) and leaves the single job to the user. |
 | 6 | MEDIUM | runtime | Shots and seed are not validated; bad values give misleading errors and spend the IonQ job | `ui/views/lab.js`:51 | Fixed: shots (100–100,000, whole number) and seed (whole number ≥ 0) are validated before anything is submitted; such errors do not use up the IonQ job. |
-| 7 | MEDIUM | claims | Simulated runs are said to 'certify a DI key' and to confirm a Bell violation, which the repo's own limits rule out | `README.md`:163 | Fixed: README now says the asymptotic DI-key bound stays positive or turns negative at the conservative end, for simulated counts. |
+| 7 | MEDIUM | claims | Simulated runs are said to 'certify a DI key' and to confirm a Bell violation, which the repo's own limits rule out | `README.md`:163 | Fixed: README now says the asymptotic DI-key bound stays positive or turns negative at the conservative end, for simulated counts. The final audit (Round 5) found the app still used the old wording; its strings were changed too ("DI-key bound positive at the conservative end", "S above 2 at the conservative end (simulated counts)"), and `docs/references.md` §10 now says the rung names label formulas evaluated on simulated counts. |
 | 8 | MEDIUM | claims | The built-in simulator row claims a Qollab run that the repo does not contain | `README.md`:147 | Fixed: the row is labelled as the local reference run. |
 | 9 | MEDIUM | claims | Pauli-frame description swaps the X and Z corrections | `README.md`:110 | Fixed: README describes the frame as in the code (Z-basis bit: parity of the CNOT-target bits; X-basis bit: parity of the control bits). |
 | 10 | MEDIUM | claims | All README images point to a tag, v1.0-submission, that does not exist | `README.md`:15 | Fixed: README uses relative image paths; `scripts/make_writeup.py` produces the Qollab write-up with absolute URLs at the submission tag. |
@@ -28,7 +28,7 @@ HIGH findings survived. Three reported findings were refuted and are not listed.
 | 19 | LOW | runtime | Confidence levels on the error-rate and $`S`$ intervals are mislabelled | `ui/views/lab.js`:193 | Same as the interval-label findings above. |
 | 20 | LOW | runtime | 'allows undefined' size note on the refused (QPU) profile | `ui/views/common.js`:72 | Fixed: a refused (QPU) profile shows its refusal instead of a qubit limit. |
 | 21 | LOW | runtime | Reset leaves the old error and the old report in place, and exports then disagree | `ui/views/lab.js`:284 | Fixed: Reset clears the error message and the last report, so exports are empty again. |
-| 22 | LOW | runtime | Run markers outside the axis range disappear while their legend entries stay | `ui/views/certificates.js`:215 | Fixed: markers outside the axes are pinned to the edge and drawn hollow. |
+| 22 | LOW | runtime | Run markers outside the axis range disappear while their legend entries stay | `ui/views/certificates.js`:215 | Fixed: markers outside the axes are pinned to the edge and drawn hollow. Changed in Round 5: a pinned marker gets a small arrow instead, so hollow means only the conservative end. |
 | 23 | LOW | runtime | Noise-strength slider in the Certificates noise sweep has no effect | `ui/views/certificates.js`:171 | Fixed: the noise sweep shows only the noise-type selector (the sweep covers every strength). |
 | 24 | LOW | runtime | 3D view leaks GPU buffers on every Bell run | `ui/widgets/corrset3d.js`:289 | Fixed: geometries and materials are disposed when the 3D points or surfaces are rebuilt. |
 | 25 | LOW | claims | The $`S`$ interval is labelled 95 % but is computed as a 97.5 % Hoeffding interval | `ui/widgets/gauge.js`:47 | Same as the interval-label findings above. |
@@ -59,11 +59,11 @@ correctness, R = rules, A = accessibility, D = documentation.
 | # | Severity | Finding | What was done |
 |---|---|---|---|
 | R1 | HIGH | Demo video not linked yet | Fixed: unlisted YouTube video linked in the README and write-up (opens without sign-in). |
-| R2 | HIGH | Repository private; the write-up links a tag that does not exist yet | Open until submission: tag `v1.0-submission`, make the repository public, regenerate the write-up with images, check every link signed out. |
+| R2 | HIGH | Repository private; the write-up links a tag that does not exist yet | Closed with the submission: tag `v1.0-submission`, repository public, write-up rebuilt with its images. |
 | A1 | HIGH | Tour box cut off at 400 % zoom (Reflow) | Fixed: box limited to the viewport and scrolls inside; checked at 320 × 256 px. |
 | A2 | HIGH | Input borders 1.5:1 (non-text contrast) | Fixed: separate control-border colour, 3.4–4.0:1. |
 | R3 | MEDIUM | Pre-window throwaway test project on Qollab not disclosed | Fixed: listed in "Pre-window material" (date, what it established, nothing reused). |
-| R4 | MEDIUM | In-window commit times could look like pre-window coding | Fixed: window start in JST and UTC, GitHub event time of the pre-window push, commits described as batched snapshots, D9 dated "during the window". |
+| R4 | MEDIUM | In-window commit times could look like pre-window coding | Fixed: window start in JST and UTC, the pre-window tag and its commit time (given as a disclosure, since commit times are set by the author), commits described as batched snapshots, D9 dated "during the window". |
 | R5 | MEDIUM | No accessibility statement in the write-up | Fixed: "Accessibility" section with the measured results. |
 | R6 | MEDIUM | CC BY notice lacked the Zenodo record title and its copyright line | Fixed in `NOTICE.md` and `THIRD_PARTY_NOTICES.md` (checked against the Zenodo record). |
 | R7 | MEDIUM | Recorded IonQ runs predate the final code | Checked: circuits and decoding unchanged since the captures; noted in Results; a new IonQ Forte Enterprise 1 run was made with the final upload. |
@@ -80,7 +80,7 @@ correctness, R = rules, A = accessibility, D = documentation.
 | D1 | MEDIUM | Jargon used before it is defined | Fixed: glossary in the README and in the Method view; QBER spelled out in the UI. |
 | D2 | MEDIUM | Write-up links point to a tag that does not exist | Same as R2. |
 | D3 | MEDIUM | LaTeX in the write-up may not render on Qollab | Checked on Qollab's preview: 21 formulas, no errors (2026-10-10). Checked again after the formula change (2026-10-11): the pasted write-up shows 75 KaTeX formulas (3 display), no KaTeX error; after the evening update, 76, no error. |
-| C6 | LOW | Two dates for the throwaway test project | Fixed: reused once in the window for the WebGPU check (D10). |
+| C6 | LOW | Two dates for the throwaway test project | Fixed: the test project itself (not its code) was used once more in the window for the WebGPU check (D10). |
 | C7 | LOW | No capture for the built-in simulator on Qollab | Fixed: the built-in run on Qollab gives the same seed and counts as the local reference row ($`S = 2.708`$), now stated. |
 | C8 | LOW | Write-up script edge cases (CRLF, scheme links, missing marker) | Fixed: CRLF normalised, links with a scheme, `//` or `#` left alone, error when the marker is missing. |
 | C9 | LOW | Every notebook rebuild changes cell ids and timestamps | Fixed: stable ids, execution timestamps removed. |
@@ -95,7 +95,7 @@ correctness, R = rules, A = accessibility, D = documentation.
 | R12 | LOW | The "beyond tutorial" category is not named | Fixed: named in "Prior work and what is new here". |
 | R13 | LOW | Uploaded README links break in Qollab's file view | Not changed: the Project Card uses the converted write-up with absolute links. |
 | R14 | LOW | No "What didn't work" section | Fixed: added. |
-| R15 | LOW | Tag time is self-asserted | Fixed: GitHub's event time of the first push cited. |
+| R15 | LOW | Tag time is self-asserted | Disclosed as such: the README gives the tagged commit and its time as a disclosure, not as proof (the event-log sentence was dropped in Round 5, since judges cannot check it once the repository is public). |
 | A8 | LOW | `<pre>` with a name but no role | Fixed: `role="region"`. |
 | A9 | LOW | Live regions unreliable; current stage not exposed | Partly fixed: `aria-current="step"` on the active stage; the busy indicator is unchanged. |
 | A10 | LOW | Two bar pairs and two gauge zones differ by colour only | Not changed: the bars are labelled by position and listed in the counts table; the gauge zones are labelled by their tick values. |
@@ -118,7 +118,7 @@ reviewer re-checked each finding before it was fixed.
 |---|---|---|---|
 | V1 | HIGH | Video: "your run lies between the two" over a plot whose "your run" was the eavesdropped run, inside the local square | A run without Eve (S ≈ 2.7) is made before the correlation-space shot |
 | V2 | MEDIUM | Video: the two-link swap was credited to the IonQ Aria noise model while the screen showed other runs | The shot sets link noise to none, where the recorded IonQ Aria 1 run (S = 2.520) and its note show |
-| V3 | MEDIUM | Repeater: "a job is already running" appeared for the view's own job, and the video cut before the purification result | The view tracks its own job (local busy flag); the status keeps the run's result. Checked on Qollab with the IonQ Aria 1 noise model on 2026-10-11: the chain status kept "Done in 22.887 s" (S = 2.590, conservative 2.171) and only the other control showed the one-job notice |
+| V3 | MEDIUM | Repeater: "a job is already running" appeared for the view's own job, and the video cut before the purification result | The view tracks its own job (local busy flag); the status keeps the run's result. Checked on Qollab with the IonQ Aria 1 noise model on 2026-10-11: the chain status kept "Done in 22.887 s" (S = 2.590, conservative 2.171; values read off the screen, not exported, so this run is not in `results/`) and only the other control showed the one-job notice |
 | M1 | MEDIUM | "The two entries share no code" no longer held (same small Temml helper and font declaration) | Disclosed in the README |
 | M2 | MEDIUM | Unicode fallback printed `bigl`/`bigr` in the DI-key formula | Mapped; spacing after control words and `^\circ` fixed too; a render that throws falls back |
 | M3 | MEDIUM | Upload bundle README linked the old video | Bundles rebuilt from HEAD before upload |
@@ -160,3 +160,21 @@ run console at the end, which names the simulator and prints a line per result. 
 placed where each step happened in the take; nothing is cut. Checks of the finished file: no
 decode errors, constant 30 fps, loudness about −16.8 LUFS, and real-time playback in Chrome with
 no stall and no dropped frame. The runs it shows are in `results/qollab/video_take_20261011.json`.
+
+## Round 5 (2026-10-11 evening): final audit before submission
+
+A final audit of the submission (rules, claims, references, write-up, interface), each finding
+re-checked by a second reviewer. The interface fixes and their checks are listed in
+[results/a11y/README.md](../results/a11y/README.md) ("Fifth check"). Documentation, wording and
+test changes:
+
+| ID | Severity | Finding | Resolution |
+|---|---|---|---|
+| T1 | MEDIUM | The upload-limits test forbade every file under `results/`, but the saved Qollab runs now ship in the bundle so judges can check them | The test allows exactly `results/qollab/*.json` and still forbids the other results, tests, scripts, tools and docs; the README says the saved runs ship |
+| BELL-02 | MEDIUM | Certificate vocabulary for simulated runs differed between the app and `references.md` §10 | See item 7 above |
+| BELL-03 | MEDIUM | Device-independent rungs on post-selected (purified) rounds were shown without their extra assumption | The README states that they assume a setting-independent herald; the ladder and the console line say so |
+| BELL-04 | MEDIUM | No reason given for the IonQ default of 200 shots; the backend figure mixed shot counts without saying so | Reason in the README and D4 (shot-aware noise-model simulation, 22.8–26.9 s per packed job on Qollab); the shots field's range stated; the figure labels each run's shots |
+| J7–J9 | MEDIUM | Headline results far down the write-up; audience and exercises missing; what is new buried in one paragraph | "In one minute" block with the demo video (the write-up converter turns a YouTube link on its own line into Qollab's embedded player); "Who it is for and how to use it" with three exercises whose answers `tests/test_exercises.py` checks; three bullets in "Prior work and what is new here" |
+| — | LOW | Claims and references | Witness threshold scoped to the two-setting witness; Kaniewski symbol $`F_\text{ext}`$ defined; confidence level of the Munich lower ends; Meiers 2026 wording; Werner state with $`\lvert\Phi^+\rangle`$; Designolle 0.69604; QPU refusal described as a name and class match (README, Overview and Method view); tour steps that run circuits; the 2D slice caption (the disc is exact only when also $`E_{01} = E_{10}`$); the tour's correlation-space step qualified for the June Munich run; Munich distance 398 m; Aria QPUs retired; entries for Storz 2023, Kulikov 2026, Hensen 2016, BBPSSW, DEJMPS, Hoeffding and Wilson; DOIs for five supporting sources; prior-art re-check dated 2026-10-11; D13 (considered and not built) |
+
+At the last count before tagging, 322 tests pass.

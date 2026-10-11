@@ -1,4 +1,4 @@
-# References and fact-check notes (checked 2026-10-09; updated 2026-10-10)
+# References and fact-check notes (checked 2026-10-09; updated 2026-10-11)
 
 **How to read this.** Each entry has a label for its kind of source:
 
@@ -41,7 +41,7 @@ Conventions: outcomes are $`\pm 1`$, $`E_{xy} = \langle A_x B_y\rangle`$, and $`
 
 - **Werner 1989.** R. F. Werner, "Quantum states with Einstein-Podolsky-Rosen correlations admitting a hidden-variable model", *Phys. Rev. A* 40, 4277–4281 (1989). https://doi.org/10.1103/PhysRevA.40.4277. *Theory.*
   - **What it shows:** entangled states can still have local hidden-variable models, so entanglement is not the same as Bell nonlocality.
-  - For two qubits the relevant family is $`\rho_v = v\,\lvert\psi^-\rangle\langle\psi^-\rvert + (1-v)\,I/4`$.
+  - For two qubits the relevant family is $`\rho_v = v\,\lvert\psi^-\rangle\langle\psi^-\rvert + (1-v)\,I/4`$. This lab uses the same family with $`\lvert\Phi^+\rangle`$ (F3); with $`\lvert\psi^-\rangle`$ the QBERs of F3 hold after Bob flips his bit.
   - The original model covers projective measurements up to $`v = 1/2`$. This value comes from Hirsch 2017, not from reading Werner's text.
   - **Caveat:** the $`S`$ and QBER formulas in F3 are standard derivations. They are not stated in this paper.
   - **Read:** abstract only (paywall).
@@ -55,7 +55,7 @@ Conventions: outcomes are $`\pm 1`$, $`E_{xy} = \langle A_x B_y\rangle`$, and $`
     - Gives local models up to $`v \approx 0.6829`$ for projective measurements and $`v \approx 0.4553`$ for general measurements (POVMs). Both values have since been improved by the next two papers.
     - Read: arXiv v4.
   - **Designolle 2023.** S. Designolle et al., *Phys. Rev. Research* 5, 043059 (2023). https://doi.org/10.1103/PhysRevResearch.5.043059 · [arXiv:2302.04721](https://arxiv.org/abs/2302.04721).
-    - For projective measurements: local for $`v \le 0.6875`$ and nonlocal for $`v \ge 0.6961`$. The nonlocality uses a Bell inequality with many settings, not CHSH.
+    - For projective measurements: local for $`v \le 0.6875`$ and nonlocal for $`v \ge 0.6961`$ (0.69604 in the 2026 follow-up below). The nonlocality uses a Bell inequality with many settings, not CHSH.
     - Bounds on the Grothendieck constant: $`1.4367 \le K_G(3) \le 1.4546`$.
     - The follow-up S. Designolle, T. Vértesi, S. Pokutta, *Phys. Rev. A* 113, 022401 (2026), https://doi.org/10.1103/m5mn-c5dx · arXiv:2409.03739 (v4), lowers the upper threshold to about 0.69604.
     - Read: APS abstract and arXiv HTML. arXiv v4 (2026-10-05) adds an erratum on the multipartite results and a lemma; the two-qubit bounds 0.6875/0.6961 and $`1.4367 \le K_G(3) \le 1.4546`$ used here are unchanged (checked 2026-10-10).
@@ -104,9 +104,9 @@ Conventions: outcomes are $`\pm 1`$, $`E_{xy} = \langle A_x B_y\rangle`$, and $`
   - **Caveat:** the BB84 worst case is phase-covariant cloning, not depolarising noise. The two give the same rate only because $`\varepsilon_y`$ is not monitored.
   - **Read:** arXiv v3, App. A.
 
-### Loophole-free Bell tests (2015–2017)
+### Loophole-free Bell tests (2015–2023)
 
-These experiments closed the detection and locality loopholes together. They still assume free setting choices and that recorded outcomes are final.
+These experiments closed the detection and locality loopholes together. They still assume free setting choices and that recorded outcomes are final (Kulikov 2026, §4, drops the assumption of perfect randomness: it starts from imperfect randomness from a physical source and amplifies it).
 
 - **Hensen 2015.** B. Hensen et al., *Nature* 526, 682–686 (2015). https://doi.org/10.1038/nature15759 · [arXiv:1508.05949](https://arxiv.org/abs/1508.05949). *Experiment.*
   - **What it shows:** NV-centre spins 1280 m apart, heralded by entanglement swapping.
@@ -116,6 +116,7 @@ These experiments closed the detection and locality loopholes together. They sti
     - $`p = 0.019`$ in the conventional analysis and $`p \le 0.039`$ in the complete analysis. The latter is about $`1.76\sigma`$ one-sided, which is modest.
     - Heralding succeeded about $`6.4 \times 10^{-9}`$ per attempt.
   - **Read:** arXiv, and the published abstract via PubMed.
+  - **Follow-up (Hensen 2016).** B. Hensen et al., "Loophole-free Bell test using electron spins in diamond: second experiment and additional analysis", *Sci. Rep.* 6, 30289 (2016). https://doi.org/10.1038/srep30289. A second run gives $`S = 2.35 \pm 0.18`$; combined with the first, $`S = 2.38 \pm 0.14`$. Read: Crossref record and abstract (2026-10-11).
 
 - **Giustina 2015.** M. Giustina et al., *PRL* 115, 250401 (2015). https://doi.org/10.1103/PhysRevLett.115.250401 · [arXiv:1511.03190](https://arxiv.org/abs/1511.03190). *Experiment.*
   - **What it shows:** a photonic test of the CH–Eberhard inequality ($`J \le 0`$) with stations about 58 m apart.
@@ -149,6 +150,10 @@ These experiments closed the detection and locality loopholes together. They sti
     - Lab 1 and lab 2 correspond to Alice and Bob only by convention.
     - For in-browser fetches, only the Zenodo API content URL sends an `Access-Control-Allow-Origin` header; the `?download=1` URL does not (checked 2026-10-09).
   - **Read:** arXiv v2 (main text and supplement) and the Zenodo record (README and both data files).
+
+- **Storz 2023.** S. Storz et al., "Loophole-free Bell inequality violation with superconducting circuits", *Nature* 617, 265–270 (2023). https://doi.org/10.1038/s41586-023-05885-0. *Experiment.*
+  - **What it shows:** a loophole-free CHSH-type test between two superconducting qubits connected by a cryogenic link spanning 30 m; the average $`S`$ over more than 1 million trials is 2.0747.
+  - **Read:** Crossref abstract only (2026-10-11).
 
 ## 2 Device-independent bounds (Acín 2007, Pironio 2010, self-testing, finite-size/EAT, noisy preprocessing)
 
@@ -241,6 +246,10 @@ These experiments closed the detection and locality loopholes together. They sti
   - **Caveat:** this is where the "2.362" threshold comes from. It does not apply to single-basis protocols.
   - **Read:** arXiv v2.
 
+- **Statistics behind the confidence ends.** *Theory.*
+  - **Hoeffding 1963.** W. Hoeffding, "Probability Inequalities for Sums of Bounded Random Variables", *J. Am. Stat. Assoc.* 58, 13–30 (1963). https://doi.org/10.1080/01621459.1963.10500830. Used for the interval on $`S`$. Read: Crossref record only.
+  - **Wilson 1927.** E. B. Wilson, "Probable Inference, the Law of Succession, and Statistical Inference", *J. Am. Stat. Assoc.* 22, 209–212 (1927). https://doi.org/10.1080/01621459.1927.10502953. Used for the score intervals on the QBERs. Read: Crossref record only.
+
 - **Zapatero 2023.** V. Zapatero et al., "Advances in device-independent quantum key distribution", *npj Quantum Inf.* 9, 10 (2023). https://doi.org/10.1038/s41534-023-00684-x · [arXiv:2208.12842](https://arxiv.org/abs/2208.12842). *Review.*
   - **Numbers:** detection-efficiency thresholds from 92.4% down to 80.3%, depending on the protocol.
   - **Read:** excerpts only. We use the primary papers for numbers.
@@ -256,7 +265,7 @@ These experiments closed the detection and locality loopholes together. They sti
 | Liu 2026 | ⁴⁰Ca⁺ ions | 101 km, spooled | 2.494 ± 0.075ᶜ | 6.92 ± 1.13%ᶜ | 0.0974 per round | asymptotic, 2,799 rounds |
 | Lu 2026 | ⁸⁷Rb atoms | 11 km, spooled, one lab | 2.612(31) | 2.85% | 0.112 bits/event (estimated) | finite-size, $`\varepsilon = 10^{-5}`$ |
 | Lu 2026 | ⁸⁷Rb atoms | 100 km, spooled, one lab | 2.495 ± 0.103ᶜ | 7.16 ± 0.89%ᶜ | positive | asymptotic, different variant |
-| Meiers 2026 | ⁴⁰Ca⁺ ion + photon | 25 km, spooled | 2.75 (+0.16/−0.15)ᵈ | ≈1.4%ᵉ | "69 bits" (model value) | authors make no DI claim |
+| Meiers 2026 | ⁴⁰Ca⁺ ion + photon | 25 km, spooled | 2.75 (+0.16/−0.15)ᵈ | ≈1.4%ᵉ | "69 bits" (model value) | no DI key-generation claim (window optimised on the same data) |
 
 ᵃ From a separate characterisation run, not from the key run.
 ᵇ Only a separate calibration run gives a CHSH value ($`\omega = 0.7559`$, $`S \approx 2.047`$).
@@ -326,7 +335,7 @@ These experiments closed the detection and locality loopholes together. They sti
   - **Caveats:**
     - 61.9% of readouts failed and were discarded, so the detection loophole is open.
     - Bob's basis choice is passive.
-    - The authors explicitly make no DI key or security claim.
+    - The authors explicitly make no device-independent key-generation claim, because the same dataset was used to optimise the time window.
     - Of all the papers here, this is the closest to our approach of evaluating a bound on data under a model.
   - **Read:** arXiv v2.
 
@@ -394,6 +403,10 @@ The bound we evaluate is Pironio 2010 (see §2).
     - No loophole is closed.
   - **Read:** arXiv v2.
 
+- **Kulikov 2026.** A. Kulikov, S. Storz, J. D. Schär, M. Sandfuchs, R. Wolf, F. Berterottière, C. Hellings, A. Wallraff, R. Renner, "Experimental randomness amplification", *Nature* 653, 1033–1038 (2026). https://doi.org/10.1038/s41586-026-10521-8 · [arXiv:2412.17931](https://arxiv.org/abs/2412.17931) (v1 title: "Device-Independent Randomness Amplification"). *Experiment.*
+  - **What the abstract says:** existing Bell-test applications assume access to perfect randomness; this work amplifies imperfect randomness from a physical source, using a loophole-free Bell test with superconducting circuits.
+  - **Read:** Crossref record and the arXiv v1 abstract only (2026-10-11).
+
 - **Press.** We cite the papers rather than these releases:
   - NIST, 2025-06-11: https://www.nist.gov/news-events/news/2025/06/nist-and-partners-use-quantum-mechanics-make-factory-random-numbers
   - JPMorganChase, 2025-03-26: https://www.jpmorgan.com/technology/news/certified-randomness
@@ -423,6 +436,14 @@ The bound we evaluate is Pironio 2010 (see §2).
   - **What it shows:** chain fidelity (Eq. 19). Connecting segments in sequence or in parallel gives the same result.
   - **Read:** arXiv full text.
 
+- **BBPSSW 1996.** C. H. Bennett, G. Brassard, S. Popescu, B. Schumacher, J. A. Smolin, W. K. Wootters, "Purification of Noisy Entanglement and Faithful Teleportation via Noisy Channels", *PRL* 76, 722–725 (1996). https://doi.org/10.1103/PhysRevLett.76.722. *Theory.*
+  - **Used for:** the Repeater view's recurrence purification step (bilateral CNOT, keep the round when the second pair agrees), here without the random twirl.
+  - **Read:** Crossref record only.
+
+- **DEJMPS 1996.** D. Deutsch, A. Ekert, R. Jozsa, C. Macchiavello, S. Popescu, A. Sanpera, "Quantum Privacy Amplification and the Security of Quantum Cryptography over Noisy Channels", *PRL* 77, 2818–2821 (1996). https://doi.org/10.1103/PhysRevLett.77.2818. *Theory.*
+  - **Used for:** the purification option that applies $`R_x(\pm\pi/2)`$ before the bilateral CNOT.
+  - **Read:** Crossref record only.
+
 - **Cui 2026.** Z.-B. Cui et al. (Tsinghua), *PRL* 137, 020803 (2026). https://doi.org/10.1103/9h14-sc8t · [arXiv:2510.20392](https://arxiv.org/abs/2510.20392). *Experiment.*
   - **Numbers:** 10 temporal modes, a 4.59× speed-up, and fidelity 95.9 ± 1.5% over 1.2 km.
   - **Read:** abstract and first page.
@@ -448,8 +469,8 @@ The bound we evaluate is Pironio 2010 (see §2).
 
 - **Hartung 2026.** L. Hartung et al. (39 authors), "Quantum Networking at the Speed of Quantum Computation: Kilohertz Entanglement in a Heterogeneous Quantum System", [arXiv:2610.10705](https://arxiv.org/abs/2610.10705) (2026-10-07). *Experiment; unrefereed preprint.* IonQ announced it on 2026-10-09 (https://www.ionq.com/news/ionq-demonstrates-world-first-quantum-memory-enhanced-interconnect-for-distributed-quantum-applications).
   - **What the abstract says:** a trapped ¹³⁸Ba⁺ ion is entangled with a silicon-vacancy (SiV⁻) centre in a diamond nanophotonic cavity; one detected photon heralds each pair. Including conversion losses, Bell pairs come at 1.03(1) kHz with fidelity 87.9(7)%, about four times the fastest photonic link between two trapped ions.
-  - **What it is not:** an ion–SiV link, not ion–ion; no entanglement swapping is claimed in the abstract; the press release's "world-first" is IonQ's own wording. Distance not in the abstract (要確認).
-  - **Read:** abstract and press release only (2026-10-10).
+  - **What it is not:** an ion–SiV link, not ion–ion; no entanglement swapping is claimed in the abstract; the press release's "world-first" is IonQ's own wording. The distance between the nodes is not stated in the abstract, and a search of the arXiv text found none; the only length given is a delay fibre of about 15 m.
+  - **Read:** abstract and press release (2026-10-10); arXiv text searched for a distance (2026-10-11).
 
 - **PostQuantum.com, 2026-04-20.** https://postquantum.com/industry-news/ionq-photonic-interconnect-networked-quantum/. *Commentary.*
   - Confirms that the IonQ release gives no performance figures.
@@ -459,6 +480,7 @@ The bound we evaluate is Pironio 2010 (see §2).
   - **Noise models:** https://docs.ionq.com/features/simulation-with-noise-models
     - Qubit limits: 29 for ideal, forte-1 and forte-enterprise-1; 25 for Aria.
     - The published depolarising parameters cover only Aria and Forte jobs from before mid-September 2025. Documentation for the current Forte models is "in preparation".
+    - Checked 2026-10-11: the Aria 1 and Aria 2 QPUs are retired, and their noise models remain available. Noise-model simulation is "shot-aware" and runs one simulation per requested shot, which is why this lab's IonQ profile defaults to 200 shots per setting.
     - IonQ disclaims predictive accuracy ("IonQ offers no specific guarantees of accuracy").
     - The documented channel is $`\rho \mapsto (1-r)\,\rho + r\,I/2`$ for one qubit and $`\rho \mapsto (1-r)\,\rho + r\,I/4`$ for two qubits. So $`r`$ is the same parameter as $`\lambda`$ in Aer's `depolarizing_error` (F8).
     - Read literally, the page's two-qubit Kraus list is not trace-preserving. Trace preservation needs all 15 non-identity two-qubit Pauli terms (our reading).
@@ -493,15 +515,15 @@ The bound we evaluate is Pironio 2010 (see §2).
   - **Le et al. 2023.** T. P. Le, C. Meroni, B. Sturmfels, R. F. Werner, T. Ziegler, *Quantum* 7, 947 (2023). https://doi.org/10.22331/q-2023-03-16-947 · [arXiv:2111.06270](https://arxiv.org/abs/2111.06270) (v3 read). Used for the pushout map, the two-polynomial test, the Gram completion and the volume ratios.
     - It has a sign error on p. 13: it writes $`+2xyz`$ for $`c_{11} = -1`$, where $`-2xyz`$ is correct.
     - It cites Tsirelson's "Thm 2.2" where Thm 2.3 is meant.
-  - **Goh et al. 2018**, *PRA* 97, 022104 (to verify): the PR-plane slice, and the name "TLM" (Tsirelson–Landau–Masanes).
+  - **Goh et al. 2018**, "Geometry of the set of quantum correlations", *PRA* 97, 022104, https://doi.org/10.1103/PhysRevA.97.022104 (record checked 2026-10-11): the PR-plane slice, and the name "TLM" (Tsirelson–Landau–Masanes).
   - **Tsirelson, LOMI 142, 174–194:** Theorem 2.2 gives a polynomial criterion, stated without proof. LOMI 142 is the 1985 original; the 1987 item is its English translation in *J. Sov. Math.* 36 (years to verify).
   - **Landau 1988** (*Found. Phys.* 18, 449–460): the square-root form. The abstract states it as a necessary condition; only the abstract was read.
-  - **Navascués–Pironio–Acín 2007**, *PRL* 98, 010401 (to verify): the level-1 Gram test and the test that accounts for marginals.
+  - **Navascués–Pironio–Acín 2007**, *PRL* 98, 010401, https://doi.org/10.1103/PhysRevLett.98.010401 (record checked 2026-10-11): the level-1 Gram test and the test that accounts for marginals.
   - **Brunner et al. 2014** (*Rev. Mod. Phys.*, 419–478).
-  - **Werner–Wolf 2001**, *PRA* 64, 032112 (to verify): 16 facets, made of 8 trivial and 8 CHSH.
+  - **Werner–Wolf 2001**, *PRA* 64, 032112, https://doi.org/10.1103/PhysRevA.64.032112 (record checked 2026-10-11): 16 facets, made of 8 trivial and 8 CHSH.
   - **Fine 1982** (*PRL*, 291–295): full text not read.
-  - **Popescu–Rohrlich 1994**, *Found. Phys.* 24, 379 (to verify): the paper does not use the term "PR box".
-  - **Barrett et al. 2005**, *PRA* 71, 022101 (to verify); **Sanyal** (the "samosa" nickname for the 3×3 elliptope); **Laurent–Mascarin–Telen** [arXiv:2605.02484](https://arxiv.org/abs/2605.02484).
+  - **Popescu–Rohrlich 1994**, *Found. Phys.* 24, 379–385, https://doi.org/10.1007/BF02058098 (record checked 2026-10-11): the paper does not use the term "PR box".
+  - **Barrett et al. 2005**, *PRA* 71, 022101, https://doi.org/10.1103/PhysRevA.71.022101 (record checked 2026-10-11); **Sanyal** (the "samosa" nickname for the 3×3 elliptope); **Laurent–Mascarin–Telen** [arXiv:2605.02484](https://arxiv.org/abs/2605.02484).
 
 - **What the 3D view shows:**
   - Projecting onto any three correlators fills the whole cube, so it shows nothing. The view therefore uses slices: $`E_{11} = t`$ (F21), the section $`E_{01} = E_{10}`$, or the PR plane (F22).
@@ -514,7 +536,8 @@ The bound we evaluate is Pironio 2010 (see §2).
   - "Quantum Teleportation" (https://qollab.xyz/u/qollab/quantum-teleportation): coherent corrections on the IonQ simulator; checks only Z-basis populations.
   - "Scaled Entanglement" (https://qollab.xyz/u/qollab/scaled-entanglement): reports a GHZ "fidelity" based on populations, which is only an upper bound.
 
-- **Qollab search, 2026-10-09.** No results for CHSH, QKD, E91 or BBM92. The search is fuzzy, so this does not prove absence.
+- **Qollab search, 2026-10-09** (before the build window opened at 23:00 UTC). No results for CHSH, QKD, E91 or BBM92. The search is fuzzy, so this does not prove absence.
+- **Re-check, 2026-10-11.** Several public Qollab entries built during this hackathon also use CHSH or QKD. Projects built during the hackathon are not prior art and are not listed here.
 
 - **Quantinuum pytket "Iterated entanglement swapping".** https://docs.quantinuum.com/tket/user-guide/examples/algorithms_and_protocols/entanglement_swapping.html. *Docs.*
   - Uses feed-forward swapping, repeated up to 10 times, with fidelity from tomography.
@@ -562,7 +585,7 @@ The lab runs on whichever Qollab backend is selected, including IonQ's noise-mod
 | Matplotlib | 3.10.8 | Matplotlib (PSF-style) | https://matplotlib.org | Figures only |
 | three.js | r186 (`three@0.186.1`, 2026-09-24) | MIT, © 2010–2026 three.js authors | https://github.com/mrdoob/three.js | Provided by Qollab's import map; not vendored |
 | Tabler Icons | 3.49.0 (2026-10-05) | MIT, © 2020–2026 Paweł Kuna | https://github.com/tabler/tabler-icons | Icons: a small subset is vendored into the UI, with its licence notice |
-| mermaid-cli | 12.0.0 | MIT | https://github.com/mermaid-js/mermaid-cli | Build tool (planned): will render the README's Mermaid diagram sources to PNG |
+| mermaid-cli | 12.0.0 | MIT | https://github.com/mermaid-js/mermaid-cli | Build tool: rendered the README's Mermaid diagram sources to PNG |
 
 Licence strings were read from the installed package metadata (Python packages) and from the npm registry or the repositories (JavaScript), on 2026-10-09.
 
@@ -602,7 +625,7 @@ Notation: $`h(x) = -x\log_2 x - (1-x)\log_2(1-x)`$.
 - **F2. Tsirelson.** $`\lvert S\rvert \le 2\sqrt{2} \approx 2.828`$.
   - Reached by $`\lvert\Phi^+\rangle`$ with $`A \in \{Z, X\}`$ and $`B \in \{(Z \pm X)/\sqrt{2}\}`$.
   - Source: Tsirelson 1980.
-- **F3. Werner state.** $`\rho_v = v\,\lvert\psi^-\rangle\langle\psi^-\rvert + (1-v)\,I/4`$.
+- **F3. Werner state.** $`\rho_v = v\,\lvert\Phi^+\rangle\langle\Phi^+\rvert + (1-v)\,I/4`$, as in the code. Werner's original uses $`\lvert\psi^-\rangle`$; for it the QBERs below hold after Bob flips his bit.
   - $`S_\text{max} = 2\sqrt{2}\,v`$, $`Q_Z = Q_X = (1-v)/2`$, so $`S = 2\sqrt{2}\,(1-2Q)`$.
   - $`S > 2`$ if and only if $`Q < 14.64\%`$.
   - Conditions: depolarising noise only, optimal settings, no loss.
@@ -614,7 +637,7 @@ Notation: $`h(x) = -x\log_2 x - (1-x)\log_2(1-x)`$.
 - **F5. Werner-state thresholds.**
   - Separable if and only if $`v \le 1/3`$.
   - Local for all POVMs at $`v \le 1/2`$.
-  - Projective measurements: local for $`v \le 0.6875`$ and nonlocal for $`v \ge 0.6961`$.
+  - Projective measurements: local for $`v \le 0.6875`$ and nonlocal for $`v \ge 0.6961`$ (0.69604 in the 2026 follow-up).
   - CHSH violated if and only if $`v > 0.7071`$.
 
 **Trusted-device QKD rates**
@@ -705,7 +728,7 @@ Notation: $`h(x) = -x\log_2 x - (1-x)\log_2(1-x)`$.
 
 **About our own results**
 
-- We never say "Bell violation", "loophole-free", "secure key" or "certified randomness" about simulated results. All simulated outcomes come from a seeded pseudo-random generator.
+- The rung names (Bell violation, DI key, …) label formulas evaluated on simulated counts. About simulated results we never claim a loophole-free Bell violation, a secure key or certified randomness. All simulated outcomes come from a seeded pseudo-random generator.
 - DI numbers are not security proofs and not extractable bit counts. Finite-size DI keys need roughly $`10^{8}`$ to $`10^{15}`$ rounds; our runs use roughly $`10^{3}`$ to $`10^{5}`$ shots.
 - A CHSH value computed on post-selected (purified) pairs is not a DI certificate. It assumes the herald is independent of the settings, as in event-ready schemes, and its statistics use the kept shots only.
 - IonQ noise-model results are not predictions of real QPU behaviour.
@@ -770,7 +793,6 @@ To verify:
 
 **Bibliographic details**
 - The PRL received dates for Giustina 2015 and Shalm 2015.
-- The Hensen follow-up dataset (2016).
 
 **DI bounds**
 - Pironio 2009's 92.4% threshold (our recomputation gives 92.3%).
@@ -810,7 +832,7 @@ To verify:
 - Runtime MediaRecorder support in each target browser, including Safari.
 
 **Prior art**
-- Re-check Qollab and GitHub near the submission deadline.
+- Re-checked 2026-10-11 (see §7): several in-window Qollab entries also use CHSH or QKD; they are not prior art.
 
-**Not read**
-- The 2026 Nature paper "Experimental randomness amplification" (https://doi.org/10.1038/s41586-026-10521-8).
+**Not read in full**
+- Kulikov 2026 and Storz 2023 (§1, §4): only their abstracts were read.

@@ -132,7 +132,7 @@ export default {
           const y = (p.e[1] + p.e[2]) / 2;
           return { x, y, color: p.color, shape: p.shape, legend: p.name, hollow: Boolean(p.hollow), size: 5.5 };
         }),
-        caption: tm`Exact for points with $E_{11} = -E_{00}$ (the lab’s Werner runs); other points are shown at their projection, so use the table for their membership.`,
+        caption: tm`The diamond is exact for points with $E_{11} = -E_{00}$, the disc when also $E_{01} = E_{10}$ (the lab’s Werner settings); other points are shown at their projection, so use the table for their membership.`,
       });
       sliceBox.replaceChildren(chart.element);
     }

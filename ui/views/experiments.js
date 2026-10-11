@@ -42,8 +42,8 @@ export default {
     const pubBox = h('div', { class: 'stack' });
     body.append(
       h('div', { class: 'card wide' },
-        h('h3', null, icon('database'), 'Munich 2017: event-ready Bell test with two atoms 400 m apart'),
-        h('p', null, 'Rosenfeld et al., Phys. Rev. Lett. 119, 010402 (2017) closed the detection and locality loopholes. Their event files (Zenodo, doi:10.5281/zenodo.22936124, CC BY 4.0) list every valid atom–atom event. This lab reads them, maps each event onto the same CHSH form S = E00 + E01 + E10 − E11 that it uses for simulated counts, and reproduces the paper’s S = 2.221 ± 0.033 for the 15 April 2016 run.'),
+        h('h3', null, icon('database'), 'Munich 2017: event-ready Bell test with two atoms 398 m apart'),
+        h('p', null, tm`Rosenfeld et al., Phys. Rev. Lett. 119, 010402 (2017) closed the detection and locality loopholes. Their event files (Zenodo, doi:10.5281/zenodo.22936124, CC BY 4.0) list every valid atom–atom event. This lab reads them, maps each event onto the same CHSH form $S = E_{00} + E_{01} + E_{10} - E_{11}$ that it uses for simulated counts, and reproduces the paper’s $S = 2.221 \pm 0.033$ for the 15 April 2016 run.`),
         rosBox),
       h('div', { class: 'card wide' }, h('h3', null, icon('shield-lock'), 'Published DI-QKD experiments'), pubBox),
     );

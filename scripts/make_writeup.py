@@ -4,8 +4,9 @@ Usage: python scripts/make_writeup.py [git-ref] [--no-images]   (default ref: v1
 
 Qollab's write-up renders Markdown and KaTeX but not Mermaid, and shows images only from
 allowed hosts. This script points relative images and links at the public repository at the
-given ref, drops the Mermaid block (the PNG above it carries the same diagram) and checks the
-length limit. Output: dist/writeup.md.
+given ref, drops the Mermaid block (the PNG above it carries the same diagram), turns a YouTube
+link that stands alone on its line into Qollab's embedded player, and checks the length limit.
+Output: dist/writeup.md.
 """
 
 from __future__ import annotations
@@ -21,6 +22,9 @@ LIMIT = 65_000
 # in-page anchor (#) is left alone.
 LOCAL_IMAGE = r"!\[([^\]]*)\]\((?![a-z][a-z0-9+.-]*:|//)([^)]+)\)"
 LOCAL_LINK = r"(?<!!)\[([^\]]+)\]\((?![a-z][a-z0-9+.-]*:|//|#)([^)]+)\)"
+# A YouTube link alone on its line. Qollab's write-up renders image syntax with a YouTube URL as an
+# embedded player; GitHub would show a broken image, so the README keeps a plain link.
+VIDEO_LINE = r"^\[([^\]]+)\]\((https://(?:youtu\.be/|www\.youtube\.com/watch\?v=)[^)\s]+)\)[ \t]*$"
 
 
 def convert(text: str, ref: str, images: bool = True) -> str:
@@ -50,6 +54,7 @@ def convert(text: str, ref: str, images: bool = True) -> str:
             " the final submission; figures and screenshots appear then.*\n",
             1,
         )
+    text = re.sub(VIDEO_LINE, lambda m: f"![{m.group(1)}]({m.group(2)})", text, flags=re.M)
     text = re.sub(LOCAL_IMAGE, lambda m: f"![{m.group(1)}]({raw}{m.group(2)})", text)
     text = re.sub(LOCAL_LINK, lambda m: f"[{m.group(1)}]({blob}{m.group(2)})", text)
     return text

@@ -94,7 +94,7 @@ export default {
           h('li', null, 'A simulated CHSH value above 2 shows nothing about nature and closes no loophole.'),
           h('li', null, 'The key and randomness numbers are asymptotic formulas evaluated at finite-sample confidence ends. They are not finite-size or composable security proofs.'),
           h('li', null, 'Simulator outcomes come from pseudo-random number generators; nothing here is a quantum random number generator.'),
-          h('li', null, 'IBM and IonQ noise models are models of devices, not the devices. This lab never submits to quantum hardware.'),
+          h('li', null, 'IBM and IonQ noise models are models of devices, not the devices. The lab is meant for Qollab’s free simulators: a backend whose name or class contains “qpu” (as IonQ’s hardware does) is refused, and an unrecognised backend runs with a conservative default profile.'),
           h('li', null, 'Post-selected purification assumes the keep/discard decision is independent of the measurement settings.'),
           h('li', null, 'Published values are quoted as the authors give them; rates shown next to them are our recomputation and may use a different protocol than the authors’.'))),
       sec('Disclosure', 'info-circle',

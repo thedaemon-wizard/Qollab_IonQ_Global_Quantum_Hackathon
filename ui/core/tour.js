@@ -31,8 +31,15 @@ export function createTour(ctx) {
     highlighted = null;
   }
 
+  // Bottom edge of the sticky header: content above it is hidden, so it is the top of the frame.
+  function headerBottom() {
+    const header = document.getElementById('bk-header');
+    return header ? Math.max(0, header.getBoundingClientRect().bottom) : 0;
+  }
+
   // Scroll the target so that its top (or, if the page cannot scroll that far, its bottom)
-  // leaves `room` pixels free at that edge of the frame.
+  // leaves `room` pixels free at that edge of the frame. The page's scroll-padding already
+  // keeps the top edge below the sticky header.
   function scrollClear(target, edge, room) {
     const key = edge === 'top' ? 'scrollMarginTop' : 'scrollMarginBottom';
     target.style[key] = `${room}px`;
@@ -42,9 +49,10 @@ export function createTour(ctx) {
   }
 
   // Put the box next to its target without covering it: below, above, left or right,
-  // whichever has room. If none has (a tall target, a short frame on Qollab, a phone), the box
-  // goes to the top of the frame and the target is scrolled to start just under it, or, near the
-  // top of the page, the box goes to the bottom and the target ends just above it.
+  // whichever has room, and never with the target's top under the sticky header. If no side has
+  // room, the box goes under the header and the target starts just below the box; a target too
+  // tall for that (a short frame on Qollab, a phone) starts just under the header and the box
+  // docks at the bottom, on the side where it covers less of the target.
   function place(target) {
     Object.assign(box.style, { left: '', top: '', right: '16px', bottom: '16px' });
     if (!target) return;
@@ -53,26 +61,34 @@ export function createTour(ctx) {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const m = 12;
+    const top = headerBottom();
     const clampX = (x) => Math.min(Math.max(m, x), vw - w - m);
-    const clampY = (y) => Math.min(Math.max(m, y), vh - hgt - m);
+    const clampY = (y) => Math.min(Math.max(top + m, y), vh - hgt - m);
     let r = target.getBoundingClientRect();
-    // after a resize the target may have moved out of view
-    if (r.bottom <= 0 || r.top >= vh) {
+    // after a resize the target may have moved out of view, or its top may sit under the header
+    if (r.bottom <= top || r.top >= vh) {
       target.scrollIntoView({ block: 'nearest', behavior: 'auto' });
       r = target.getBoundingClientRect();
     }
+    if (r.top < top) r = scrollClear(target, 'top', 0);
     let pos = null;
     if (vh - r.bottom >= hgt + 2 * m) pos = { left: clampX(r.left), top: r.bottom + m };
     else if (r.top >= hgt + 2 * m) pos = { left: clampX(r.left), top: r.top - hgt - m };
     else if (r.left >= w + 2 * m) pos = { left: r.left - w - m, top: clampY(r.top) };
     else if (vw - r.right >= w + 2 * m) pos = { left: r.right + m, top: clampY(r.top) };
-    else {
+    else if (top + hgt + 2 * m + r.height <= vh) {
       r = scrollClear(target, 'top', hgt + 2 * m);
-      if (r.top >= hgt + 2 * m - 1) pos = { left: clampX(r.left), top: m };
+      if (r.top >= top + hgt + 2 * m - 1) pos = { left: clampX(r.left), top: top + m };
       else {
         r = scrollClear(target, 'bottom', hgt + 2 * m);
         pos = { left: clampX(r.left), top: clampY(r.bottom + m) };
       }
+    }
+    if (!pos) {
+      r = scrollClear(target, 'top', 0);
+      const covered = (x) => Math.max(0, Math.min(x + w, r.right) - Math.max(x, r.left));
+      const left = covered(m) <= covered(vw - w - m) ? m : vw - w - m;
+      pos = { left: Math.max(m, left), top: Math.max(top + m, vh - hgt - m) };
     }
     Object.assign(box.style, { right: '', bottom: '', left: `${pos.left}px`, top: `${pos.top}px` });
   }

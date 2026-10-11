@@ -74,7 +74,7 @@ export default {
       h('div', { class: 'grid' },
         h('div', { class: 'card', id: 'circ-controls' }, h('h3', null, icon('adjustments-horizontal'), 'Which circuits'), module.element, hops.element, noise.element, eve.element, sizeBox),
         backendCard),
-      h('div', { class: 'card wide' }, h('h3', null, icon('hierarchy'), 'Circuit'),
+      h('div', { class: 'card wide', id: 'circ-card' }, h('h3', null, icon('hierarchy'), 'Circuit'),
         h('div', { class: 'toolbar' }, h('label', { for: 'circ-unit' }, 'Setting'), unitSel, h('span', { class: 'spacer' }), ...modeBtns),
         drawBox),
       h('div', { class: 'card wide' }, h('h3', null, icon('cpu'), 'Last run: circuits before and after transpilation'), compileBox),
@@ -128,6 +128,7 @@ export default {
       }
       const rows = rep.circuits.compiled.map((c, i) => ({ name: c.name, lq: rep.circuits.logical[i].num_qubits, ld: rep.circuits.logical[i].depth, l2: rep.circuits.logical[i].two_qubit_gates, cq: c.num_qubits, cd: c.depth, c2: c.two_qubit_gates, ops: Object.entries(c.ops).map(([k, v]) => `${k} ${v}`).join(', ') }));
       compileBox.replaceChildren(dataTable({
+        className: 'wrap-head',
         caption: `${rep.experiment.module} on ${rep.backend.name}: ${rep.layout === 'packed_single_circuit' ? 'one packed circuit' : `${rows.length} circuits`}, ${int(rep.shots)} shots each, ${rep.seconds} s`,
         columns: [
           { key: 'name', label: 'Circuit' }, { key: 'lq', label: 'qubits' }, { key: 'ld', label: 'depth' }, { key: 'l2', label: '2-qubit gates' },

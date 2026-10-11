@@ -2,7 +2,7 @@
 // the caller in a fixed viewBox; the SVG scales to the container width. Optional per-node and
 // per-edge `status`, `dash`, `mark` and widths let a caller show progress (the Bell Lab run);
 // nodes with the same `fitGroup` shrink their titles together when a font needs it.
-import { fitWhenShown, h, s, uid } from '../core/dom.js';
+import { fitWhenShown, h, s, scrollableWhenNeeded, uid } from '../core/dom.js';
 import { iconMarkup } from '../core/icons.js';
 
 function anchor(n, side) {
@@ -98,6 +98,13 @@ export function flowDiagram(spec) {
     svg.append(g);
   }
   fitWhenShown(svg);
-  const figure = h('figure', { class: spec.className ? `diagram ${spec.className}` : 'diagram' }, svg, spec.caption ? h('figcaption', null, spec.caption) : null);
+  // `minWidth` (px): below it the drawing scrolls sideways in its own labelled, keyboard-reachable
+  // box instead of shrinking its labels below about 10 px; the caption stays outside the box.
+  let drawing = svg;
+  if (spec.minWidth) {
+    svg.style.minWidth = `${spec.minWidth}px`;
+    drawing = scrollableWhenNeeded(h('div', { class: 'diagram-scroll' }, svg), spec.title);
+  }
+  const figure = h('figure', { class: spec.className ? `diagram ${spec.className}` : 'diagram' }, drawing, spec.caption ? h('figcaption', null, spec.caption) : null);
   return { element: figure, svg };
 }

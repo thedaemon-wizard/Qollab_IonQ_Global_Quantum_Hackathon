@@ -22,3 +22,17 @@ def test_start_and_selftest_lines():
     st = json.loads(app.selftest_json())
     assert info["console_line"].startswith("[Bell-Test Lab] started on basic_simulator")
     assert st["console_line"].endswith(f"formula self-check: {st['passed']} of {st['total']} passed.")
+
+
+def test_purification_line_says_post_selected():
+    """Purified rounds are post-selected: the console line says the device-independent rungs
+    assume a herald that does not depend on the settings; other runs carry no such note."""
+    req = {"module": "purify", "rotation": "dejmps", "channel": {"kind": "depolarizing", "strength": 0.05},
+           "shots": 1000, "seed": 1}
+    rep = json.loads(app.run_json(BasicSimulator(), json.dumps(req)))
+    line = rep["console_line"]
+    assert line.startswith("[Bell-Test Lab] Purification run on basic_simulator")
+    assert line.endswith(" (post-selected; device-independent rungs assume a setting-independent herald).")
+    bell = {"module": "bell", "channel": {"kind": "none", "strength": 0}, "eve": {"enabled": False},
+            "include_yy": False, "shots": 500, "seed": 1}
+    assert "post-selected" not in json.loads(app.run_json(BasicSimulator(), json.dumps(bell)))["console_line"]

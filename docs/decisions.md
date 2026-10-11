@@ -1,7 +1,7 @@
 # Decisions
 
 D1–D7 were recorded on 2026-10-09, before the build window; D3 and D4 were updated and D8–D11
-added during the window (2026-10-10), D12 on 2026-10-11.
+added during the window (2026-10-10), D12 and D13 on 2026-10-11.
 
 Each entry states the decision, the evidence it rests on (checked on the date given), and what
 would make us revisit it. Sources are in [references.md](references.md) unless linked here.
@@ -34,8 +34,8 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
 
 ## D3 — No JupyterLite; a guided tour inside the app instead
 
-- **Decision.** The walkthrough is part of the app (a keyboard-accessible guided tour that runs the
-  real circuits). An executed notebook (`notebooks/walkthrough.ipynb`, 2026-10-10) is in the repository for
+- **Decision.** The walkthrough is part of the app (a keyboard-accessible guided tour; five of its
+  steps run the real circuits, or set them up on IonQ). An executed notebook (`notebooks/walkthrough.ipynb`, 2026-10-10) is in the repository for
   reading on GitHub; it is not part of the Qollab upload.
 - **Evidence (2026-10-09).** JupyterLite kernels run in Web Workers (blocked by `worker-src
   'none'`), the app is several hundred files (Qollab allows 100 files of ≤ 2 MB), it expects
@@ -60,6 +60,11 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
 - **Consequence.** The packed circuit grows with the number of settings, so the IonQ profile has a
   qubit limit (`config/defaults.json`); a run that would exceed it is refused with a message
   before anything is submitted.
+- **Shots (2026-10-11).** The IonQ profile defaults to 200 shots per setting. IonQ's noise-model
+  simulation is shot-aware and runs one simulation per requested shot (IonQ docs, checked
+  2026-10-11), and a 200-shot packed job took 22.8–26.9 s on Qollab (`results/qollab/`). The
+  *Shots per setting* field accepts 100–100,000 on every backend, so more shots are one edit away;
+  at 200 the DI-key bound does not survive the conservative end, which the README reports.
 
 ## D5 — Pin `qiskit==2.5.2`
 
@@ -158,3 +163,12 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
   With jsDelivr blocked the views show the same formulas as Unicode text (checked in the local
   harness); on Qollab the import and the font load (checked with the built-in simulator).
 - **Revisit if** the app must run offline: vendor Temml and the font with their licences.
+
+## D13 — Considered and not built (recorded 2026-10-11)
+
+| Item | Status | Reason |
+|---|---|---|
+| A hosted mirror outside Qollab (for example a Hugging Face Space) | Not built | D1: the judged artifact is the Qollab project. |
+| Fetching the Munich files from Zenodo at run time to check them | Not built | The app reads the shipped copies in `data/third_party/` (with their `NOTICE.md`), so it runs offline and the same numbers come out every time; the Zenodo CORS behaviour is noted in `references.md` §1. |
+| A run seed taken from a public randomness beacon | Not built | Runs use the fixed seed in `config/defaults.json` so anyone can reproduce the counts; simulator outcomes are pseudo-random either way, so a beacon seed would add no physics. |
+| CSV or log files of the recorded runs in `results/` | Not built | Results are kept as JSON, with the counts wherever they were exported (`results/`, `data/recorded_runs.json`); the app's CSV export goes to Qollab's run console. |

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "note": "Files uploaded to the Qollab project. Everything else (tests, scripts, docs, results) stays in the repository only.",
+  "note": "Files uploaded to the Qollab project. The saved Qollab runs (results/qollab/*.json) ship too, so judges can check the recorded results; tests, scripts, docs and the other results stay in the repository only.",
   "zip_name": "dist/qollab_upload.zip",
   "include": [
     "index.html",
@@ -16,6 +16,7 @@
     "data/third_party/rosenfeld2017/NOTICE.md",
     "data/third_party/rosenfeld2017/Bell_2016-04-15_9_pairs.csv",
     "data/third_party/rosenfeld2017/Bell_2016-06-14_16_pairs.csv",
+    "results/qollab/*.json",
     "bellkit/*.py",
     "ui/**/*.js",
     "ui/**/*.css",

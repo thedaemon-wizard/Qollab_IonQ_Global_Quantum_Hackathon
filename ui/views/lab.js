@@ -65,6 +65,10 @@ export default {
 
     // ---------- run toolbar and stepper ----------
     const status = h('p', { class: 'muted', role: 'status', id: 'lab-status', tabindex: '-1' }, 'Ready. Press Run to submit one job.');
+    // This view's own message; a run blocker from another view is shown over it only while it lasts.
+    let ownStatus = status.textContent;
+    const showStatus = (text) => { if (status.textContent !== text) status.textContent = text; };
+    const setStatus = (text) => { ownStatus = text; updateRunButton(); };
     const runBtn = button('Run', 'player-play', () => machine.send('RUN'), { primary: true });
     runBtn.id = 'lab-run';
     const pauseBtn = button('Pause', 'player-pause', () => (machine.state === 'paused' ? machine.send('RESUME') : machine.send('PAUSE')));
@@ -153,7 +157,9 @@ export default {
       const busy = machine.state === 'running';
       setDisabled(runBtn, busy || Boolean(blocker) || !sizeOk, status);
       runBtn.title = blocker || (!sizeOk ? 'The experiment is too large for this backend profile' : '');
-      if (blocker && !busy) status.textContent = blocker;
+      // while this view runs or replays its own job, its own message stays
+      const ownTurn = busy || machine.state === 'replay' || machine.state === 'paused';
+      showStatus(blocker && !ownTurn ? blocker : ownStatus);
     }
 
     // ---------- state machine ----------
@@ -181,7 +187,7 @@ export default {
       if (i === STAGES.length - 1 && machine.state !== 'running') stepItems[i].setAttribute('data-status', 'done');
       const rep = last;
       const a = rep.analysis;
-      const detail = (k, text) => { stepItems[k].querySelector('.detail').textContent = text; };
+      const detail = (k, text) => { stepItems[k].querySelector('.detail').replaceChildren(text); };
       if (i >= 0) {
         const n = Object.values(a.settings).reduce((t, st) => t + st.N, 0);
         detail(0, `${int(rep.shots)} shots × ${Object.keys(a.settings).length} settings on ${rep.backend.name}`);
@@ -201,22 +207,22 @@ export default {
           h('p', { class: 'muted small' }, `Wilson intervals at ${(100 * (1 - a.delta / 2)).toFixed(1)}% each; key basis = Alice 0°, Bob 0°.`));
         corrCard.hidden = false;
         corrCard.replaceChildren(h('h3', null, icon('table'), 'Correlators'), correlatorTable(rep));
-        detail(3, `S = ${num(a.S.point)}, Q_Z = ${pct(a.Q_Z.point)}`);
+        detail(3, tm`$S$ = ${num(a.S.point)}, $Q_Z$ = ${pct(a.Q_Z.point)}`);
       }
       if (i >= 4) {
         ladderCard.hidden = false;
-        ladderCard.replaceChildren(h('h3', null, icon('certificate'), 'Certificates from these counts'), ladderTable(a),
+        ladderCard.replaceChildren(h('h3', null, icon('certificate'), 'Certificates from these counts'), ladderTable(a, { label: 'Table: certificates from the Bell Lab run' }),
           a.S.outside_quantum_set ? note('warn', tm`The estimate of $S$ is above $2\sqrt{2}$. No quantum system can do that: it is sampling noise, and the bounds use $S$ capped at $2\sqrt{2}$.`) : '');
-        detail(4, `${a.ladder_conservative.di_certified ? 'DI key certified' : 'no DI key'} at the conservative end`);
-        announce(`Done. S equals ${num(a.S.point)}; ${a.S.above_classical ? 'Bell violation confirmed at the conservative end' : 'no conclusive Bell violation'}.`);
+        detail(4, `${a.ladder_conservative.di_certified ? 'DI-key bound positive' : 'DI-key bound not positive'} at the conservative end`);
+        announce(`Done. S equals ${num(a.S.point)}; ${a.S.above_classical ? 'S above 2 at the conservative end (simulated counts)' : 'S not above 2 at the conservative end'}.`);
       }
       flow.update(stepItems.map((li) => li.dataset.status), rep, i);
     }
 
     function sVerdict(a) {
-      if (a.S.above_classical) return note('good', `S = ${num(a.S.point)}, interval [${num(a.S.low)}, ${num(a.S.high)}]: the conservative end is above 2, so no local (classical) model fits these counts.`, 'check');
-      if (a.S.inconclusive) return note('warn', `S = ${num(a.S.point)}, interval [${num(a.S.low)}, ${num(a.S.high)}] contains 2: inconclusive at this number of shots.`);
-      return note('', `S = ${num(a.S.point)} is within the local bound.`);
+      if (a.S.above_classical) return note('good', tm`$S$ = ${num(a.S.point)}, interval [${num(a.S.low)}, ${num(a.S.high)}]: the conservative end is above 2, so no local (classical) model fits these counts.`, 'check');
+      if (a.S.inconclusive) return note('warn', tm`$S$ = ${num(a.S.point)}, interval [${num(a.S.low)}, ${num(a.S.high)}] contains 2: inconclusive at this number of shots.`);
+      return note('', tm`$S$ = ${num(a.S.point)} is within the local bound.`);
     }
 
     function correlatorTable(rep) {
@@ -258,7 +264,7 @@ export default {
       if (state === 'running') {
         clearResults();
         errorBox.replaceChildren();
-        status.textContent = `Submitting one job to ${ctx.backend.name}…`;
+        setStatus(`Submitting one job to ${ctx.backend.name}…`);
         flow.submitting(ctx.backend.name);
         updateRunButton();
         last = null;
@@ -271,7 +277,7 @@ export default {
         }
       } else if (state === 'replay') {
         if (event === 'RESULT') {
-          status.textContent = `Job finished in ${last.seconds} s (${last.layout === 'packed_single_circuit' ? 'one packed circuit' : `${last.circuits.compiled.length} circuits`}, canary ${pct(last.canary_fraction, 0)} correct). Replaying the stages…`;
+          setStatus(`Job finished in ${last.seconds} s (${last.layout === 'packed_single_circuit' ? 'one packed circuit' : `${last.circuits.compiled.length} circuits`}, canary ${pct(last.canary_fraction, 0)} correct). Replaying the stages…`);
           if (prefersReducedMotion()) {
             showStage(STAGES.length - 1);
             machine.send('TICK');
@@ -284,19 +290,19 @@ export default {
         timer = setInterval(() => machine.send('TICK'), TICK_MS);
       } else if (state === 'paused') {
         if (event === 'STEP') showStage(stage + 1);
-        status.textContent = `Paused at stage ${stage + 1} of ${STAGES.length}.`;
+        setStatus(`Paused at stage ${stage + 1} of ${STAGES.length}.`);
       } else if (state === 'done') {
         if (event === 'STEP' || event === 'TICK') showStage(STAGES.length - 1);
-        status.textContent = `Done: ${last.backend.name}, ${int(last.shots)} shots per setting, ${last.seconds} s.`;
+        setStatus(`Done: ${last.backend.name}, ${int(last.shots)} shots per setting, ${last.seconds} s.`);
         updateRunButton();
       } else if (state === 'idle') {
         clearResults();
         errorBox.replaceChildren();
         last = null;
-        status.textContent = 'Ready. Press Run to submit one job.';
+        setStatus('Ready. Press Run to submit one job.');
         updateRunButton();
       } else if (state === 'error') {
-        status.textContent = 'The run did not complete; see the message above.';
+        setStatus('The run did not complete; see the message above.');
         updateRunButton();
       }
     });

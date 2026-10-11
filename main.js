@@ -33,7 +33,7 @@ async function start() {
     h('span', { class: 'muted small long' }, 'one CHSH experiment, a ladder of certificates'));
 
   const busy = h('span', { class: 'busy', hidden: true, role: 'status' },
-    h('span', { class: 'spinner', 'aria-hidden': 'true' }), 'Python is working…');
+    h('span', { class: 'spinner', 'aria-hidden': 'true' }), h('span', { class: 'busy-label' }, 'Python is working…'));
   onBusy((on) => {
     busy.hidden = !on;
     root.setAttribute('aria-busy', on ? 'true' : 'false');
@@ -41,11 +41,17 @@ async function start() {
   const profile = backendInfo.profile;
   const chipClass = profile.refuse ? 'bad' : profile.id === config.default_profile.id ? 'warn' : 'good';
   const backendChip = h('span', { class: `chip ${chipClass}`, title: `Run profile: ${profile.label}` },
-    icon('server', { size: 16 }), h('span', null, backendInfo.name), h('span', { class: 'muted' }, `· ${profile.label}`));
+    icon('server', { size: 16 }), h('span', null, backendInfo.name), h('span', { class: 'muted chip-detail' }, `· ${profile.label}`));
   const theme = themeToggle(root);
-  const tourBtn = h('button', { class: 'btn', type: 'button' }, icon('school'), 'Guided tour');
+  // on a phone the label is visually hidden (it stays the button's name), so the header keeps to two rows
+  const tourBtn = h('button', { class: 'btn', type: 'button', title: 'Guided tour' }, icon('school'), h('span', { class: 'btn-label' }, 'Guided tour'));
 
   header.append(h('span', { class: 'spacer' }), busy, backendChip, tourBtn, theme.element);
+  // The header is sticky and wraps to more rows on narrow frames. Its height (--hdr) keeps
+  // focused fields, scrolled-to targets and the sticky nav out from under it.
+  const syncHeader = () => document.documentElement.style.setProperty('--hdr', `${Math.ceil(header.getBoundingClientRect().height)}px`);
+  syncHeader();
+  if (typeof ResizeObserver === 'function') new ResizeObserver(syncHeader).observe(header);
 
   const ctx = { api, store, config, backend: backendInfo, root, theme };
   const router = createRouter({

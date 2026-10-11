@@ -41,7 +41,7 @@ change on the local harness:
 | Lighthouse 13.5.0, snapshot of the Bell Lab after a run, dark and light | Accessibility 100, Best Practices 100 (`lighthouse_20261010_round3.json`) |
 | Diagram follows the stepper (Pause after the first stage, then Step four times) | Every box's state equals its stage's state in the stepper at each step; the certificate boxes say the same as the ladder table (`protocol_diagram_checks_20261010.json`, 17 of 17 checks) |
 | Motion (2.2.2 Pause, Stop, Hide; 2.3.3) | The highlight moves only while the replay plays (about 5.5 s); paused or done, no animation runs; with reduced motion all stages are shown done at once |
-| Text alternative | The SVG has a title and a description that names the current stage and its numbers (S with its interval, Q_Z, Q_X, the certificates that hold); the stepper and the status line give the same in text |
+| Text alternative | The SVG has a title and a description that names the current stage and its numbers ($`S`$ with its interval, $`Q_Z`$, $`Q_X`$, the certificates that hold); the stepper and the status line give the same in text |
 | 320 px | No horizontal page scroll; the diagram scrolls inside a box that becomes focusable (`role="region"`, "Protocol diagram") |
 
 ## Fourth check (2026-10-11): formulas typeset as math
@@ -58,3 +58,19 @@ the seven hand-built Method formulas use the same font).
 | 320 px wide viewport | No horizontal page scroll on any view. Two spots were fixed: term lists go to one column below 480 px (a formula cannot break inside), and the Repeater's rotation menu now shrinks with its column (it was 35 px too wide before this round). |
 | Guided tour | Every step renders; steps 2–5, 7 and 8 contain typeset formulas, none shows a raw `$`. |
 | Plain text kept | SVG text and titles, `<option>`, ARIA labels, `announce()` messages, `role="status"` lines and exports. The Bell Lab's prediction box (a polite live region) has MathML term labels; Temml annotates each with its TeX source. |
+
+## Fifth check (2026-10-11, final): states beyond the default views
+
+A final review found problems that appear only after runs, on Shift+Tab or at Qollab's
+Fullscreen width (1014 px). They were fixed in the interface, then checked on the local harness
+(`basic_simulator`, Chrome headless). The axe claim now covers exactly the states listed here.
+
+| Check | Result |
+|---|---|
+| axe-core 4.14.0, tags wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa, best-practice; at 1280 × 900 and 1014 × 720, dark and light: all 8 views before any run, then the Bell Lab after a run, Certificates after that run, the Repeater after a chain run and after a purification run, Backends after the runs (Last run table filled) and Backends showing the repeater-chain circuits; at 375 × 812, dark and light: the Bell Lab after a run, the Repeater after a chain run and a purification run, Backends showing the chain circuits | 0 violations in all 62 runs (`axe_20261011_final.json`). Before the fixes, two best-practice rules failed in these states: a circuit `<figure>` with a caption took `role="region"` when it overflowed, and at 375 px the chain and purification ladders were two regions with the same name. The scroll region is now a box inside the figure, and each ladder names its run. |
+| Lighthouse 13.5.0, snapshot of the Bell Lab after one run, 1280 × 900, dark and light | Accessibility 100, Best Practices 100 (`lighthouse_20261011_final.json`) |
+| Focus not obscured (2.4.11), Shift+Tab from the end of the Bell Lab and of the Repeater after a run, at 1014 × 720, 900 × 700 and 375 × 812 | 0 of 66 focus stops under the sticky header or below the frame. The page's `scroll-padding-top` follows the header's height (a `ResizeObserver` sets `--hdr`); the sticky navigation uses the same offset. The review had found the shots and seed fields hidden under the header at 1014 px. |
+| Guided tour with the keyboard (Enter, then → on each of the 10 steps) at 1014 × 720, 1280 × 900, 768 × 1024, 375 × 812 and 320 × 640 | In all 50 steps the top of the highlighted target is at or below the header and focus stays in the tour. At 1014 and 1280 px the box covers at most 12 % of a target; on a 320 × 640 screen it covers up to 77 %. After the tour the Bell Lab status shows its own last message, not the "job already running" notice of another view. |
+| Text size in figures (font size × on-screen scale) | Protocol diagram (Bell Lab), the Overview diagrams, the repeater topology and the circuit diagram: at least 10 px on screen at 1280, 1014, 375 and 320 px. Below the width that allows this they scroll sideways in a named, focusable box. Gate angles in the circuit diagram are 10 px (were 8.5). Not changed: the timeline and the charts, whose labels stay below 10 px at 320–375 px. |
+| Header at narrow widths | When idle, one row (52 px) at 1280, 1014, 900 and 768 px (the brand's subtitle is hidden below 1000 px) and two rows (91 and 83 px, were 124) at 375 and 320 px (the tour button shows its icon and the chip the backend name; the hidden texts remain in the accessibility tree). While "Python is working…" shows, the header wraps to two rows (90 px) at 1014 and 768 px; the scroll padding and the navigation offset follow it. |
+| Legends | A hollow marker (the conservative end) is hollow in the legend too. A point outside the axes is pinned to the edge with a small arrow; it is no longer drawn hollow. |

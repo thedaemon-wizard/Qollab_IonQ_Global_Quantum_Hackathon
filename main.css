@@ -108,6 +108,9 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+/* --hdr is the sticky header's height, kept in sync by main.js: scrolling to a field or a target
+   (keyboard focus, the tour) stops below the header instead of under it. */
+html { scroll-padding-top: calc(var(--hdr, 52px) + 8px); }
 body { background: #0e1320; }
 
 .bk-root {
@@ -171,8 +174,8 @@ p { margin: 0 0 0.6rem; }
 .bk-body { display: grid; grid-template-columns: 196px 1fr; min-height: 0; }
 .bk-nav {
   border-right: 1px solid var(--border); background: var(--surface);
-  padding: 0.6rem 0.4rem; position: sticky; top: 49px; align-self: start;
-  max-height: calc(100vh - 49px); overflow-y: auto;
+  padding: 0.6rem 0.4rem; position: sticky; top: var(--hdr, 52px); align-self: start;
+  max-height: calc(100vh - var(--hdr, 52px)); overflow-y: auto;
 }
 .bk-nav ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
 .nav-btn {
@@ -240,6 +243,9 @@ th, td { padding: 0.3rem 0.5rem; border-bottom: 1px solid var(--border); text-al
 th:first-child, td:first-child { text-align: left; }
 thead th { color: var(--muted); font-weight: 600; }
 td.text, th.text { text-align: left; white-space: normal; }
+/* a wide table whose last column is free text: headers wrap so the text column keeps its room */
+.wrap-head thead th { white-space: normal; }
+.wrap-head td.text { min-width: 22ch; }
 details { margin-top: 0.4rem; }
 summary { cursor: pointer; color: var(--muted); font-size: 0.86rem; }
 
@@ -250,13 +256,14 @@ figcaption { font-size: 0.84rem; color: var(--muted); margin-top: 0.3rem; }
 .chart svg { max-width: 760px; }
 .diagram.small svg { max-width: 300px; }
 .diagram.swim svg { max-width: 680px; }
+.diagram-scroll { overflow-x: auto; }
 .chart text, .diagram text, .gauge text, .circuit text { fill: var(--text); font-size: 12px; font-family: inherit; }
 .chart .axis line, .chart .axis path { stroke: var(--muted); }
 .chart .grid line { stroke: var(--border); stroke-dasharray: 2 3; }
 .chart .tick text, .chart .axis-label { fill: var(--muted); }
 .legend { display: flex; flex-wrap: wrap; gap: 0.3rem 0.9rem; font-size: 0.82rem; margin-top: 0.25rem; }
 .legend span { display: inline-flex; align-items: center; gap: 0.3rem; white-space: nowrap; }
-.circuit { overflow-x: auto; }
+div.circuit, .circuit-scroll { overflow-x: auto; }
 .circuit svg { display: block; }
 .circuit pre { margin: 0; padding: 0.6rem; background: var(--surface-2); border-radius: 8px; overflow-x: auto; }
 
@@ -273,7 +280,7 @@ figcaption { font-size: 0.84rem; color: var(--muted); margin-top: 0.3rem; }
 /* Protocol diagram above the stepper. The current stage glows and its arrows flow only while the
    replay plays (data-playing); paused or done, the highlight stays but nothing moves. */
 .flow-wrap { overflow-x: auto; margin: 0.4rem 0 0.2rem; }
-.diagram.flow svg { min-width: 640px; max-width: 1000px; }
+.diagram.flow svg { min-width: 910px; max-width: 1000px; } /* 11-unit labels stay at 10 px or more */
 .diagram.flow .node[data-status='active'] rect { filter: drop-shadow(0 0 5px var(--accent)); }
 .diagram.flow[data-playing='true'] .node[data-status='active'] rect { animation: flow-glow 0.55s ease-in-out infinite alternate; }
 .diagram.flow[data-playing='true'] .edge[data-status='active'] { animation: flow-dash 0.8s linear infinite; }
@@ -314,10 +321,22 @@ figcaption { font-size: 0.84rem; color: var(--muted); margin-top: 0.3rem; }
   .grid, .grid.two { grid-template-columns: 1fr; }
   .stepper { grid-template-columns: 1fr 1fr; }
 }
+/* the brand's subtitle goes first, so the sticky header stays one row at tablet widths */
+@media (max-width: 1000px) {
+  .bk-brand span.long { display: none; }
+}
 @media (max-width: 420px) {
   .bk-main { padding: 0.7rem 0.6rem 2rem; }
   .stepper { grid-template-columns: 1fr; }
-  .bk-brand span.long { display: none; }
+  .bk-header { gap: 0.5rem; }
+  /* a compact header: the tour button shows its icon, the backend chip its name and the busy
+     indicator its spinner (so the header does not grow while Python works); the texts stay in
+     the accessibility tree */
+  .bk-header .btn-label, .bk-header .chip-detail, .bk-header .busy-label {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+  .bk-header .btn { padding: 0.35rem; min-width: 34px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

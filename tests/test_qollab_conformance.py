@@ -5,7 +5,8 @@
 - No dynamic circuits (no IonQ target runs them), no measure_all (we name every clbit).
 - The injected ``backend`` is never created or reassigned in Python.
 - Data files are referenced by literal paths so that Qollab ships them.
-- Upload limits: 100 files, 2 MB per file, README within the write-up limit.
+- Upload limits: 100 files, 2 MB per file, README within the write-up limit; of results/, only
+  the saved Qollab runs (results/qollab/*.json) ship.
 """
 
 import ast
@@ -84,6 +85,9 @@ def test_upload_limits():
     manifest = json.loads((ROOT / "qollab_manifest.json").read_text(encoding="utf-8"))
     files = build_upload.collect(manifest)
     assert build_upload.check_limits(files, manifest["limits"]) == []
-    assert not any(
-        p.relative_to(ROOT).parts[0] in {"tests", "scripts", "tools", "docs", "results"} for p in files
-    )
+    rels = [p.relative_to(ROOT) for p in files]
+    assert not any(r.parts[0] in {"tests", "scripts", "tools", "docs"} for r in rels)
+    # Of results/, only the saved Qollab runs ship (so judges can check the recorded results).
+    shipped_results = sorted(r.as_posix() for r in rels if r.parts[0] == "results")
+    saved_runs = sorted(p.relative_to(ROOT).as_posix() for p in (ROOT / "results" / "qollab").glob("*.json"))
+    assert saved_runs and shipped_results == saved_runs

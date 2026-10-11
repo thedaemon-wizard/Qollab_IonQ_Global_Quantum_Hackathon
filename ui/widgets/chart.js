@@ -37,7 +37,8 @@ export function legendSwatch(item) {
   if (item.kind !== 'marker') {
     sw.append(s('line', { x1: 1, y1: 6, x2: 27, y2: 6, style: `stroke:${item.color};stroke-width:2.2;stroke-dasharray:${item.dash || 'none'}` }));
   }
-  if (item.marker) sw.append(markerShape(item.marker, 14, 6, 3.6, `fill:${item.color};stroke:${item.color}`));
+  // a hollow marker (the conservative end of a run) is hollow in the legend too
+  if (item.marker) sw.append(markerShape(item.marker, 14, 6, 3.6, `fill:${item.hollow ? 'var(--surface)' : item.color};stroke:${item.color};stroke-width:1.6`));
   if (item.kind === 'band') sw.replaceChildren(s('rect', { x: 1, y: 1, width: 26, height: 10, style: `fill:${item.color}` }));
   return sw;
 }
@@ -123,22 +124,31 @@ export function lineChart(initial) {
     const clampX = (v) => Math.min(Math.max(v, X.min), X.max);
     const clampY = (v) => Math.min(Math.max(v, Y.min), Y.max);
     for (const raw of spec.markers || []) {
-      // Points outside the axes are pinned to the edge (and drawn hollow) rather than lost.
-      const off = raw.x < X.min || raw.x > X.max || raw.y < Y.min || raw.y > Y.max;
-      const m = { ...raw, x: clampX(raw.x), y: clampY(raw.y), hollow: raw.hollow || off,
+      // Points outside the axes are pinned to the edge rather than lost, with a small arrow that
+      // points to where they really are (hollow keeps its one meaning: the conservative end).
+      const dir = [raw.x < X.min ? -1 : raw.x > X.max ? 1 : 0, raw.y < Y.min ? 1 : raw.y > Y.max ? -1 : 0];
+      const m = { ...raw, x: clampX(raw.x), y: clampY(raw.y),
         xlo: raw.xlo === undefined ? undefined : clampX(raw.xlo), xhi: raw.xhi === undefined ? undefined : clampX(raw.xhi),
         ylo: raw.ylo === undefined ? undefined : clampY(raw.ylo), yhi: raw.yhi === undefined ? undefined : clampY(raw.yhi) };
       const style = `stroke:${m.color};stroke-width:1.6`;
       if (m.xlo !== undefined && m.xhi !== undefined) marks.append(s('line', { x1: sx(m.xlo), x2: sx(m.xhi), y1: sy(m.y), y2: sy(m.y), style }));
       if (m.ylo !== undefined && m.yhi !== undefined) marks.append(s('line', { x1: sx(m.x), x2: sx(m.x), y1: sy(m.ylo), y2: sy(m.yhi), style }));
       marks.append(markerShape(m.shape || 'circle', sx(m.x), sy(m.y), m.size || 4.5, `fill:${m.hollow ? 'var(--surface)' : m.color};stroke:${m.color};stroke-width:1.8`));
+      if (dir[0] || dir[1]) {
+        const len = Math.hypot(dir[0], dir[1]);
+        const [ux, uy] = [dir[0] / len, dir[1] / len];
+        const r0 = (m.size || 4.5) + 3;
+        const [tx, ty] = [sx(m.x) + ux * (r0 + 6), sy(m.y) + uy * (r0 + 6)];
+        const [bx, by] = [sx(m.x) + ux * r0, sy(m.y) + uy * r0];
+        marks.append(s('path', { class: 'off-axis', d: `M${tx},${ty} L${bx - uy * 4},${by + ux * 4} L${bx + uy * 4},${by - ux * 4} Z`, style: `fill:${m.color};stroke:none` }));
+      }
       if (m.label) marks.append(s('text', { x: sx(m.x) + 7, y: sy(m.y) - 7, class: 'tick' }, m.label));
     }
     svg.append(axes, marks);
 
     const legendItems = [
       ...(spec.series || []).filter((x) => x.name).map((x) => ({ name: x.name, color: x.color, dash: x.dash, marker: x.marker })),
-      ...(spec.markers || []).filter((m) => m.legend).map((m) => ({ name: m.legend, color: m.color, marker: m.shape || 'circle', kind: 'marker' })),
+      ...(spec.markers || []).filter((m) => m.legend).map((m) => ({ name: m.legend, color: m.color, marker: m.shape || 'circle', hollow: Boolean(m.hollow), kind: 'marker' })),
       ...(spec.bands || []).filter((b) => b.legend).map((b) => ({ name: b.legend, color: b.fill, kind: 'band' })),
     ];
     const legend = legendItems.length

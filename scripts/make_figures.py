@@ -42,7 +42,7 @@ def recorded() -> list[dict]:
 
 def short_name(label: str) -> str:
     for key, short in (
-        ("BasicSimulator", "Local ideal"),
+        ("BasicSimulator", "Local ideal\n(= Qollab built-in,\nsame seed)"),
         ("Braket", "Braket local"),
         ("Aria 1", "IonQ Aria 1"),
         ("Forte Enterprise 1", "IonQ Forte Ent. 1"),
@@ -64,7 +64,7 @@ def backends_figure() -> None:
         and r["experiment"]["eve_phi_deg"] is None
     ]
     runs += [r for r in recorded() if r["experiment"]["module"] == "chain"]
-    fig, ax = plt.subplots(figsize=(8.4, 4.0))
+    fig, ax = plt.subplots(figsize=(8.4, 4.6))
     labels = []
     for i, r in enumerate(runs):
         a = r["analysis"]["S"]
@@ -77,7 +77,7 @@ def backends_figure() -> None:
             lab += f"\n{r['experiment']['hops']}-link swap\n{noise}"
         else:
             lab += "\nBell test\n5% dep."
-        labels.append(lab)
+        labels.append(f"{lab}\n{r['shots']:,} shots")
         ax.errorbar(
             i,
             a["point"],
@@ -99,8 +99,8 @@ def backends_figure() -> None:
     ax.set_ylabel(r"CHSH value $S$")
     ax.set_ylim(1.8, 3.05)
     ax.set_title(
-        "Runs on Qollab's simulators: $S$ with its 97.5% Hoeffding interval\n"
-        "(grey bar: exact prediction without device noise)",
+        "Runs through this app: $S$ with its 97.5% Hoeffding interval\n"
+        "(grey bar: exact prediction without device noise; unequal shots per setting: 10,000 / 2,000 / 200)",
         fontsize=10,
     )
     fig.tight_layout()

@@ -22,7 +22,7 @@ export const STEPS = [
     title: 'Welcome to the Bell-Test Lab',
     body: [
       'You will run a CHSH Bell test on the simulator you picked in Qollab and see which claims its counts support.',
-      'Every step below runs real Qiskit circuits on that backend. Use Next, the arrow keys, or Escape to leave.',
+      'Steps 2 to 5 and step 8 run real Qiskit circuits on that backend; the other steps show what the runs mean. On an IonQ backend, where a Qollab run allows one job, the tour only sets up those experiments and leaves Run to you. Use Next, the arrow keys, or Escape to leave.',
     ],
   },
   {
@@ -85,11 +85,11 @@ export const STEPS = [
     view: 'space',
     target: '#space-slice',
     title: 'Where the correlations live',
-    body: 'In this slice the local models fill the diamond, quantum mechanics the disc and everything that does not signal the square. Your run and the Munich data sit between the diamond and the disc: beyond any local model, inside quantum mechanics.',
+    body: 'In this slice the local models fill the diamond, quantum mechanics the disc and everything that does not signal the square. At their point estimates, a noisy run without Eve and both Munich runs sit between the diamond and the disc (the June run does not clear 2 at 95%, see the Real data step).',
   },
   {
     view: 'circuits',
-    target: '#circ-drawing',
+    target: '#circ-card',
     title: 'The circuits behind it',
     body: 'Every setting is one small circuit; shaded bands mark the pair source, the noise ancillas, the basis choice and the measurements. Switch to Qiskit’s own text drawing to check them. That is the tour; the Method view lists every formula and source.',
   },

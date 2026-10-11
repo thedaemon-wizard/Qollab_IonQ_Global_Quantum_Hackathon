@@ -93,9 +93,10 @@ export function circuitSvg(unit, labels) {
   );
   const box = (x, y, label, sub) => {
     const g = s('g');
-    g.append(s('rect', { x: x - 17, y: y - 13, width: 34, height: 26, rx: 4, style: 'fill:var(--surface);stroke:var(--text);stroke-width:1.3' }),
-      s('text', { x, y: sub ? y + 0 : y + 4, 'text-anchor': 'middle', style: 'font-size:11.5px;font-weight:600' }, label));
-    if (sub) g.append(s('text', { x, y: y + 10, 'text-anchor': 'middle', style: 'font-size:8.5px' }, sub));
+    g.append(s('rect', { x: x - 19, y: y - 15, width: 38, height: 30, rx: 4, style: 'fill:var(--surface);stroke:var(--text);stroke-width:1.3' }),
+      s('text', { x, y: sub ? y - 1 : y + 4, 'text-anchor': 'middle', style: 'font-size:11.5px;font-weight:600' }, label));
+    // the angle under the gate name: 10 px on screen (the diagram is drawn at its natural size)
+    if (sub) g.append(s('text', { x, y: y + 11, 'text-anchor': 'middle', 'data-fit': 36, style: 'font-size:10px' }, sub));
     return g;
   };
   const dot = (x, y) => s('circle', { cx: x, cy: y, r: 4.2, style: 'fill:var(--text)' });
@@ -126,7 +127,9 @@ export function circuitSvg(unit, labels) {
   return fitWhenShown(svg);
 }
 
+// The drawing scrolls inside its own box; the <figure> and its caption stay outside it (a figure
+// with a figcaption may not take role=region).
 export function circuitFigure(unit, labels, caption) {
-  const fig = h('figure', { class: 'circuit' }, circuitSvg(unit, labels), caption ? h('figcaption', null, caption) : null);
-  return scrollableWhenNeeded(fig, `Circuit diagram of ${unit.name}`);
+  const scroller = scrollableWhenNeeded(h('div', { class: 'circuit-scroll' }, circuitSvg(unit, labels)), `Circuit diagram of ${unit.name}`);
+  return h('figure', { class: 'circuit' }, scroller, caption ? h('figcaption', null, caption) : null);
 }

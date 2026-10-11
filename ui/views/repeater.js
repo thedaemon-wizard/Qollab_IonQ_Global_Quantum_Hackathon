@@ -34,6 +34,7 @@ function topology(hops) {
   }
   return flowDiagram({
     width: W, height: 210 + 12 * hops,
+    minWidth: Math.round((W * 10) / 11), // labels of 11 units stay at 10 px or more on screen
     title: `Repeater chain with ${hops} link${hops > 1 ? 's' : ''}`,
     desc: `Each of the ${hops} links has its own pair source and the same noise. ${hops > 1 ? `The ${hops - 1} repeater(s) perform a Bell measurement on the two qubits they hold and send the two result bits to Bob, who corrects his outcome in software (a Pauli frame).` : 'With one link there is no repeater.'}`,
     nodes, edges,
@@ -107,6 +108,10 @@ export default {
     const purRun = button('Run purification', 'player-play', () => runPurify(), { primary: true });
     const measured = [];
     const recordedBox = h('div');
+    // Each status line keeps its own message; a run blocker from another view is shown over it
+    // only while it lasts (updateButtons puts the own message back).
+    const ownStatus = new Map([[chainStatus, chainStatus.textContent], [purStatus, purStatus.textContent]]);
+    const setStatus = (el, text) => { ownStatus.set(el, text); el.textContent = text; };
 
     body.append(
       h('div', { class: 'grid' },
@@ -247,12 +252,12 @@ export default {
       shown.delete(resultEl);
       busy = true;
       lastRun = statusEl;
-      statusEl.textContent = `Submitting one job to ${ctx.backend.name}…`;
+      setStatus(statusEl, `Submitting one job to ${ctx.backend.name}…`);
       setDisabled(chainRun, true, statusEl);
       setDisabled(purRun, true, statusEl);
       try {
         const rep = await submitRun(ctx, req);
-        statusEl.textContent = `Done in ${rep.seconds} s on ${rep.backend.name} (${int(rep.shots)} shots per setting).`;
+        setStatus(statusEl, `Done in ${rep.seconds} s on ${rep.backend.name} (${int(rep.shots)} shots per setting).`);
         const a = rep.analysis;
         const kept = rep.purification
           ? note('', `Kept ${int(rep.purification.kept)} of ${int(rep.purification.total)} rounds (${pct(rep.purification.P_success_measured, 1)}); predicted ${pct(rep.prediction.P_success, 1)}.`)
@@ -264,11 +269,14 @@ export default {
               h('dt', null, 'S predicted'), h('dd', null, num(rep.prediction.S_fixed)),
               h('dt', null, 'Fidelity predicted'), h('dd', null, num(rep.prediction.fidelity))),
             qberList(a)),
-          kept, ladderTable(a)));
+          kept, ladderTable(a, {
+            label: `Table: certificates from the ${req.module === 'purify' ? 'purification' : 'chain'} run`,
+            postSelected: Boolean(rep.purification),
+          })));
         shown.set(resultEl, JSON.stringify(req.module === 'purify' ? { rot: req.rotation, ch: req.channel } : { hops: req.hops, ch: req.channel }));
         return rep;
       } catch (err) {
-        statusEl.textContent = 'The run did not complete.';
+        setStatus(statusEl, 'The run did not complete.');
         resultEl.append(errorNote(err));
         return null;
       } finally {
@@ -302,8 +310,9 @@ export default {
       setDisabled(purRun, busy || Boolean(blocker) || !sizeOk.purify, purStatus);
       chainRun.title = blocker || (sizeOk.chain ? '' : 'Too large for this backend profile');
       purRun.title = blocker || (sizeOk.purify ? '' : 'Too large for this backend profile');
-      if (blocker) {
-        for (const el of [chainStatus, purStatus]) if (el !== lastRun) el.textContent = blocker;
+      for (const el of [chainStatus, purStatus]) {
+        const text = blocker && el !== lastRun ? blocker : ownStatus.get(el);
+        if (el.textContent !== text) el.textContent = text;
       }
     }
     ctx.store.subscribe((st, prev) => {

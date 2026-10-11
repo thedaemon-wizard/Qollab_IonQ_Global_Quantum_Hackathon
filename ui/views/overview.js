@@ -13,6 +13,7 @@ function protocolDiagram() {
   const n = (id, x, y, w, ic, title, sub, tone) => ({ id, x, y, w, h: sub ? (sub.includes('\n') ? 66 : 62) : 40, icon: ic, title, sub, tone, fitGroup: sub ? undefined : 'cert' });
   return flowDiagram({
     width: 820,
+    minWidth: 750, // labels of 11 units stay at 10 px or more on screen
     height: 342,
     title: 'From entangled pairs to certificates',
     desc: 'A source sends entangled pairs to Alice and Bob through noisy links, optionally tapped by Eve. Alice and Bob measure in chosen bases, compare a sample of results over a classical channel and estimate S and the error rates. These numbers feed six certificates: Bell violation, an entanglement witness, BBM92 key, a self-test, device-independent randomness and device-independent key. ',
@@ -51,6 +52,7 @@ function softwareDiagram() {
   const n = (id, x, y, w, ic, title, sub, tone) => ({ id, x, y, w, h: sub.includes('\n') ? 66 : 62, icon: ic, title, sub, tone });
   return flowDiagram({
     width: 980,
+    minWidth: 891, // labels of 11 units stay at 10 px or more on screen
     height: 250,
     title: 'Software architecture',
     desc: 'The browser interface, written as plain JavaScript modules, calls Python only through one module, api.js, which passes JSON strings. The Python package bellkit builds circuits from config/defaults.json, submits one job to the backend Qollab injected, decodes the counts and computes estimates and bounds. Open data files are read from the project.',
@@ -90,7 +92,7 @@ export default {
     const prof = ctx.backend.profile;
     const start = h('div', { class: 'card' },
       h('h3', null, icon('player-play'), 'Start here'),
-      h('p', null, 'The guided tour runs the real circuits step by step (about two minutes). Or open a view from the menu.'),
+      h('p', null, 'The guided tour (about two minutes) runs real circuits in five of its ten steps; on an IonQ backend it sets them up and leaves the one job to you. Or open a view from the menu.'),
       h('div', { class: 'toolbar' },
         button('Start the guided tour', 'school', (e) => ctx.tour.start(e.currentTarget), { primary: true }),
         button('Open the Bell Lab', 'flask', () => ctx.router.go('lab', { focus: true }))));
@@ -105,7 +107,7 @@ export default {
       prof.refuse ? note('bad', prof.refuse_reason) : null,
       prof.one_job_per_run ? note('warn', 'This session can submit one job (Qollab allows one IonQ job per project run; the lab applies the same rule to unrecognised backends). Choose the experiment, run it once, then press Run in Qollab again for another.') : null,
       prof.id === ctx.config.default_profile.id ? note('warn', `This backend name is not in the configured list, so the conservative "${prof.label}" profile is used.`) : null,
-      h('p', { class: 'muted small' }, 'Pick another simulator in Qollab’s Run dialog to change it. This lab never submits to quantum hardware.'));
+      h('p', { class: 'muted small' }, 'Pick another simulator in Qollab’s Run dialog to change it. A backend whose name or class contains “qpu” (IonQ’s hardware) is refused.'));
     const checks = h('div', { class: 'card' }, h('h3', null, icon('list-check'), 'Formula self-check'), h('p', { class: 'muted' }, 'Running…'));
     const realTable = dataTable({
       caption: 'What the numbers in this lab are',

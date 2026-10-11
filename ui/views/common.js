@@ -91,9 +91,10 @@ export function sizeNote(ctx, circuits) {
   const largest = Math.max(...circuits.units.map((u) => u.num_qubits));
   const needed = prof.layout === 'packed_single_circuit' ? circuits.packed_qubits : largest;
   const ok = needed <= prof.max_qubits;
+  // counted as the protocol diagram counts them: the job also carries the one-qubit canary
   const what = prof.layout === 'packed_single_circuit'
-    ? `All ${circuits.units.length} settings packed into one circuit need ${needed} qubits`
-    : `${circuits.units.length} circuits, the largest with ${largest} qubits`;
+    ? `All ${circuits.units.length} settings and the canary packed into one circuit need ${needed} qubits`
+    : `${circuits.units.length} setting circuit${circuits.units.length === 1 ? '' : 's'} + 1 canary circuit, the largest with ${largest} qubits`;
   return { ok, text: `${what}; the ${prof.label} profile allows ${prof.max_qubits}.${ok ? '' : ' Reduce the experiment (for example switch off the eavesdropper or the noise, or use fewer hops) or pick a larger simulator.'}` };
 }
 
@@ -120,21 +121,37 @@ export function rungOutcome(rung, analysis) {
   return rung.ok(cons) ? 'holds' : rung.ok(point) ? 'point' : 'no';
 }
 
-/** Ladder of certificates: point estimate and conservative end side by side. */
-export function ladderTable(analysis) {
+// Rungs that assume nothing about the devices. On post-selected rounds (purification) they also
+// need the keep/discard decision (the herald) to be independent of the measurement settings.
+const DEVICE_INDEPENDENT = new Set(['bell', 'self', 'rnd', 'di']);
+const HERALD = 'conditional on a setting-independent herald (post-selected)';
+
+function assumesText(rung, postSelected) {
+  if (!postSelected || !DEVICE_INDEPENDENT.has(rung.key)) return rung.assumes;
+  const rest = rung.assumes.replace(/^none(?: about the devices)?;?\s*/, '');
+  return rest ? `${HERALD}; ${rest}` : HERALD;
+}
+
+/**
+ * Ladder of certificates: point estimate and conservative end side by side. `label` names the
+ * scroll region (distinct per run, so two tables on one view never share a landmark name);
+ * `postSelected` marks results computed on kept rounds only (purification).
+ */
+export function ladderTable(analysis, { label = 'Table: certificates from these counts', postSelected = false } = {}) {
   const { point, cons } = ladderEnds(analysis);
   return scrollableWhenNeeded(h('div', { class: 'table-wrap' }, h('table', null,
-    h('caption', null, tm`Same counts, six claims. Conservative = $S$ at the lower end of its interval, error rates at the upper end; each interval is at ${(100 * (1 - analysis.delta / 2)).toFixed(1)}%, so each claim, which combines at most two of them, holds at ${Math.round(100 * (1 - analysis.delta))}% (i.i.d. rounds).`),
+    h('caption', null, tm`Same counts, six claims. Conservative = $S$ at the lower end of its interval, error rates at the upper end; each interval is at ${(100 * (1 - analysis.delta / 2)).toFixed(1)}%, so each claim, which combines at most two of them, holds at ${Math.round(100 * (1 - analysis.delta))}% (i.i.d. rounds).`,
+      postSelected ? ' Post-selected rounds: the device-independent rows (Bell violation, self-test, DI randomness, DI key) hold only if the keep/discard decision does not depend on the measurement settings.' : ''),
     h('thead', null, h('tr', null, h('th', { scope: 'col', class: 'text' }, 'Certificate'), h('th', { scope: 'col', class: 'text' }, 'Assumes'),
       h('th', { scope: 'col' }, 'Point estimate'), h('th', { scope: 'col' }, 'Conservative'), h('th', { scope: 'col' }, 'Holds?'))),
     h('tbody', null, RUNG_INFO.map((r) => h('tr', null,
       h('th', { scope: 'row', class: 'text' }, h('span', { style: { display: 'inline-flex', gap: '0.35rem', alignItems: 'center' } }, icon(r.icon, { size: 16 }), r.title)),
-      h('td', { class: 'text muted' }, r.assumes),
+      h('td', { class: 'text muted' }, assumesText(r, postSelected)),
       h('td', null, tm`${r.tex(point)}`),
       h('td', null, tm`${r.tex(cons)}`),
       h('td', null, r.ok(cons) ? h('span', { style: { color: 'var(--good)' } }, icon('check', { size: 16, label: 'holds' }), ' yes')
         : r.ok(point) ? h('span', { style: { color: 'var(--warn)' } }, icon('alert-triangle', { size: 16, label: 'only at the point estimate' }), ' point only')
-          : h('span', { class: 'muted' }, icon('x', { size: 16, label: 'does not hold' }), ' no'))))))), 'Table: certificates from these counts');
+          : h('span', { class: 'muted' }, icon('x', { size: 16, label: 'does not hold' }), ' no'))))))), label);
 }
 
 export function qberList(analysis) {
