@@ -149,8 +149,9 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
   turns both into the `$…$` and `$$…$$` that Qollab's write-up renders with KaTeX, and stops on
   an unpaired delimiter. In the app, `ui/core/tex.js` turns TeX in view text into native MathML
   with Temml 0.14.0 (imported at start-up from jsDelivr) in Latin Modern Math; the seven
-  hand-built Method formulas use the same font. SVG text, `<option>`, ARIA labels, live messages
-  and exports stay plain Unicode. The README figures use matplotlib mathtext.
+  hand-built Method formulas use the same font. SVG text, `<option>`, ARIA labels, `announce()`
+  messages, status lines and exports stay plain Unicode (the Lab's prediction box, a polite live
+  region, keeps MathML term labels). The README figures use matplotlib mathtext.
 - **Evidence.** Plain `$…$` on GitHub drops a backslash before punctuation (`\,`, `\%`), which
   changes formulas; Qollab's renderer does not understand the backtick form or math fences. The
   project frame's CSP allows scripts and fonts from cdn.jsdelivr.net and blocks `data:` fonts.

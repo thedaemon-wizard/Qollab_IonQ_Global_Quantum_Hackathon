@@ -79,7 +79,7 @@ correctness, R = rules, A = accessibility, D = documentation.
 | A7 | MEDIUM | Overflowing scroll boxes not keyboard-reachable in Safari | Fixed: focusable region while overflowing. |
 | D1 | MEDIUM | Jargon used before it is defined | Fixed: glossary in the README and in the Method view; QBER spelled out in the UI. |
 | D2 | MEDIUM | Write-up links point to a tag that does not exist | Same as R2. |
-| D3 | MEDIUM | LaTeX in the write-up may not render on Qollab | Checked on Qollab's preview: 21 formulas, no errors. |
+| D3 | MEDIUM | LaTeX in the write-up may not render on Qollab | Checked on Qollab's preview: 21 formulas, no errors (2026-10-10). Checked again after the formula change (2026-10-11): the pasted write-up shows 75 KaTeX formulas (3 display), no KaTeX error. |
 | C6 | LOW | Two dates for the throwaway test project | Fixed: reused once in the window for the WebGPU check (D10). |
 | C7 | LOW | No capture for the built-in simulator on Qollab | Fixed: the built-in run on Qollab gives the same seed and counts as the local reference row ($`S = 2.708`$), now stated. |
 | C8 | LOW | Write-up script edge cases (CRLF, scheme links, missing marker) | Fixed: CRLF normalised, links with a scheme, `//` or `#` left alone, error when the marker is missing. |

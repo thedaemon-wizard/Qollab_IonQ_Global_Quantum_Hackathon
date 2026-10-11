@@ -87,7 +87,7 @@ for kind, ls in kinds:
     rates = [max(0.0, bounds.di_rate_acin(p["S_fixed"], p["Q_Z"]) or 0.0) for p in preds]
     axes[1].plot(qs, rates, ls, label=kind)
 axes[0].axhline(2, color="grey", lw=1, label=r"local bound $S = 2$")
-axes[0].set(xlabel="noise strength", ylabel="CHSH value S", title="S (exact model)")
+axes[0].set(xlabel="noise strength", ylabel=r"CHSH value $S$", title=r"$S$ (exact model)")
 axes[1].set(xlabel="noise strength", ylabel="bits per round", title="DI key rate (Acin et al. 2007)")
 axes[0].legend(fontsize=8)
 axes[1].legend(fontsize=8)

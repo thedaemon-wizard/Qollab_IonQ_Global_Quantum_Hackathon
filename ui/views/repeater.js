@@ -221,6 +221,8 @@ export default {
 
     async function runGeneric(req, statusEl, resultEl, title) {
       resultEl.replaceChildren();
+      busy = true;
+      lastRun = statusEl;
       statusEl.textContent = `Submitting one job to ${ctx.backend.name}…`;
       setDisabled(chainRun, true, statusEl);
       setDisabled(purRun, true, statusEl);
@@ -245,6 +247,7 @@ export default {
         resultEl.append(errorNote(err));
         return null;
       } finally {
+        busy = false;
         await refresh();
       }
     }
@@ -266,15 +269,16 @@ export default {
     }
 
     let sizeOk = { chain: false, purify: false };
+    let busy = false; // this view's own job is running: it is not "another job"
+    let lastRun = null; // the status line that reports this view's last run; it keeps its result
     function updateButtons() {
-      const blocker = runBlocker(ctx);
-      setDisabled(chainRun, Boolean(blocker) || !sizeOk.chain, chainStatus);
-      setDisabled(purRun, Boolean(blocker) || !sizeOk.purify, purStatus);
+      const blocker = busy ? null : runBlocker(ctx);
+      setDisabled(chainRun, busy || Boolean(blocker) || !sizeOk.chain, chainStatus);
+      setDisabled(purRun, busy || Boolean(blocker) || !sizeOk.purify, purStatus);
       chainRun.title = blocker || (sizeOk.chain ? '' : 'Too large for this backend profile');
       purRun.title = blocker || (sizeOk.purify ? '' : 'Too large for this backend profile');
       if (blocker) {
-        chainStatus.textContent = blocker;
-        purStatus.textContent = blocker;
+        for (const el of [chainStatus, purStatus]) if (el !== lastRun) el.textContent = blocker;
       }
     }
     ctx.store.subscribe((st, prev) => {

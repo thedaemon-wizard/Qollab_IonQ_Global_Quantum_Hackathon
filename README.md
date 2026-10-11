@@ -258,7 +258,8 @@ The terms ask for UI accessibility best practice, so it was tested, not assumed
 ([results/a11y/](results/a11y/README.md)):
 
 - **Automated**: axe-core 4.14.0 (WCAG 2.0–2.2 A/AA and best practice) reports 0 violations on all
-  8 views in the dark and the light scheme; Lighthouse accessibility score 100.
+  8 views in the dark and the light scheme; Lighthouse accessibility score 100 in both (re-run
+  on 2026-10-11, after the formula change).
 - **Keyboard**: skip link, visible focus, every control reachable; the guided tour works with
   Enter/→/←/Esc and keeps focus while a step runs; the 3D view turns with buttons; sideways
   scroll boxes are focusable.
@@ -324,7 +325,8 @@ The author previously showed an E91/CHSH Werner-state model in a separate public
 the idea of the step-by-step flow pages in the author's earlier QKD testbed demo; it was
 written new during the window, again with no code reused. During the window the author also
 built a second, separate entry, *Entangled Compass* (Quantum Playground: GHZ sensors tracking
-real geomagnetic data); the two entries share no code.
+real geomagnetic data). Apart from a small formula helper for Temml and its font declaration,
+written for both during the window, the two entries share no code.
 
 ## Extending it
 

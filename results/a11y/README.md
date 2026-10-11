@@ -51,9 +51,10 @@ the seven hand-built Method formulas use the same font).
 
 | Check | Result |
 |---|---|
-| Formulas rendered (local harness, all 8 views, then a Bell Lab run) | 113 MathML formulas over the views, 0 Temml errors, no TeX left visible (`math_checks_20261011.json`); after a run the Bell Lab view holds 23 (ladder, error rates, correlators). |
-| jsDelivr blocked | The same views show the formulas as Unicode text; only the 7 hand-built MathML formulas stay MathML; no errors besides the blocked requests. |
+| Formulas rendered (local harness, all 8 views, then a Bell Lab run) | 113 MathML formulas over the views, 0 Temml errors, no TeX left visible (`math_checks_20261011.json`). The re-run after the fallback fixes below counts the same 113, and 130 after one Bell Lab run (17 more: ladder, error rates, correlators) (`math_checks_20261011b.json`). |
+| jsDelivr blocked | The same views show the formulas as Unicode text; only the 7 hand-built MathML formulas stay MathML. The console shows no new errors besides the two blocked requests (a 404 for the harness's missing `/favicon.ico` appears in both modes). A review found three flaws in the Unicode spelling: `\bigl`/`\bigr` printed as words, the space after every control word swallowed, and `^\circ` shown as `^°`. They were fixed, and the re-run finds none of them in any view (`math_checks_20261011b.json`, `fallbackArtifacts`). |
+| Lighthouse 13.5.0, Bell Lab after a run, dark and light (re-run after the formula change) | Accessibility 100, Best Practices 100 (`lighthouse_20261011_math.json`) |
 | axe-core 4.14.0, all 8 views, dark and light | 0 violations in all 16 combinations (`axe_20261011_math.json`). |
 | 320 px wide viewport | No horizontal page scroll on any view. Two spots were fixed: term lists go to one column below 480 px (a formula cannot break inside), and the Repeater's rotation menu now shrinks with its column (it was 35 px too wide before this round). |
 | Guided tour | Every step renders; steps 2–5, 7 and 8 contain typeset formulas, none shows a raw `$`. |
-| Plain text kept | SVG text and titles, `<option>`, ARIA labels, live messages and exports. |
+| Plain text kept | SVG text and titles, `<option>`, ARIA labels, `announce()` messages, `role="status"` lines and exports. The Bell Lab's prediction box (a polite live region) has MathML term labels; Temml annotates each with its TeX source. |
