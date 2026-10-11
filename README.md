@@ -9,7 +9,7 @@ self-test. Then add noise or an eavesdropper, stretch the link with entanglement
 try purification, and check the formulas against **open data from a loophole-free Bell test**
 and published device-independent QKD experiments.
 
-> Demo video (2:59, YouTube, synthetic narration, English captions): https://youtu.be/6eT2Bk_R-54 · Repository:
+> Demo video (2:59, YouTube, synthetic narration, English captions): https://youtu.be/x7eFBNgVdmo · Repository:
 > https://github.com/thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon
 
 ![The Bell Lab after one run: the protocol diagram with each stage's numbers, and the list of stages](docs/img/screen_lab.png)
@@ -82,8 +82,12 @@ open the Bell Lab. Notes:
   one 25-qubit circuit, submits it once, and then disables Run with an explanation; the tour
   only configures experiments there. Press Run in Qollab again for another IonQ experiment.
 - The lab **never submits to quantum hardware**: a QPU backend gets a refusal profile.
-- Exports (JSON, CSV, PNG) appear in Qollab's **run console**, from where they can be
-  downloaded (the project frame itself cannot download files).
+- Qollab's **run console** gets one line per result: the backend at start-up, the formula
+  self-check, then every run (S with its interval, Q_Z, Q_X and the certificates that hold),
+  for example `[Bell-Test Lab] Bell Lab run on basic_simulator: 10000 shots per setting, …
+  S = 2.708 (97.5% interval 2.649 to 2.767); Q_Z = 2.36%, Q_X = 2.47%. …`.
+- Exports (JSON, CSV, PNG) appear in the same console, from where they can be downloaded (the
+  project frame itself cannot download files).
 
 **Locally** (Python 3.14):
 

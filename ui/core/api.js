@@ -49,8 +49,10 @@ function call(fn, ...args) {
     // Let the browser paint the "working" state before Python blocks the main thread.
     await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
     try {
-      const out = await py[fn].callPromising(...args);
-      return JSON.parse(String(out));
+      const out = JSON.parse(String(await py[fn].callPromising(...args)));
+      // Qollab routes console.log to its run console, where judges look for results.
+      if (out && typeof out.console_line === 'string') console.log(out.console_line);
+      return out;
     } catch (err) {
       if (err instanceof ApiError) throw err;
       const { kind, message } = parsePythonError(err);

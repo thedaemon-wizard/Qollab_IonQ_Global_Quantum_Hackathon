@@ -14,6 +14,7 @@ from bellkit import (
     analysis,
     bounds,
     config,
+    console,
     decode,
     execution,
     experiments,
@@ -115,6 +116,9 @@ def describe_backend_json(backend) -> str:
             "num_qubits": getattr(backend, "num_qubits", None),
             "type": type(backend).__name__,
             "profile": {k: v for k, v in profile.items() if k != "match"},
+            "console_line": console.line(
+                f"started on {name} (profile: {profile['label']}); every run's results are printed here."
+            ),
         }
     )
 
@@ -166,7 +170,9 @@ def run_json(backend, request_json: str) -> str:
         "canary_fraction": canary,
         "circuits": {"logical": run["logical"], "compiled": run["compiled"]},
     }
-    return json.dumps(build_report(cfg, req, exp, tables, selection, meta))
+    report = build_report(cfg, req, exp, tables, selection, meta)
+    report["console_line"] = console.line(console.run_summary(report))
+    return json.dumps(report)
 
 
 def build_report(cfg: dict, req: dict, exp: Experiment, tables: dict, selection: dict, meta: dict) -> dict:
@@ -421,10 +427,12 @@ def selftest_json() -> str:
             < 1e-4,
         ),
     ]
+    passed = sum(ok for _, ok in checks)
     return json.dumps(
         {
-            "passed": sum(ok for _, ok in checks),
+            "passed": passed,
             "total": len(checks),
             "checks": [{"name": n, "ok": bool(ok)} for n, ok in checks],
+            "console_line": console.line(f"formula self-check: {passed} of {len(checks)} passed."),
         }
     )

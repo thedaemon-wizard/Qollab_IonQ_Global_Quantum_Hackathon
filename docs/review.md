@@ -108,3 +108,26 @@ correctness, R = rules, A = accessibility, D = documentation.
 
 After the fixes: 254 tests pass; axe-core 4.14.0 reports 0 violations on all 8 views in both
 schemes, and Lighthouse 13.5.0 scores accessibility 100 (`results/a11y/`).
+
+## Round 3 (2026-10-11): formulas, documents and the demo video
+
+Independent reviewers checked the typeset formulas, the documents and the demo video; a second
+reviewer re-checked each finding before it was fixed.
+
+| ID | Severity | Finding | Resolution |
+|---|---|---|---|
+| V1 | HIGH | Video: "your run lies between the two" over a plot whose "your run" was the eavesdropped run, inside the local square | A run without Eve (S ≈ 2.7) is made before the correlation-space shot |
+| V2 | MEDIUM | Video: the two-link swap was credited to the IonQ Aria noise model while the screen showed other runs | The shot sets link noise to none, where the recorded IonQ Aria 1 run (S = 2.520) and its note show |
+| V3 | MEDIUM | Repeater: "a job is already running" appeared for the view's own job, and the video cut before the purification result | The view tracks its own job (local busy flag); the status keeps the run's result. Checked on Qollab with the IonQ Aria 1 noise model on 2026-10-11: the chain status kept "Done in 22.887 s" (S = 2.590, conservative 2.171) and only the other control showed the one-job notice |
+| M1 | MEDIUM | "The two entries share no code" no longer held (same small Temml helper and font declaration) | Disclosed in the README |
+| M2 | MEDIUM | Unicode fallback printed `bigl`/`bigr` in the DI-key formula | Mapped; spacing after control words and `^\circ` fixed too; a render that throws falls back |
+| M3 | MEDIUM | Upload bundle README linked the old video | Bundles rebuilt from HEAD before upload |
+| L1 | LOW | Prediction box is an aria-live region with MathML labels, against "live messages stay plain" | Claim narrowed (D12, tex.js, accessibility record) |
+| L2 | LOW | Accessibility record cited an after-run count not in its file and missed a 404 | Re-run recorded (`math_checks_20261011b.json`); the 404 is the harness's `/favicon.ico` |
+| L3 | LOW | Lighthouse 100 not re-run after the formula change | Re-run: 100 / 100 in both schemes (`lighthouse_20261011_math.json`) |
+| L4 | LOW | Notebook noise-sweep axis and title not typeset | mathtext |
+| V4 | LOW | Video: Forte Enterprise row cut off; Overview flashed between scenes | Scroll adjusted; each scene opens on its own view |
+
+The video was re-recorded in one colour scheme (light) with no still stretch longer than about
+four seconds; the finished file has no decode errors, a constant 30 fps and played in Chrome in
+real time with no stall or dropped frame.

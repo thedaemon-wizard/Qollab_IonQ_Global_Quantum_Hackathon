@@ -1,5 +1,5 @@
 {
-  "note": "Run shown in the demo video (https://youtu.be/6eT2Bk_R-54), recorded on Qollab on 2026-10-10 at about 23:40 UTC. Values were read off the screen; the counts were not exported, so the run is not in data/recorded_runs.json.",
+  "note": "Run shown in the demo video (https://youtu.be/x7eFBNgVdmo), recorded on Qollab on 2026-10-10 at about 23:40 UTC. Values were read off the screen; the counts were not exported, so the run is not in data/recorded_runs.json.",
   "backend": "ionq_simulator (IonQ cloud noise-model simulator, Aria 1), chosen in Qollab's Run dialog (free simulator)",
   "experiment": "Bell test, depolarizing 0.05 on Bob's link, six settings packed into one 25-qubit circuit, one job",
   "shots_per_setting": 200,
