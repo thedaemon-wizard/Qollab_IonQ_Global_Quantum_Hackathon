@@ -138,7 +138,7 @@ export default {
           ],
           rows: lu.rows,
         },
-        caption: 'Ours is 0.0008–0.0015 above every published value; the paper does not print the exact formula, so we report the difference rather than explain it. At 70 and 100 km the conservative corner is negative: those rates are not robust at one standard deviation.',
+        caption: 'Ours is 0.00079–0.00145 above every published value; the paper does not print the exact formula, so we report the difference rather than explain it. At 70 and 100 km the conservative corner is negative: those rates are not robust at one standard deviation.',
       });
       pubBox.replaceChildren(sq.element, table, h('details', null, h('summary', null, 'Caveats for each experiment'), caveats),
         h('h4', null, 'A distance series: Lu et al. 2026'), luChart.element,

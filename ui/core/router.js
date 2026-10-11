@@ -23,6 +23,16 @@ export function createRouter({ nav, main, views, ctx }) {
   }
   nav.append(list);
 
+  // On a phone the list is a strip that scrolls sideways: keep the current section's button in
+  // view (sideways only; the page itself does not scroll).
+  function revealInStrip(btn) {
+    if (list.scrollWidth <= list.clientWidth + 1) return;
+    const r = btn.getBoundingClientRect();
+    const lr = list.getBoundingClientRect();
+    if (r.left < lr.left) list.scrollLeft -= lr.left - r.left + 24;
+    else if (r.right > lr.right) list.scrollLeft += r.right - lr.right + 24;
+  }
+
   function ensure(view) {
     if (!built.has(view.id)) {
       const instance = view.create(ctx);
@@ -46,6 +56,7 @@ export function createRouter({ nav, main, views, ctx }) {
     const instance = ensure(view);
     instance.element.hidden = false;
     buttons.get(id).setAttribute('aria-current', 'page');
+    revealInStrip(buttons.get(id));
     current = id;
     if (focus) {
       const heading = instance.element.querySelector('h2');

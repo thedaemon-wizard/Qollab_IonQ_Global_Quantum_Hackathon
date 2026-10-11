@@ -193,6 +193,8 @@ p { margin: 0 0 0.6rem; }
 
 .grid { display: grid; gap: 0.9rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; }
 .grid.two { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
+/* the noise sweep: the two charts get the card's width when two columns would shrink their labels */
+.grid.sweep { grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr)); }
 .stack { display: grid; gap: 0.9rem; }
 .card {
   background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
@@ -254,9 +256,23 @@ figure { margin: 0; }
 figcaption { font-size: 0.84rem; color: var(--muted); margin-top: 0.3rem; }
 .chart svg, .diagram svg, .gauge svg { width: 100%; height: auto; display: block; margin: 0 auto; }
 .chart svg { max-width: 760px; }
+/* legend swatches keep their own 28 x 12 size (on a phone the rule above made them grow) */
+.chart .legend svg { width: 28px; height: 12px; flex: none; margin: 0; }
 .diagram.small svg { max-width: 300px; }
 .diagram.swim svg { max-width: 680px; }
-.diagram-scroll { overflow-x: auto; }
+.diagram-scroll, .chart-scroll { overflow-x: auto; }
+/* A drawing that would shrink its labels below about 10 px scrolls sideways in its own box
+   (min-width set in ui/core/dom.js readableScroll). On narrow screens a short note says so; the
+   box is a named region while it overflows. */
+.scroll-hint { display: flex; align-items: center; gap: 0.3rem; margin: 0.2rem 0 0; font-size: 0.8rem; color: var(--muted); }
+.scroll-hint[hidden] { display: none; }
+@media (min-width: 768px) { .scroll-hint { display: none; } }
+/* The Bell Lab's gauge and counts: at 350-366 px (two columns in a 1014 px frame) their labels
+   are 12.6 units instead of 12, so they stay at 10 px on screen without scrolling. */
+.gauge, .chart.bars { container-type: inline-size; }
+@container (max-width: 366.9px) {
+  .gauge svg text, .chart.bars svg text { font-size: 12.6px; }
+}
 .chart text, .diagram text, .gauge text, .circuit text { fill: var(--text); font-size: 12px; font-family: inherit; }
 .chart .axis line, .chart .axis path { stroke: var(--muted); }
 .chart .grid line { stroke: var(--border); stroke-dasharray: 2 3; }
@@ -324,6 +340,29 @@ div.circuit, .circuit-scroll { overflow-x: auto; }
 /* the brand's subtitle goes first, so the sticky header stays one row at tablet widths */
 @media (max-width: 1000px) {
   .bk-brand span.long { display: none; }
+}
+/* below 1100 px the busy indicator shows its spinner only, so the header keeps one row while
+   Python works; its text stays in the accessibility tree (the status region is unchanged) */
+@media (max-width: 1099px) {
+  .bk-header .busy-label {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+}
+/* On a phone the section strip stays under the header while the page scrolls. The strip
+   scrolls sideways by itself; a fade at an edge shows that more sections follow on that side
+   (data-more-* set by main.js). Scrolling to a field or a target stops below the strip too. */
+@media (max-width: 600px) {
+  html { scroll-padding-top: calc(var(--hdr, 52px) + var(--navh, 44px) + 8px); }
+  .bk-nav { position: sticky; top: var(--hdr, 52px); z-index: 15; overflow: visible; min-width: 0; padding: 0.15rem 0.2rem; }
+  .bk-nav ul { overflow-x: auto; padding: 5px 4px; scrollbar-width: thin; }
+  .bk-nav::before, .bk-nav::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 2.5rem; pointer-events: none;
+    opacity: 0; transition: opacity 0.15s;
+  }
+  .bk-nav::before { left: 0; background: linear-gradient(to left, transparent, var(--surface) 85%); }
+  .bk-nav::after { right: 0; background: linear-gradient(to right, transparent, var(--surface) 85%); }
+  .bk-nav[data-more-left='true']::before, .bk-nav[data-more-right='true']::after { opacity: 1; }
 }
 @media (max-width: 420px) {
   .bk-main { padding: 0.7rem 0.6rem 2rem; }

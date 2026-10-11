@@ -1,7 +1,7 @@
 // XY chart in SVG: lines, points with error bars, reference lines and shaded bands.
 // Series differ by colour AND by dash/marker, so they stay distinguishable without colour.
 // Every chart carries <title>/<desc> and a data table in <details>.
-import { h, s, uid } from '../core/dom.js';
+import { h, readableScroll, refreshScrollable, s, uid } from '../core/dom.js';
 import { detailsTable } from './table.js';
 
 const PAD = { left: 56, right: 16, top: 14, bottom: 44 };
@@ -48,6 +48,9 @@ export function lineChart(initial) {
   const clipId = uid('clip');
   const titleId = uid('t');
   const descId = uid('d');
+  let title = initial.title;
+  let box = null;
+  let hint = null;
 
   function render(spec) {
     const W = spec.width || 560;
@@ -155,7 +158,16 @@ export function lineChart(initial) {
       ? h('div', { class: 'legend', 'aria-hidden': 'true' }, legendItems.map((it) => h('span', null, legendSwatch(it), it.name)))
       : null;
     const table = spec.table ? detailsTable(spec.table.summary || 'Data table', spec.table) : null;
-    figure.replaceChildren(svg, legend || '', spec.caption ? h('figcaption', null, spec.caption) : '', table || '');
+    // Chart labels are 12 units in the viewBox (main.css): below W x 10 / 12 px the chart scrolls
+    // sideways in its own box instead of shrinking them under 10 px.
+    title = spec.title;
+    if (!box) [box, hint] = readableScroll(svg, (W * 10) / 12, () => title, 'chart-scroll');
+    else {
+      svg.style.minWidth = `${Math.ceil((W * 10) / 12)}px`;
+      box.replaceChildren(svg);
+      refreshScrollable(box);
+    }
+    figure.replaceChildren(box, hint, legend || '', spec.caption ? h('figcaption', null, spec.caption) : '', table || '');
   }
 
   render(initial);

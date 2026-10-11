@@ -31,10 +31,14 @@ export function createTour(ctx) {
     highlighted = null;
   }
 
-  // Bottom edge of the sticky header: content above it is hidden, so it is the top of the frame.
+  // Bottom edge of the sticky header (and, on a phone, of the section strip under it): content
+  // above it is hidden, so it is the top of the frame.
   function headerBottom() {
     const header = document.getElementById('bk-header');
-    return header ? Math.max(0, header.getBoundingClientRect().bottom) : 0;
+    let bottom = header ? header.getBoundingClientRect().bottom : 0;
+    const nav = document.getElementById('bk-nav');
+    if (nav && window.matchMedia('(max-width: 600px)').matches) bottom = Math.max(bottom, nav.getBoundingClientRect().bottom);
+    return Math.max(0, bottom);
   }
 
   // Scroll the target so that its top (or, if the page cannot scroll that far, its bottom)

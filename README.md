@@ -78,7 +78,7 @@ the device-independent key does not — finite statistics are part of the lesson
 | View | What it shows |
 |---|---|
 | **Overview** | The protocol and the software architecture as diagrams; which numbers are simulated, measured or bounds; the injected backend and its run profile; an 8-check formula self-test run in Python at start-up. |
-| **Bell Lab** | Choose link noise (depolarizing, dephasing, bit flip, Y flip), an eavesdropper (controlled-Ry with angle $`\varphi`$), an optional YY setting, shots and seed. **One job** runs six settings; the five protocol stages then replay from its counts (Run, Pause, Step, Reset), as a stepper and as a protocol diagram whose current stage lights up and whose boxes fill in with that stage's numbers (the pacing is not physical time). $`S`$ gauge with its interval, outcome counts, correlators against the exact prediction, error rates, the six-rung certificate ladder. Exports to JSON, CSV and PNG. |
+| **Bell Lab** | Choose link noise (depolarizing, dephasing, bit flip, Y flip), an eavesdropper (controlled-Ry with angle $`\varphi`$), an optional YY setting, shots and seed. **One job** runs six settings (seven with YY); the five protocol stages then replay from its counts (Run, Pause, Step, Reset), as a stepper and as a protocol diagram whose current stage lights up and whose boxes fill in with that stage's numbers (the pacing is not physical time). $`S`$ gauge with its interval, outcome counts, correlators against the exact prediction, error rates, the six-rung certificate ladder. With YY, the fidelity with $`\lvert\Phi^+\rangle`$, $`(1 + \langle XX\rangle - \langle YY\rangle + \langle ZZ\rangle)/4`$, is measured directly and listed with the error rates as a point estimate; it is not one of the six rungs. Exports to JSON, CSV and PNG. |
 | **Certificates** | Key rate against QBER (BBM92 and DI), what $`S`$ alone certifies (min-entropy, von Neumann entropy, self-test bound), noise sweeps for each channel type, and a threshold table — with your latest run placed on the curves. |
 | **Real data** | The **Munich 2017 event-ready Bell test** (Rosenfeld et al., open event files) re-analysed with the same estimator; published DI-QKD experiments on the $`S`$–$`Q`$ plane against the DI-key boundary (plus one $`S`$-only result); a distance series (Lu et al. 2026) next to our recomputation. |
 | **Repeater** | 1–4 links joined by entanglement swapping (topology diagram, timeline of classical messages, link budget, $`S`$ and QBER against the number of links), and one round of BBPSSW/DEJMPS purification with post-selection. |
@@ -317,7 +317,7 @@ with the same asymptotic bounds, at the central values and at the corner $`(S - 
 Meiers 2026 (a preprint that makes no device-independent key-generation claim, since its time
 window was optimised on the same data) reports $`S`$ only and is listed without a rate. For Liu 2026 at 101 km the rate is 0.087 at the centre and −0.038 at that
 corner. For Lu et al. 2026 (Science 391, 592), our $`(1 - \gamma)\,r_\text{DI}`$ with
-$`\gamma = 10^{-3}`$ is 0.0008–0.0015 above every deposited Fig. 5C value; the paper does not print
+$`\gamma = 10^{-3}`$ is 0.00079–0.00145 above every deposited Fig. 5C value; the paper does not print
 its exact formula, so the lab reports the difference rather than claiming a reproduction.
 
 ## How it was verified

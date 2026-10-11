@@ -1,0 +1,1287 @@
+{
+ "tool": "axe-core 4.14.0",
+ "tags": [
+  "wcag2a",
+  "wcag2aa",
+  "wcag21a",
+  "wcag21aa",
+  "wcag22aa",
+  "best-practice"
+ ],
+ "date": "2026-10-11T16:37:23.585Z",
+ "harness": "tools/devserver (basic_simulator), Chrome headless",
+ "runs": [
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Overview",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Bell Lab",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Certificates",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Real data",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Repeater",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Correlation space",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Backends",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Method",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Bell Lab",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Certificates",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Correlation space",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Repeater",
+   "state": "after a chain run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Repeater",
+   "state": "after a chain run and a purification run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Backends",
+   "state": "after the runs (Last run table filled)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "dark",
+   "view": "Backends",
+   "state": "Repeater chain circuits shown",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ],
+   "pageErrors": []
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Overview",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Bell Lab",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Certificates",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Real data",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Repeater",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Correlation space",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Backends",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Method",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Bell Lab",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Certificates",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Correlation space",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Repeater",
+   "state": "after a chain run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Repeater",
+   "state": "after a chain run and a purification run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Backends",
+   "state": "after the runs (Last run table filled)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1280,
+   "height": 900,
+   "scheme": "light",
+   "view": "Backends",
+   "state": "Repeater chain circuits shown",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ],
+   "pageErrors": []
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Overview",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Bell Lab",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Certificates",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Real data",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Repeater",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Correlation space",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Backends",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Method",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Bell Lab",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Certificates",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Correlation space",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Repeater",
+   "state": "after a chain run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Repeater",
+   "state": "after a chain run and a purification run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Backends",
+   "state": "after the runs (Last run table filled)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "dark",
+   "view": "Backends",
+   "state": "Repeater chain circuits shown",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ],
+   "pageErrors": []
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Overview",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Bell Lab",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Certificates",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Real data",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Repeater",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Correlation space",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Backends",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Method",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Bell Lab",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Certificates",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Correlation space",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Repeater",
+   "state": "after a chain run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Repeater",
+   "state": "after a chain run and a purification run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Backends",
+   "state": "after the runs (Last run table filled)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 1014,
+   "height": 720,
+   "scheme": "light",
+   "view": "Backends",
+   "state": "Repeater chain circuits shown",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ],
+   "pageErrors": []
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Overview",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Bell Lab",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Certificates",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Real data",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Repeater",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Correlation space",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Backends",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Method",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Bell Lab",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Certificates",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Correlation space",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Repeater",
+   "state": "after a chain run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Repeater",
+   "state": "after a chain run and a purification run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Backends",
+   "state": "after the runs (Last run table filled)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "dark",
+   "view": "Backends",
+   "state": "Repeater chain circuits shown",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ],
+   "pageErrors": []
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Overview",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Bell Lab",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Certificates",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Real data",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Repeater",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Correlation space",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Backends",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Method",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Bell Lab",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Certificates",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Correlation space",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Repeater",
+   "state": "after a chain run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Repeater",
+   "state": "after a chain run and a purification run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Backends",
+   "state": "after the runs (Last run table filled)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 375,
+   "height": 812,
+   "scheme": "light",
+   "view": "Backends",
+   "state": "Repeater chain circuits shown",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ],
+   "pageErrors": []
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Overview",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Bell Lab",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Certificates",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Real data",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Repeater",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Correlation space",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Backends",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Method",
+   "state": "default (no run yet)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Bell Lab",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Certificates",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Correlation space",
+   "state": "after a Bell Lab run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Repeater",
+   "state": "after a chain run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Repeater",
+   "state": "after a chain run and a purification run",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Backends",
+   "state": "after the runs (Last run table filled)",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ]
+  },
+  {
+   "width": 320,
+   "height": 640,
+   "scheme": "light",
+   "view": "Backends",
+   "state": "Repeater chain circuits shown",
+   "hscroll": 0,
+   "violations": [],
+   "incomplete": [
+    "color-contrast"
+   ],
+   "pageErrors": []
+  }
+ ],
+ "summary": {
+  "runs": 105,
+  "with_violations": 0,
+  "with_page_hscroll": 0
+ }
+}

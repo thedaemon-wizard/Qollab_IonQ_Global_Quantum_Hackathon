@@ -178,3 +178,36 @@ test changes:
 | — | LOW | Claims and references | Witness threshold scoped to the two-setting witness; Kaniewski symbol $`F_\text{ext}`$ defined; confidence level of the Munich lower ends; Meiers 2026 wording; Werner state with $`\lvert\Phi^+\rangle`$; Designolle 0.69604; QPU refusal described as a name and class match (README, Overview and Method view); tour steps that run circuits; the 2D slice caption (the disc is exact only when also $`E_{01} = E_{10}`$); the tour's correlation-space step qualified for the June Munich run; Munich distance 398 m; Aria QPUs retired; entries for Storz 2023, Kulikov 2026, Hensen 2016, BBPSSW, DEJMPS, Hoeffding and Wilson; DOIs for five supporting sources; prior-art re-check dated 2026-10-11; D13 (considered and not built) |
 
 At the last count before tagging, 322 tests pass.
+
+## Round 6 (2026-10-12 JST, before the 08:00 JST edit deadline): references, documentation and interface after submission
+
+Fixes made after submission and before the edit deadline, each re-checked by a second reviewer.
+Each bibliographic record was checked on 2026-10-12 against Crossref, doi.org, Math-Net.ru, the
+arXiv abstract pages, the npm registry or the GitHub releases page; `docs/references.md` says
+which. The interface fixes and their checks are listed in
+[results/a11y/README.md](../results/a11y/README.md) ("Sixth check").
+
+| ID | Severity | Finding | Resolution |
+|---|---|---|---|
+| R6-1 | LOW | Tsirelson's LOMI paper: "years to verify", and no DOI for the English translation | *Zap. Nauchn. Sem. LOMI* 142, 174–194 (1985) (Math-Net.ru); *J. Sov. Math.* 36(4), 557–570 (1987), doi:10.1007/BF01663472 (Crossref) |
+| R6-2 | LOW | Valcarce 2020 and Bhavsar 2025 cited without DOIs | doi:10.22331/q-2020-03-23-246 (arXiv:1910.04606) and doi:10.1103/1j5f-qjhx (arXiv:2505.06833), with full author lists checked in Crossref |
+| R6-3 | LOW | Meiers 2026: "check for newer versions" | The arXiv page lists v1 and v2 (the version read) and no journal reference |
+| R6-4 | LOW | three.js: "r187 is not on npm yet", undated | Dated check: npm `latest` is 0.186.1 (2026-09-24), the newest GitHub release is r186, and `three.core.js` sets `REVISION = '186'` |
+| R6-5 | LOW | Landau 1988, Brunner 2014 and Fine 1982 without full records | Title, volume and DOI from Crossref |
+| BELL-07 | LOW | The README did not say how the optional YY setting is reported | The direct fidelity with $`\lvert\Phi^+\rangle`$, $`(1 + \langle XX\rangle - \langle YY\rangle + \langle ZZ\rangle)/4`$, is listed with the error rates as a point estimate and is not one of the six rungs; one job then runs seven settings |
+| R6-6 | LOW | The Lu 2026 comparison was quoted as 0.0008–0.0015, but the largest difference is 0.001449 | The README, `references.md`, the Real data caption and the `bellkit/experiments.py` docstring give 0.00079–0.00145 (values from `bellkit.app.experiments_json()`); `tests/test_experiments.py` checks all four against the computed range |
+| R6-7 | LOW | "To verify" markers left in `references.md` | Points that a source now confirms are closed with the evidence; the others are stated plainly in §11 "What was not checked" |
+| R6-8 | LOW | The math test checked for only one macro (`operatorname`, which GitHub's math renderer refuses) | `tests/test_docs_math.py` also rejects, as a precaution, macros that define commands, load extensions, add links or set HTML attributes (the list is in the test) in the README, `THIRD_PARTY_NOTICES.md`, `docs/` and the accessibility record; none is used |
+| R6-9 | MEDIUM | On narrow screens the line charts, the counts chart, the $`S`$ gauge and the Repeater timeline were scaled down together with their labels (down to 4.9 px at 320 px) | Below the width that keeps their labels at about 10 px they scroll sideways in their own named, keyboard-reachable box, like the diagrams; a short note below 768 px says so. At 1014 px the noise-sweep charts take the card's width and the gauge and counts chart use slightly larger labels, so neither scrolls there |
+| R6-10 | LOW | On a phone the section menu scrolled away with the page; while Python worked, the header wrapped to two rows at 1014 and 768 px; legend swatches grew on a phone | At 600 px and below the section strip stays under the header, scrolls sideways with edge fades, and is counted in the scroll padding and by the guided tour; below 1100 px the busy indicator shows its spinner only (its text stays for screen readers); legend swatches keep 28 × 12 px |
+| R6-11 | LOW | No test ran the IBM Fez noise model, encoded the packed IonQ circuit, or compared the circuit diagram with Qiskit's drawing | `tests/test_backends_extra.py`: the FakeFez noise model through `app.run_json` gives $`2 < S < 2\sqrt{2}`$ and a non-zero key error rate; the packed circuit for three Bell requests is encoded by qiskit-ionq's own encoder without network access, stays within 25 qubits and uses only gates IonQ accepts, and the chain and purification are refused before encoding; for five requests the diagram draws the same gates, qubit by qubit, as Qiskit's text drawing (each part skips if its package is missing) |
+
+Re-checked without changes: every row of the README's results table, recomputed from the saved
+counts with `scripts/record_runs.py`'s code; the demo-video values against
+`results/qollab/video_take_20261011.json`; the IonQ job times (22.8–26.9 s); the Munich values
+($`S = 2.2213 \pm 0.0332`$ and 2.0957 ± 0.0340, lower ends 2.113 and 1.987); the Liu 2026
+101 km rates (0.087 and −0.038); and the five tour runs on the IBM Fez noise model, re-run
+locally with Python 3.14.7, which reproduce the Qollab counts setting by setting.
+
+At 2026-10-11 17:01 UTC (02:01 JST on 2026-10-12), with these changes in the working tree, 339 tests
+pass (`.venv/bin/python -m pytest -q`) and `ruff check .` reports no findings.

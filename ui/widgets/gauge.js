@@ -1,7 +1,7 @@
 // The CHSH gauge: S on a scale with the local bound 2, the Werner DI threshold and 2*sqrt(2).
 // Shows the point estimate and its conservative interval; values above 2*sqrt(2) are marked as
 // statistical fluctuation, not as super-quantum correlations.
-import { h, s, uid } from '../core/dom.js';
+import { h, readableScroll, s, uid } from '../core/dom.js';
 import { num } from '../core/format.js';
 
 export function sGauge({ thresholds }) {
@@ -43,7 +43,9 @@ export function sGauge({ thresholds }) {
         s('text', { x: Math.min(x(est.point), W - 50), y: 22, 'text-anchor': 'middle', style: 'font-weight:600;font-size:14px' }, `S = ${num(est.point)}`),
       );
     }
-    figure.replaceChildren(svg, h('figcaption', null,
+    // Labels are 12 units in the viewBox, 12.6 when the figure is narrower than 367 px (main.css):
+    // below 350 px the scale scrolls sideways instead of shrinking them under 10 px.
+    figure.replaceChildren(...readableScroll(svg, 350, 'CHSH value S on a scale', 'chart-scroll'), h('figcaption', null,
       est ? `Bar: ${(100 * (1 - est.delta / 2)).toFixed(1)}% Hoeffding interval for S (i.i.d. rounds); with an error-rate interval of the same level, a certificate holds at ${Math.round(100 * (1 - est.delta))}%. Dashed: Werner-state DI-key threshold.`
         : 'Run the lab to place S on the scale.'));
   }

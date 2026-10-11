@@ -2,7 +2,7 @@
 // the stepper: the current stage is highlighted (and animated while the replay plays), finished
 // stages turn solid, and each box shows its numbers only once its stage has been reached.
 // It draws what the report contains and computes nothing; there are no timers here.
-import { scrollableWhenNeeded } from '../core/dom.js';
+import { h, refreshScrollable, scrollableWhenNeeded, scrollHint } from '../core/dom.js';
 import { int, num, pct } from '../core/format.js';
 import { flowDiagram } from '../widgets/diagram.js';
 import { RUNG_INFO, rungOutcome } from './common.js';
@@ -37,7 +37,8 @@ function clip(text, n) {
 }
 
 export function labFlow(stageTitles) {
-  const wrap = scrollableWhenNeeded(document.createElement('div'), 'Protocol diagram');
+  const hint = scrollHint();
+  const wrap = scrollableWhenNeeded(document.createElement('div'), 'Protocol diagram', hint);
   wrap.className = 'flow-wrap';
   let opts = { channel: null, evePhi: null, backend: '' };
   let showing = 'preview';
@@ -131,13 +132,14 @@ export function labFlow(stageTitles) {
     });
     element.setAttribute('data-playing', String(playing));
     wrap.replaceChildren(element);
+    refreshScrollable(wrap);
   }
 
   const idle = () => stageTitles.map(() => 'todo');
   render(idle(), null, -1);
 
   return {
-    element: wrap,
+    element: h('div', null, hint, wrap), // the hint sits right above the drawing, not under its long caption
     /** Called by the Bell Lab after each stage is shown. */
     update(statuses, rep, stage) {
       showing = 'run';

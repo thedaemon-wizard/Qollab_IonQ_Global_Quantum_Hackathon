@@ -6,7 +6,7 @@ the one-sigma "unfavourable corner" (S - sigma_S, Q + sigma_Q). These are our
 recomputations, not the authors' key rates; their protocols differ in detail.
 
 For Lu et al. 2026 the deposited Fig. 5C rates are shown next to our (1 - gamma) r_Acin.
-Ours is 0.0008-0.0015 higher at every distance; the authors' exact formula is not printed
+Ours is 0.00079-0.00145 higher at every distance; the authors' exact formula is not printed
 in the paper, so the difference is reported, not explained.
 """
 

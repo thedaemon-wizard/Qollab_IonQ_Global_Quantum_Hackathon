@@ -61,6 +61,19 @@ async function start() {
     ctx,
   });
   ctx.router = router;
+
+  // On a phone the section strip is sticky under the header (main.css): its height (--navh) is
+  // added to the scroll padding, and data-more-left/right show a fade where sections are cut off.
+  const nav = document.getElementById('bk-nav');
+  const strip = nav.querySelector('ul');
+  const syncNav = () => {
+    document.documentElement.style.setProperty('--navh', `${Math.ceil(nav.getBoundingClientRect().height)}px`);
+    nav.dataset.moreLeft = String(strip.scrollLeft > 1);
+    nav.dataset.moreRight = String(strip.scrollLeft + strip.clientWidth < strip.scrollWidth - 1);
+  };
+  syncNav();
+  strip.addEventListener('scroll', syncNav, { passive: true });
+  if (typeof ResizeObserver === 'function') new ResizeObserver(syncNav).observe(nav);
   const tour = createTour(ctx);
   ctx.tour = tour;
   tourBtn.addEventListener('click', () => tour.start(tourBtn));

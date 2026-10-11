@@ -1,4 +1,7 @@
-# References and fact-check notes (checked 2026-10-09; updated 2026-10-11)
+# References and fact-check notes (checked 2026-10-09; updated 2026-10-12)
+
+Dates in this file are Japan time (JST, UTC+9). The edit deadline was 2026-10-12 08:00 JST
+(2026-10-11 19:00 ET); every check dated 2026-10-12 was made before it.
 
 **How to read this.** Each entry has a label for its kind of source:
 
@@ -18,7 +21,7 @@ Everything this project computes from its own circuits is a **simulation**. It r
   - These are i.i.d. plug-in bounds. They show how the bounds respond to noise. They are not finite-size or composable security proofs, and they certify neither a key nor randomness.
 - **Simulator "measurement outcomes" are pseudo-random.** Aer uses `std::mt19937_64` and BasicSimulator uses NumPy `default_rng`. Both give the same output for the same seed; our environment check uses seed 20261009 by default.
 
-Each entry says which text was actually read: the full text, the arXiv version of a paywalled paper, or the abstract only. "To verify" marks anything a primary source did not confirm. Quotes are under 15 words. F-numbers refer to §9.
+Each entry says which text was actually read: the full text, the arXiv version of a paywalled paper, or the abstract only. "Not checked" marks anything a primary source did not confirm; §11 lists these points. Quotes are under 15 words. F-numbers refer to §9.
 
 Conventions: outcomes are $`\pm 1`$, $`E_{xy} = \langle A_x B_y\rangle`$, and $`S = E_{00} + E_{01} + E_{10} - E_{11}`$.
 
@@ -48,7 +51,7 @@ Conventions: outcomes are $`\pm 1`$, $`E_{xy} = \langle A_x B_y\rangle`$, and $`
 
 - **Horodecki 1995.** R. Horodecki, P. Horodecki, M. Horodecki, "Violating Bell inequality by mixed spin-1/2 states: necessary and sufficient condition", *Phys. Lett. A* 200, 340–344 (1995). https://doi.org/10.1016/0375-9601(95)00214-N. *Theory.*
   - **What it shows:** the usual source for $`S_\text{max} = 2\sqrt{M(\rho)}`$ (F4).
-  - **Read:** Crossref metadata and a secondary restatement only. To verify against the original.
+  - **Read:** Crossref metadata and a secondary restatement only; the paper itself was not read. The Crossref record (checked 2026-10-12) gives the title without "spin-1/2"; we did not see the publisher's page.
 
 - **Werner-state locality thresholds (F5).** *Theory.*
   - **Hirsch 2017.** F. Hirsch, M. T. Quintino, T. Vértesi, M. Navascués, N. Brunner, *Quantum* 1, 3 (2017). https://doi.org/10.22331/q-2017-04-25-3 · [arXiv:1609.06114](https://arxiv.org/abs/1609.06114).
@@ -75,7 +78,7 @@ Conventions: outcomes are $`\pm 1`$, $`E_{xy} = \langle A_x B_y\rangle`$, and $`
   - **What it shows:** an EPR-pair scheme argued to be secure without Bell's theorem, including when the source is substituted. It is equivalent to BB84.
   - **Caveats:**
     - The abstract's "prove" predates modern composable proofs.
-    - The protocol details we use (two conjugate bases, sifting) come from standard knowledge. To verify against the full text.
+    - The protocol details we use (two conjugate bases, sifting) come from standard knowledge. Not checked against the full text.
     - Any CHSH value we compute alongside BBM92 is a diagnostic only.
   - **Read:** abstract only.
 
@@ -199,9 +202,9 @@ These experiments closed the detection and locality loopholes together. They sti
     - Examples: 0.565 at $`S = 2.2`$ and 0.704 at $`S = 2.4`$.
   - **Caveats:**
     - We call this "extractability (local channels)". It is not the fidelity of the physical state.
-    - The true DI threshold for non-trivial extractability lies somewhere in [2.05, 2.11] and is unresolved. Valcarce et al., *Quantum* 4, 246 (2020) give a state with trivial extractability at $`S \approx 2.05`$. Bhavsar et al., *PRX Quantum* 6, 040356 (2025) ([arXiv:2505.06833](https://arxiv.org/abs/2505.06833)) still describe the tight bound for local channels as open.
+    - The true DI threshold for non-trivial extractability lies somewhere in [2.05, 2.11] and is unresolved. Valcarce et al., *Quantum* 4, 246 (2020), https://doi.org/10.22331/q-2020-03-23-246 · [arXiv:1910.04606](https://arxiv.org/abs/1910.04606), give a state with trivial extractability at $`S \approx 2.05`$. Bhavsar, Wooltorton and Bae, *PRX Quantum* 6, 040356 (2025), https://doi.org/10.1103/1j5f-qjhx · [arXiv:2505.06833](https://arxiv.org/abs/2505.06833), still describe the tight bound for local channels as open.
     - The paper's statement is about expectation values. Our finite-sample value plugs in an i.i.d. Hoeffding end for $`S`$; it is not a composable proof.
-  - **Read:** arXiv v3 (Eq. 10). Valcarce 2020 and Bhavsar 2025 were checked only for the threshold statement above.
+  - **Read:** arXiv v3 (Eq. 10). Valcarce 2020 and Bhavsar 2025 were checked only for the threshold statement above. Their records were checked on 2026-10-12 in Crossref (authors, volume, article number, DOI) and on the arXiv abstract pages (Bhavsar: v3 of 12 Dec 2025 lists the same DOI).
 
 - **Arnon-Friedman 2018.** R. Arnon-Friedman, F. Dupuis, O. Fawzi, R. Renner, T. Vidick, "Practical device-independent quantum cryptography via entropy accumulation", *Nat. Commun.* 9, 459 (2018). https://doi.org/10.1038/s41467-017-02307-4. *Theory.*
   - **What it shows:** the Entropy Accumulation Theorem (EAT; F15). It gives finite-$`n`$ DIQKD security against general, non-i.i.d. attacks, built on the single-round form of F9 (F10), with an explicit key length (Eq. 35).
@@ -286,7 +289,7 @@ These experiments closed the detection and locality loopholes together. They sti
     - Asymptotic only, with a Bayesian i.i.d. uncertainty.
     - Finite-size security was only simulated: at least $`1.75 \times 10^{5}`$ rounds would be needed, assuming collective attacks.
     - The arXiv journal reference "609" is a typo; the correct volume is 607.
-    - To verify: whether the paper claims space-like separation.
+    - Not checked: whether the paper claims space-like separation.
   - **Read:** arXiv v1.
 
 - **Liu 2022.** W.-Z. Liu et al., "Toward a Photonic Demonstration of Device-Independent Quantum Key Distribution", *PRL* 129, 050502 (2022). https://doi.org/10.1103/PhysRevLett.129.050502 · [arXiv:2110.01480](https://arxiv.org/abs/2110.01480). *Experiment (proof-of-principle verification).*
@@ -296,7 +299,7 @@ These experiments closed the detection and locality loopholes together. They sti
   - **Caveats:**
     - No real-time random setting choice.
     - Collective attacks only, and no key was distilled.
-    - To verify: how a statistical uncertainty of about 0.0015 can fit inside an entropy margin of about $`2.6 \times 10^{-4}`$.
+    - Not resolved: we could not see how a statistical uncertainty of about 0.0015 fits inside an entropy margin of about $`2.6 \times 10^{-4}`$.
   - **Read:** arXiv v3.
 
 - **Liu 2026.** W.-Z. Liu et al. (29 authors on arXiv v1, in Crossref and on the Nature page; checked 2026-10-10), "Long-lived remote ion-ion entanglement for scalable quantum repeaters", *Nature* 652, 51–57 (2026). https://doi.org/10.1038/s41586-026-10177-4 · [arXiv:2602.08472](https://arxiv.org/abs/2602.08472). Source data: https://doi.org/10.5281/zenodo.18218281 (CC BY 4.0). *Experiment.*
@@ -315,8 +318,8 @@ These experiments closed the detection and locality loopholes together. They sti
   - **Settings:** in the main text Alice measures $`Z`$, $`(Z+X)/\sqrt{2}`$ and $`(Z-X)/\sqrt{2}`$, Bob measures $`Z`$ and $`X`$, and the key comes from the $`(Z, Z)`$ pair. These are the same roles as in this project, which follows Acín 2007's labelling (§2). Only the supplement's protocol description uses swapped labels.
   - **Fig. 5C rates and our comparison:**
     - The authors deposited $`S`$, $`Q`$, their Poissonian $`1\sigma`$ errors and the asymptotic rate for each distance (`Fig_5.xlsx`). These rates are for a protocol without sifting, with a test-round fraction $`\gamma = 10^{-3}`$.
-    - Our $`(1 - \gamma)\cdot\text{F9}`$ at the deposited central values is 0.0008–0.0015 above every deposited rate: +0.00079 (11 km), +0.00088 (20 km), +0.00134 (50 km), +0.00114 (70 km) and +0.00145 (100 km).
-    - The arXiv v1 supplement prints no closed-form rate, so the authors' exact formula is not known (to verify). We show our values as a comparison, not a reproduction.
+    - Our $`(1 - \gamma)\cdot\text{F9}`$ at the deposited central values is 0.00079–0.00145 above every deposited rate: +0.00079 (11 km), +0.00088 (20 km), +0.00134 (50 km), +0.00114 (70 km) and +0.00145 (100 km).
+    - The arXiv v1 supplement prints no closed-form rate, and we did not read the Science supplement, so the authors' exact formula is not known to us. We show our values as a comparison, not a reproduction.
     - At the conservative corner $`(S - \sigma, Q + \sigma)`$, F9 is negative at 70 km (−0.054) and 100 km (−0.066). That corner is not a joint $`1\sigma`$ region.
     - The 11 km finite-size rate of 0.112 bits/event ($`\varepsilon = 10^{-5}`$) is for the sifted protocol, whose asymptotic value is 0.275. The Fig. 5C value at 11 km (0.410) is for the variant without sifting. The gap is a protocol difference, not a units issue.
     - For reference, the sifted protocol's error-correction leakage is Eq. S43: $`(1 - \gamma_A/2)(1 - \gamma_B)\,h(q) + \gamma_A\gamma_B\,h(\omega)`$.
@@ -324,7 +327,7 @@ These experiments closed the detection and locality loopholes together. They sti
     - The 100 km rate is asymptotic only. Like every Fig. 5C rate, it is for the variant without sifting, not for the sifted protocol of the 11 km finite-size key.
     - The 100 km QBER of 7.16% is above the depolarising 7.1% threshold. A positive rate is still possible because $`S`$ and $`Q`$ are evaluated separately.
     - The locality loophole is explicitly not closed.
-    - To verify: whether error correction and privacy amplification were actually run.
+    - Not checked: whether error correction and privacy amplification were actually run.
   - **Read:** arXiv v1 and supplement, and the Fig. 5 source data on Zenodo.
 
 - **Meiers 2026.** J. Meiers et al., "An asymmetric atom-photon architecture for device-independent quantum key distribution over 25 km", [arXiv:2609.25795](https://arxiv.org/abs/2609.25795) (2026). *Experiment; unrefereed preprint.*
@@ -337,7 +340,7 @@ These experiments closed the detection and locality loopholes together. They sti
     - Bob's basis choice is passive.
     - The authors explicitly make no device-independent key-generation claim, because the same dataset was used to optimise the time window.
     - Of all the papers here, this is the closest to our approach of evaluating a bound on data under a model.
-  - **Read:** arXiv v2.
+  - **Read:** arXiv v2. On 2026-10-12 the arXiv abstract page lists v1 (22 Sep 2026) and v2 (23 Sep 2026) and no journal reference, so v2 is the latest version.
 
 - **Zhang X. 2023.** X. Zhang, P. Zeng, T. Ye, H.-K. Lo, X. Ma, *PRL* 131, 140801 (2023). https://doi.org/10.1103/PhysRevLett.131.140801 · [arXiv:2111.13855](https://arxiv.org/abs/2111.13855). *Theory.*
   - **What it shows:** a finite-size DI analysis based on complementarity. According to its abstract, it covers general attacks.
@@ -493,7 +496,7 @@ The bound we evaluate is Pironio 2010 (see §2).
 
 - **qiskit-ionq** (README of the current release, 1.1.1; this project pins 1.0.2, the version Qollab documents). https://github.com/qiskit-community/qiskit-ionq. *Software.*
   - **What it says:** the simulator supports mid-circuit measurement, qubit reuse and reset.
-  - **Caveat:** branching through this provider was not tested (to verify).
+  - **Caveat:** branching through this provider was not tested; this project does not use it (all measurements are terminal).
 
 **Consequence for this project:** on IonQ targets, swapping corrections must be applied without classical feed-forward. That means either deferred measurement or a Pauli frame applied in post-processing. Post-selection is not equivalent.
 
@@ -511,17 +514,17 @@ The bound we evaluate is Pironio 2010 (see §2).
     - The bibliography of Brunner et al. 2014 lists a *different* Masanes paper under "Masanes 2003". Cite the arXiv number instead.
   - **Read:** full text.
 
-- **Supporting sources.** These were checked for the statements we use. Bibliographic details marked "to verify" have not yet been checked against the publisher's record.
+- **Supporting sources.** These were checked for the statements we use. Records marked with a date were checked in Crossref (or, for LOMI, on Math-Net.ru) on that date.
   - **Le et al. 2023.** T. P. Le, C. Meroni, B. Sturmfels, R. F. Werner, T. Ziegler, *Quantum* 7, 947 (2023). https://doi.org/10.22331/q-2023-03-16-947 · [arXiv:2111.06270](https://arxiv.org/abs/2111.06270) (v3 read). Used for the pushout map, the two-polynomial test, the Gram completion and the volume ratios.
     - It has a sign error on p. 13: it writes $`+2xyz`$ for $`c_{11} = -1`$, where $`-2xyz`$ is correct.
     - It cites Tsirelson's "Thm 2.2" where Thm 2.3 is meant.
   - **Goh et al. 2018**, "Geometry of the set of quantum correlations", *PRA* 97, 022104, https://doi.org/10.1103/PhysRevA.97.022104 (record checked 2026-10-11): the PR-plane slice, and the name "TLM" (Tsirelson–Landau–Masanes).
-  - **Tsirelson, LOMI 142, 174–194:** Theorem 2.2 gives a polynomial criterion, stated without proof. LOMI 142 is the 1985 original; the 1987 item is its English translation in *J. Sov. Math.* 36 (years to verify).
-  - **Landau 1988** (*Found. Phys.* 18, 449–460): the square-root form. The abstract states it as a necessary condition; only the abstract was read.
+  - **Tsirelson 1985/1987.** B. S. Tsirel'son, "Quantum analogues of the Bell inequalities. The case of two spatially separated domains", *Zap. Nauchn. Sem. LOMI* 142, 174–194 (1985); English translation in *J. Sov. Math.* 36(4), 557–570 (1987), https://doi.org/10.1007/BF01663472 (records checked 2026-10-12: Crossref for the translation, Math-Net.ru for the original and its year). Theorem 2.2 gives a polynomial criterion, stated without proof.
+  - **Landau 1988**, "Empirical two-point correlation functions", *Found. Phys.* 18, 449–460, https://doi.org/10.1007/BF00732549 (record checked 2026-10-12): the square-root form. The abstract states it as a necessary condition; only the abstract was read.
   - **Navascués–Pironio–Acín 2007**, *PRL* 98, 010401, https://doi.org/10.1103/PhysRevLett.98.010401 (record checked 2026-10-11): the level-1 Gram test and the test that accounts for marginals.
-  - **Brunner et al. 2014** (*Rev. Mod. Phys.*, 419–478).
+  - **Brunner et al. 2014**, "Bell nonlocality", *Rev. Mod. Phys.* 86, 419–478, https://doi.org/10.1103/RevModPhys.86.419 (record checked 2026-10-12).
   - **Werner–Wolf 2001**, *PRA* 64, 032112, https://doi.org/10.1103/PhysRevA.64.032112 (record checked 2026-10-11): 16 facets, made of 8 trivial and 8 CHSH.
-  - **Fine 1982** (*PRL*, 291–295): full text not read.
+  - **Fine 1982**, "Hidden Variables, Joint Probability, and the Bell Inequalities", *PRL* 48, 291–295, https://doi.org/10.1103/PhysRevLett.48.291 (record checked 2026-10-12): full text not read.
   - **Popescu–Rohrlich 1994**, *Found. Phys.* 24, 379–385, https://doi.org/10.1007/BF02058098 (record checked 2026-10-11): the paper does not use the term "PR box".
   - **Barrett et al. 2005**, *PRA* 71, 022101, https://doi.org/10.1103/PhysRevA.71.022101 (record checked 2026-10-11); **Sanyal** (the "samosa" nickname for the 3×3 elliptope); **Laurent–Mascarin–Telen** [arXiv:2605.02484](https://arxiv.org/abs/2605.02484).
 
@@ -583,7 +586,7 @@ The lab runs on whichever Qollab backend is selected, including IonQ's noise-mod
 | NumPy | 2.4.6 | BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0 | https://numpy.org | Runtime |
 | SciPy | 1.18.0 | BSD-3-Clause | https://scipy.org | Tests and figures only |
 | Matplotlib | 3.10.8 | Matplotlib (PSF-style) | https://matplotlib.org | Figures only |
-| three.js | r186 (`three@0.186.1`, 2026-09-24) | MIT, © 2010–2026 three.js authors | https://github.com/mrdoob/three.js | Provided by Qollab's import map; not vendored |
+| three.js | r186 (`three@0.186.1`, published on npm 2026-09-24) | MIT, © 2010–2026 three.js authors | https://github.com/mrdoob/three.js | Provided by Qollab's import map; not vendored |
 | Tabler Icons | 3.49.0 (2026-10-05) | MIT, © 2020–2026 Paweł Kuna | https://github.com/tabler/tabler-icons | Icons: a small subset is vendored into the UI, with its licence notice |
 | mermaid-cli | 12.0.0 | MIT | https://github.com/mermaid-js/mermaid-cli | Build tool: rendered the README's Mermaid diagram sources to PNG |
 
@@ -595,7 +598,7 @@ Licence strings were read from the installed package metadata (Python packages) 
   - Inside Qollab, `three` and `three/addons/` come from Qollab's own import map (jsDelivr). Outside Qollab, `three.module.js` imports `three.core.js`, so both files are needed.
   - `Clock` is deprecated (use `Timer`).
   - WebGL is still the default renderer.
-  - r187 is not on npm yet.
+  - Checked 2026-10-12: npm's `latest` tag for `three` is 0.186.1 (published 2026-09-24), the newest GitHub release is r186 (2026-09-24), and `build/three.core.js` of 0.186.1 on jsDelivr sets `REVISION = '186'`. There is no r187 release yet. The local harness loads `three@0.186.1` from jsDelivr.
 - **Tabler Icons:** use `icons/outline/<name>.svg`. These names do not exist as files: `light`, `photon`, `circuit-loop` and `random`. `3d-cube-sphere` is only an alias.
 - **Qiskit Aer docs:** the `depolarizing_error` definition was read on a docs page that shows version 0.17.1.
 
@@ -633,7 +636,7 @@ Notation: $`h(x) = -x\log_2 x - (1-x)\log_2(1-x)`$.
   - Real sources are not Werner states. At Nadlinger's $`S = 2.677`$ this relation predicts $`Q \approx 2.7\%`$, against 1.44% measured. At Lu's 11 km $`S = 2.612`$ it predicts $`Q \approx 3.8\%`$, against 2.85%.
   - Likewise, a reported fidelity $`F`$ maps to $`S = 2\sqrt{2}\,(4F-1)/3`$ only under this model. Werner presets are therefore illustrative; a fit to real data needs at least two correlators (for example $`E_{ZZ}`$ and $`E_{XX}`$).
 - **F4. Bell-diagonal noise, X–Z plane settings.** $`S_\text{max} = 2\sqrt{(1-2Q_Z)^2 + (1-2Q_X)^2}`$.
-  - General form: $`S_\text{max} = 2\sqrt{t_1^2 + t_2^2}`$ (Horodecki 1995; to verify).
+  - General form: $`S_\text{max} = 2\sqrt{t_1^2 + t_2^2}`$, with $`t_1, t_2`$ the two largest singular values of the correlation matrix (Horodecki 1995; the paper was not read, see §1).
 - **F5. Werner-state thresholds.**
   - Separable if and only if $`v \le 1/3`$.
   - Local for all POVMs at $`v \le 1/2`$.
@@ -783,53 +786,49 @@ Notation: $`h(x) = -x\log_2 x - (1-x)\log_2(1-x)`$.
 - No claim to be "first" or "novel".
 - No claim of WCAG conformance without a manual audit.
 
-## 11 Open items
+## 11 What was not checked
 
-To verify:
+These points were not confirmed against a primary source. They are limits of this review, not open tasks; none of them changes a number the app computes unless the entry says so.
 
 **Foundations**
-- The full texts of Werner 1989, BBM92, Horodecki 1995, Renner 2024 and Pan 1998.
-- Whether Bennett et al. 1993 should be credited for swapping.
+- The full texts of Werner 1989, BBM92, Horodecki 1995, Renner 2024 and Pan 1998 were not read.
+- Whether Bennett et al. 1993 should also be credited for swapping was not checked.
 
 **Bibliographic details**
-- The PRL received dates for Giustina 2015 and Shalm 2015.
+- The PRL received dates for Giustina 2015 and Shalm 2015 were not checked.
 
 **DI bounds**
-- Pironio 2009's 92.4% threshold (our recomputation gives 92.3%).
-- The Ho 2020 supplement.
-- The Vazirani–Vidick 1.6% figure.
-- Pironio 2010: the Nature text compared with arXiv, and the later security analyses.
-- Full records for Valcarce 2020 and Bhavsar 2025 (cited under Kaniewski 2016).
+- Pironio 2009 gives a 92.4% threshold; our recomputation gives 92.3%. The difference was not resolved.
+- The Ho 2020 supplement was not read.
+- The Vazirani–Vidick 1.6% figure was not checked.
+- For Pironio 2010, the Nature text was not compared with arXiv, and the later security analyses were not read.
 
 **Experiments**
-- Liu 2026: the attack model and node separation, from the Nature version or supplement.
-- Lu 2026: whether error correction and privacy amplification were run, and the formula behind the Fig. 5C rates (the Science supplement was not read).
-- Zhang 2022: the locality statement.
-- Liu 2022: the statistical margin.
-- Meiers 2026: check for newer versions.
+- Liu 2026: the attack model and the node separation were not checked in the Nature version or the supplement.
+- Lu 2026: whether error correction and privacy amplification were run, and the formula behind the Fig. 5C rates, are not known to us (the Science supplement was not read).
+- Zhang 2022: the locality statement was not checked.
+- Liu 2022: the statistical margin was not resolved (§3).
 
 **Randomness**
-- Kavuri 2025 and Nai 2025: check against the published versions.
-- The RNG used by IonQ's cloud simulator.
+- Kavuri 2025 and Nai 2025 were not compared with their published versions.
+- The random-number generator used by IonQ's cloud simulator was not checked.
 
 **IonQ**
-- Any technical paper behind the April 2026 release.
-- Documentation for the current Forte noise models.
-- Whether mid-circuit measurement without branching works through qiskit-ionq 1.0.2 on Qollab (this project does not rely on it: all measurements are terminal).
+- Whether a technical paper backs the April 2026 release was not checked.
+- Documentation for the current Forte noise models was not checked beyond IonQ's noise-model page (§5).
+- Mid-circuit measurement without branching through qiskit-ionq 1.0.2 on Qollab was not tested; this project does not rely on it (all measurements are terminal).
 
 **Repeaters**
-- Confirm numerically that $`v_\text{total} = \prod_i v_i`$.
+- $`v_N = v^N`$ for equal links is checked for 1–3 links in `tests/test_circuits_exact.py`: `test_chain_with_pauli_frame` compares the circuits with the exact model, and `test_chain_spec_vectors` checks the model against $`2\sqrt{2}\,v^N`$. The product $`v = \prod_i v_i`$ for links with different visibilities is derived only; the app always uses the same channel on every link.
 
 **Geometry**
-- Full records for the supporting sources marked "to verify", and the year of Tsirelson's LOMI 142 paper.
-- Whether Masanes 2003 was ever published.
-- The Landau 1988 body text and the Fine 1982 full text.
-- Re-run the Monte Carlo equivalence checks.
+- Masanes 2003: on 2026-10-12 its arXiv page lists one version (v1, 18 Sep 2003) and no journal reference; we found no journal version.
+- The Landau 1988 body text and the Fine 1982 full text were not read.
+- The membership tests are checked by `tests/test_geometry.py` (including the Monte Carlo volume ratios $`2/3`$ and $`3\pi^2/32`$). A Monte Carlo comparison of the arcsin test with the Landau and Gram-matrix forms was not re-run in this repository; the app uses only the arcsin test.
 
 **Software**
-- `depolarizing_error` in Aer 0.17.2 (the docs page shows 0.17.1).
-- The release status of three.js r187.
-- Runtime MediaRecorder support in each target browser, including Safari.
+- `depolarizing_error` was read on the Aer 0.17.1 docs page; the pinned version is 0.17.2.
+- MediaRecorder support was taken from MDN's compatibility data, not tested in each browser (Safari included).
 
 **Prior art**
 - Re-checked 2026-10-11 (see §7): several in-window Qollab entries also use CHSH or QKD; they are not prior art.

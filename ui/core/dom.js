@@ -85,25 +85,59 @@ export function setDisabled(el, disabled, fallback) {
   el.disabled = disabled;
 }
 
+const scrollUpdates = new WeakMap();
+
 /**
  * Make a box that may scroll sideways reachable by keyboard, but only while it actually
- * overflows (Safari does not focus scrollable boxes by itself). `label` names the region.
+ * overflows (Safari does not focus scrollable boxes by itself). `label` (a string, or a function
+ * for a box whose content changes) names the region. An optional `hint` element is shown only
+ * while the box overflows.
  */
-export function scrollableWhenNeeded(el, label) {
+export function scrollableWhenNeeded(el, label, hint = null) {
   const update = () => {
-    if (el.scrollWidth > el.clientWidth + 1) {
+    const over = el.scrollWidth > el.clientWidth + 1;
+    if (over) {
       el.setAttribute('tabindex', '0');
       el.setAttribute('role', 'region');
-      el.setAttribute('aria-label', label);
+      el.setAttribute('aria-label', typeof label === 'function' ? label() : label);
     } else {
       el.removeAttribute('tabindex');
       el.removeAttribute('role');
       el.removeAttribute('aria-label');
     }
+    if (hint) hint.hidden = !over;
   };
+  scrollUpdates.set(el, update);
   if (typeof ResizeObserver === 'function') new ResizeObserver(update).observe(el);
   requestAnimationFrame(update);
   return el;
+}
+
+/** Re-check a box from scrollableWhenNeeded after its content changed (its own size may not). */
+export function refreshScrollable(el) {
+  const update = scrollUpdates.get(el);
+  if (update) requestAnimationFrame(update);
+}
+
+/**
+ * The visible note under a drawing that scrolls sideways (shown on narrow screens only, see
+ * .scroll-hint in main.css). The region itself carries the name for screen readers.
+ */
+export function scrollHint() {
+  return h('p', { class: 'scroll-hint', hidden: true }, h('span', { 'aria-hidden': 'true' }, '\u2194'), ' Scroll sideways to see the whole figure');
+}
+
+/**
+ * Keep the labels of a drawing at about 10 px or more on screen: the SVG may not get narrower
+ * than `minWidth` px (its viewBox width x 10 / its smallest font size); below that it scrolls
+ * sideways in its own named, keyboard-reachable box, with a short visible hint. Returns
+ * [box, hint]; the caller puts both into its <figure>, outside any caption.
+ */
+export function readableScroll(svg, minWidth, label, className = 'fig-scroll') {
+  svg.style.minWidth = `${Math.ceil(minWidth)}px`;
+  const hint = scrollHint();
+  const box = scrollableWhenNeeded(h('div', { class: className }, svg), label, hint);
+  return [box, hint];
 }
 
 /**

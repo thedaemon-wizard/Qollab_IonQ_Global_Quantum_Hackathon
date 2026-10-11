@@ -1,5 +1,5 @@
 // Time-ordered message chart: one lane per node, steps as boxes, classical messages as arrows.
-import { fitWhenShown, h, s, uid } from '../core/dom.js';
+import { fitWhenShown, h, readableScroll, s, uid } from '../core/dom.js';
 
 export function swimlane({ title, desc, lanes, steps, messages, caption }) {
   const tId = uid('st');
@@ -56,5 +56,7 @@ export function swimlane({ title, desc, lanes, steps, messages, caption }) {
       s('text', { x: tx(st.t), y: ly(st.lane) + 4, 'text-anchor': 'middle', 'data-fit': 92, style: 'font-size:11px' }, st.label));
   }
   fitWhenShown(svg);
-  return h('figure', { class: 'diagram swim' }, svg, caption ? h('figcaption', null, caption) : null);
+  // Labels are 10.5 to 12 units and step labels may shrink to 10 (fitSvgText): below W px the
+  // timeline scrolls sideways in its own box instead of shrinking them under 10 px on screen.
+  return h('figure', { class: 'diagram swim' }, ...readableScroll(svg, W, title, 'diagram-scroll'), caption ? h('figcaption', null, caption) : null);
 }

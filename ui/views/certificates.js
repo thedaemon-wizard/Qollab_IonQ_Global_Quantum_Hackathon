@@ -55,7 +55,7 @@ export default {
         h('div', { class: 'card' }, h('h3', null, icon('dice-5'), tm`What $S$ alone certifies`), entropyChart.element)),
       h('div', { class: 'card wide' }, h('h3', null, icon('wave-sine'), 'Noise sweep'),
         h('p', { class: 'muted' }, tm`Exact predictions for the lab’s fixed settings as the noise grows. Different noise types hurt different certificates: dephasing leaves $Q_Z$ untouched but raises $Q_X$, so it costs the BBM92 key less than the DI key.`),
-        h('div', { class: 'grid' }, h('div', null, channel.elements[0]), h('div', null, sweepBox))),
+        h('div', { class: 'grid sweep' }, h('div', null, channel.elements[0]), h('div', null, sweepBox))),
       h('div', { class: 'card wide' }, h('h3', null, icon('table'), 'Thresholds'), thresholdTable,
         note('', 'These are asymptotic formulas (infinitely many rounds, collective attacks for the DI key). The lab evaluates them at the ends of finite-sample confidence intervals; that is a teaching device, not a finite-size security proof.')),
     );

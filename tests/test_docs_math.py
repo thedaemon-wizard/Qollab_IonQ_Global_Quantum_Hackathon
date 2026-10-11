@@ -55,7 +55,18 @@ def test_writeup_converts_every_formula():
 
 def test_markdown_math_uses_github_safe_macros():
     # GitHub's math renderer rejects \\operatorname ("The following macros are not allowed").
+    # As a precaution, macros that define commands, load extensions, link or add HTML attributes
+    # are rejected too.
+    import re
+
+    banned = re.compile(
+        r"\\(operatorname|require|def|newcommand|renewcommand|href|html[A-Za-z]*|class|cssId)(?![A-Za-z])"
+    )
     docs = sorted((ROOT / "docs").glob("*.md"))
-    paths = [ROOT / "README.md", *docs, ROOT / "results" / "a11y" / "README.md"]
+    paths = [ROOT / "README.md", ROOT / "THIRD_PARTY_NOTICES.md", *docs]
+    paths.append(ROOT / "results" / "a11y" / "README.md")
     for path in paths:
-        assert "\\operatorname" not in path.read_text(encoding="utf-8"), path.name
+        hit = banned.search(path.read_text(encoding="utf-8"))
+        assert hit is None, f"{path.name}: {hit.group(0)}"
+    assert banned.search(r"$`\operatorname{tr}`$") and banned.search(r"\htmlClass{x}{y}")
+    assert not banned.search(r"$`\delta + \defect`$")

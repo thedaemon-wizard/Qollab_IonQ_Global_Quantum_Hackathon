@@ -1,6 +1,6 @@
 // Outcome counts per measurement setting as grouped bars (00, 01, 10, 11). Each outcome has
 // its own colour and fill pattern; the numbers are also in the table below the chart.
-import { h, s, uid } from '../core/dom.js';
+import { h, readableScroll, s, uid } from '../core/dom.js';
 import { legendSwatch } from './chart.js';
 import { detailsTable } from './table.js';
 
@@ -12,7 +12,7 @@ const OUTCOMES = [
 ];
 
 export function countsChart() {
-  const figure = h('figure', { class: 'chart' });
+  const figure = h('figure', { class: 'chart bars' });
   const titleId = uid('bt');
   const patId = uid('pat');
 
@@ -59,7 +59,9 @@ export function countsChart() {
       columns: [{ key: 'id', label: 'Setting' }, ...OUTCOMES.map((o) => ({ key: o.key, label: o.label }))],
       rows: ids.map((id) => ({ id, ...settings[id] })),
     });
-    figure.replaceChildren(svg, legend, table);
+    // Labels are 12 units in the viewBox, 12.6 when the figure is narrower than 367 px (main.css):
+    // below 350 px the chart scrolls sideways instead of shrinking them under 10 px.
+    figure.replaceChildren(...readableScroll(svg, 350, `Outcome counts for ${ids.length} measurement settings`, 'chart-scroll'), legend, table);
   }
   render(null);
   return { element: figure, update: render };

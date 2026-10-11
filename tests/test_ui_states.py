@@ -65,3 +65,66 @@ def test_app_wording_matches_the_readme():
     tour = _src("ui/views/tour_steps.js")
     assert "Your run and the Munich data sit between the diamond and the disc" not in tour
     assert "the June run does not clear 2 at 95%" in tour
+
+
+def test_charts_and_timeline_scroll_instead_of_shrinking_labels_below_10px():
+    # every chart widget and the Repeater timeline sit in a readableScroll box with a min-width
+    for name in ("chart.js", "bars.js", "gauge.js", "swimlane.js", "diagram.js"):
+        assert "readableScroll(" in _src(f"ui/widgets/{name}"), name
+    # line charts: labels are 12 units, so the drawing keeps at least W x 10 / 12 px
+    chart = _src("ui/widgets/chart.js")
+    assert "readableScroll(svg, (W * 10) / 12," in chart
+    assert "svg.style.minWidth = `${Math.ceil((W * 10) / 12)}px`;" in chart
+    # gauge and counts: 440 units wide, labels 12.6 units below 367 px, so 350 px keeps 10 px
+    assert 12.6 * 350 / 440 >= 10 and 12 * 367 / 440 >= 10
+    assert "readableScroll(svg, 350," in _src("ui/widgets/gauge.js")
+    assert "readableScroll(svg, 350," in _src("ui/widgets/bars.js")
+    css = _src("main.css")
+    assert re.search(
+        r"@container \(max-width: 366\.9px\) \{\s*"
+        r"\.gauge svg text, \.chart\.bars svg text \{ font-size: 12\.6px; \}",
+        css,
+    )
+    # the timeline: step labels may shrink to 10 units (fitSvgText), so it keeps its full width
+    assert "readableScroll(svg, W, title, 'diagram-scroll')" in _src("ui/widgets/swimlane.js")
+    dom = _src("ui/core/dom.js")
+    assert "svg.style.minWidth = `${Math.ceil(minWidth)}px`;" in dom
+    assert "if (hint) hint.hidden = !over;" in dom
+
+
+def test_scroll_hint_shows_on_narrow_screens_only():
+    css = _src("main.css")
+    assert ".scroll-hint[hidden] { display: none; }" in css
+    assert "@media (min-width: 768px) { .scroll-hint { display: none; } }" in css
+
+
+def test_phone_nav_strip_is_sticky_and_counted_in_the_scroll_padding():
+    css = _src("main.css")
+    block = re.search(r"@media \(max-width: 600px\) \{(.*?)\n\}", css, re.S).group(1)
+    assert "html { scroll-padding-top: calc(var(--hdr, 52px) + var(--navh, 44px) + 8px); }" in block
+    assert re.search(r"\.bk-nav \{ position: sticky; top: var\(--hdr, 52px\);[^}]*min-width: 0;", block)
+    assert ".bk-nav ul { overflow-x: auto;" in block
+    assert (
+        ".bk-nav[data-more-left='true']::before, .bk-nav[data-more-right='true']::after { opacity: 1; }"
+        in block
+    )
+    main = _src("main.js")
+    assert "setProperty('--navh'," in main and "new ResizeObserver(syncNav).observe(nav)" in main
+    assert "strip.addEventListener('scroll', syncNav" in main
+    # the tour treats the sticky strip as part of the header on a phone
+    assert "window.matchMedia('(max-width: 600px)').matches" in _src("ui/core/tour.js")
+    # the current section's button is kept in view in the strip, sideways only
+    router = _src("ui/core/router.js")
+    assert "revealInStrip(buttons.get(id));" in router and "scrollIntoView" not in router
+
+
+def test_busy_indicator_keeps_the_header_one_row_below_1100px():
+    css = _src("main.css")
+    block = re.search(r"@media \(max-width: 1099px\) \{(.*?)\n\}", css, re.S).group(1)
+    assert ".bk-header .busy-label" in block and "clip: rect(0 0 0 0)" in block
+    # the status region itself is unchanged: role=status on the indicator, its text in the tree
+    assert "h('span', { class: 'busy', hidden: true, role: 'status' }" in _src("main.js")
+
+
+def test_chart_legend_swatches_keep_their_size():
+    assert ".chart .legend svg { width: 28px; height: 12px;" in _src("main.css")
