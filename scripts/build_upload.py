@@ -1,9 +1,11 @@
 """Build the Qollab upload zip from qollab_manifest.json.
 
-Usage: python scripts/build_upload.py [--check]
+Usage: python scripts/build_upload.py [--check] [--card dist/writeup_no_images.md]
 
 The zip contains exactly the files the manifest lists (no stale files from earlier
-uploads). With --check, only list the files and the limits, without writing the zip.
+uploads). Qollab shows the project's README.md as the Project Card, so the zip never carries the
+repository README (GitHub math and relative links); with --card, the converted write-up goes in
+as README.md instead. With --check, only list the files and the limits, without writing the zip.
 """
 
 from __future__ import annotations
@@ -43,10 +45,13 @@ def check_limits(files: list[Path], limits: dict) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--check", action="store_true", help="list files and check limits only")
+    parser.add_argument("--card", type=Path, help="write-up to ship as README.md (the Project Card)")
     args = parser.parse_args()
     manifest = json.loads((ROOT / "qollab_manifest.json").read_text(encoding="utf-8"))
-    files = collect(manifest)
+    files = [f for f in collect(manifest) if f != ROOT / "README.md"]
     problems = check_limits(files, manifest["limits"])
+    if args.card and len(args.card.read_text(encoding="utf-8")) > manifest["limits"]["max_readme_chars"]:
+        problems.append(f"{args.card} is longer than the Qollab write-up limit")
     for f in files:
         print(f"{f.stat().st_size:>9}  {f.relative_to(ROOT)}")
     print(f"{len(files)} files, {sum(f.stat().st_size for f in files)} bytes")
@@ -59,7 +64,9 @@ def main() -> int:
         with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as zf:
             for f in files:
                 zf.write(f, f.relative_to(ROOT).as_posix())
-        print(f"wrote {out.relative_to(ROOT)}")
+            if args.card:
+                zf.write(args.card, "README.md")
+        print(f"wrote {out.relative_to(ROOT)}" + (f" with {args.card} as README.md" if args.card else " (no README.md)"))
     return 0
 
 
