@@ -1,0 +1,23 @@
+{
+ "note": "Runs shown in the demo video (one continuous take on Qollab, no cuts). Values copied from Qollab's run console as shown at the end of the video; the counts were not exported, so these runs are not in data/recorded_runs.json. The built-in simulator is Qiskit's BasicSimulator with the app's fixed seed, so S, Q_Z and Q_X equal the local reference run.",
+ "video": "https://youtu.be/6xn-xtrTqRE",
+ "recorded_utc": "2026-10-11T07:45:25Z",
+ "qollab_backend_label": "Built-in simulator (24q), ideal",
+ "backend_name": "basic_simulator",
+ "profile": "Ideal local simulator",
+ "seed": 20261010,
+ "console": [
+  "[Bell-Test Lab] started on basic_simulator (profile: Ideal local simulator); every run's results are printed here.",
+  "[Bell-Test Lab] formula self-check: 8 of 8 passed.",
+  "[Bell-Test Lab] Bell Lab run on basic_simulator: 10000 shots per setting, 0.078 s, canary 100%. S = 2.708 (97.5% interval 2.649 to 2.767); Q_Z = 2.36%, Q_X = 2.47%. Holding at the conservative end: Bell violation, entanglement witness, BBM92 key, self-test, DI randomness, DI key.",
+  "[Bell-Test Lab] Bell Lab run on basic_simulator: 10000 shots per setting, 0.072 s, canary 100%. S = 1.355 (97.5% interval 1.296 to 1.414); Q_Z = 2.36%, Q_X = 50.12%. Holding at the conservative end: none.",
+  "[Bell-Test Lab] 2-link chain on basic_simulator: 10000 shots per setting, 0.114 s, canary 100%. S = 2.553 (97.5% interval 2.494 to 2.612); Q_Z = 5.13%, Q_X = 4.58%. Holding at the conservative end: Bell violation, entanglement witness, BBM92 key, self-test, DI randomness, DI key.",
+  "[Bell-Test Lab] Purification run on basic_simulator: 10000 shots per setting, 0.117 s, canary 100%. S = 2.752 (97.5% interval 2.692 to 2.813); Q_Z = 0.03%, Q_X = 2.72%. Kept 57107 of 60000 rounds. Holding at the conservative end: Bell violation, entanglement witness, BBM92 key, self-test, DI randomness, DI key."
+ ],
+ "settings": {
+  "bell": "5 % depolarizing on Bob's link (default)",
+  "eve": "Eve at phi = 180 deg plus the same noise",
+  "chain": "2 links, 5 % depolarizing each (defaults)",
+  "purify": "DEJMPS, 5 % depolarizing (defaults)"
+ }
+}

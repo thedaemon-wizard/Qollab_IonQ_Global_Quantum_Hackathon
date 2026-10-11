@@ -9,7 +9,7 @@ self-test. Then add noise or an eavesdropper, stretch the link with entanglement
 try purification, and check the formulas against **open data from a loophole-free Bell test**
 and published device-independent QKD experiments.
 
-> Demo video (2:59, YouTube, synthetic narration, English captions): https://youtu.be/A0QigQCuLqA · Repository:
+> Demo video (2:40, YouTube; one continuous take on Qollab's free built-in simulator, synthetic narration, English captions): https://youtu.be/6xn-xtrTqRE · Repository:
 > https://github.com/thedaemon-wizard/Qollab_IonQ_Global_Quantum_Hackathon
 
 ![The Bell Lab after one run: the protocol diagram with each stage's numbers, and the list of stages](docs/img/screen_lab.png)
@@ -190,10 +190,14 @@ captured run passes: canary fraction 0.9725 on IBM Fez and 1 elsewhere, threshol
 | IBM Fez noise model | 2-link swap, 5 % depolarizing | 2,000 | 2.264 [2.132, 2.396] | 2.553 | 9.25 % | none |
 | IBM Fez noise model | Bell, Eve at $`\varphi = 180^\circ`$ | 2,000 | 1.322 [1.190, 1.454] | 1.414 | 2.70 % | none ($`Q_X = 51.1\,\%`$) |
 
-The demo video shows one more run, on the IonQ Aria 1 noise model (2026-10-10 23:40 UTC, Bell, 5 %
-depolarizing, 200 shots, 22.8 s): $`S = 2.580`$ [2.161, 2.999], $`Q_Z = 3.00\,\%`$, canary 100 %. Its counts
-were not exported, so it is not in the table; the values are as shown on screen
-(`results/qollab/video_run_20261010.json`).
+The demo video is one continuous take on Qollab (2026-10-11 07:45 UTC) with the free built-in
+simulator, which is BasicSimulator with the app's fixed seed: the Bell Lab run gives
+$`S = 2.708`$ [2.649, 2.767], the same as the local reference run in the first row, then the
+eavesdropper run 1.355, the 2-link chain 2.553 and purification 2.752 (57,107 of 60,000 rounds
+kept), as printed in Qollab's run console (`results/qollab/video_take_20261011.json`). One more
+IonQ Aria 1 noise-model run (2026-10-10 23:40 UTC, Bell, 5 % depolarizing, 200 shots, 22.8 s:
+$`S = 2.580`$ [2.161, 2.999], $`Q_Z = 3.00\,\%`$) was read off the screen; its counts were not
+exported, so it is not in the table (`results/qollab/video_run_20261010.json`).
 
 What the table shows:
 

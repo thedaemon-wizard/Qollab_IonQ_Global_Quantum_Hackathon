@@ -150,3 +150,13 @@ and text at 110 %; an independent pass re-ran it on the result.
 | F8 | LOW | Qiskit's text drawings fell back to a CJK monospace font on some systems, misaligning box-drawing characters | Monospace stack with DejaVu Sans Mono and Liberation Mono before the generic family |
 | F9 | LOW | The shared-code disclosure named the Temml helper (each entry has its own) and missed the harness shim and the write-up converter | Corrected in the README |
 | F10 | LOW | The independent re-check found lines crossing three labels: the dashed message arrow through "bases, sample" in the Repeater timeline (2–4 links), a source line through "link + noise" at 4 links, and the active arrowhead under "counts" at stage 4 | Edge and message labels carry a halo in the card colour and are drawn after every edge |
+
+### Demo video: one continuous take (2026-10-11)
+
+The video was cut from several recordings, so a judge could not follow every click. It is now
+one unbroken screen recording on Qollab with the real mouse pointer: the project page, Code, Run
+Project, Run with the free Built-in simulator (24q), then every step in the app in order, and the
+run console at the end, which names the simulator and prints a line per result. The narration is
+placed where each step happened in the take; nothing is cut. Checks of the finished file: no
+decode errors, constant 30 fps, loudness about −16.8 LUFS, and real-time playback in Chrome with
+no stall and no dropped frame. The runs it shows are in `results/qollab/video_take_20261011.json`.
