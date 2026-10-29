@@ -117,8 +117,8 @@ reviewer re-checked each finding before it was fixed.
 | ID | Severity | Finding | Resolution |
 |---|---|---|---|
 | V1 | HIGH | Video: "your run lies between the two" over a plot whose "your run" was the eavesdropped run, inside the local square | A run without Eve (S ≈ 2.7) is made before the correlation-space shot |
-| V2 | MEDIUM | Video: the two-link swap was credited to the IonQ Aria noise model while the screen showed other runs | The shot sets link noise to none, where the recorded IonQ Aria 1 run (S = 2.520) and its note show |
-| V3 | MEDIUM | Repeater: "a job is already running" appeared for the view's own job, and the video cut before the purification result | The view tracks its own job (local busy flag); the status keeps the run's result. Checked on Qollab with the IonQ Aria 1 noise model on 2026-10-11: the chain status kept "Done in 22.887 s" (S = 2.590, conservative 2.171; values read off the screen, not exported, so this run is not in `results/`) and only the other control showed the one-job notice |
+| V2 | MEDIUM | Video: the two-link swap was credited to the IonQ Aria noise model while the screen showed other runs | The shot sets link noise to none, where the recorded IonQ Aria 1 run and its note show |
+| V3 | MEDIUM | Repeater: "a job is already running" appeared for the view's own job, and the video cut before the purification result | The view tracks its own job (local busy flag); the status keeps the run's result. Checked on Qollab with the IonQ Aria 1 noise model on 2026-10-11: the chain status kept the run's result (values withheld; see the note under Results in the README) and only the other control showed the one-job notice |
 | M1 | MEDIUM | "The two entries share no code" no longer held (same small Temml helper and font declaration) | Disclosed in the README |
 | M2 | MEDIUM | Unicode fallback printed `bigl`/`bigr` in the DI-key formula | Mapped; spacing after control words and `^\circ` fixed too; a render that throws falls back |
 | M3 | MEDIUM | Upload bundle README linked the old video | Bundles rebuilt from HEAD before upload |
@@ -173,7 +173,7 @@ test changes:
 | T1 | MEDIUM | The upload-limits test forbade every file under `results/`, but the saved Qollab runs now ship in the bundle so judges can check them | The test allows exactly `results/qollab/*.json` and still forbids the other results, tests, scripts, tools and docs; the README says the saved runs ship |
 | BELL-02 | MEDIUM | Certificate vocabulary for simulated runs differed between the app and `references.md` §10 | See item 7 above |
 | BELL-03 | MEDIUM | Device-independent rungs on post-selected (purified) rounds were shown without their extra assumption | The README states that they assume a setting-independent herald; the ladder and the console line say so |
-| BELL-04 | MEDIUM | No reason given for the IonQ default of 200 shots; the backend figure mixed shot counts without saying so | Reason in the README and D4 (shot-aware noise-model simulation, 22.8–26.9 s per packed job on Qollab); the shots field's range stated; the figure labels each run's shots |
+| BELL-04 | MEDIUM | No reason given for the IonQ default of 200 shots; the backend figure mixed shot counts without saying so | Reason in the README and D4 (shot-aware noise-model simulation); the shots field's range stated; the figure labels each run's shots |
 | J7–J9 | MEDIUM | Headline results far down the write-up; audience and exercises missing; what is new buried in one paragraph | "In one minute" block with the demo video (the write-up converter turns a YouTube link on its own line into Qollab's embedded player); "Who it is for and how to use it" with three exercises whose answers `tests/test_exercises.py` checks; three bullets in "Prior work and what is new here" |
 | — | LOW | Claims and references | Witness threshold scoped to the two-setting witness; Kaniewski symbol $`F_\text{ext}`$ defined; confidence level of the Munich lower ends; Meiers 2026 wording; Werner state with $`\lvert\Phi^+\rangle`$; Designolle 0.69604; QPU refusal described as a name and class match (README, Overview and Method view); tour steps that run circuits; the 2D slice caption (the disc is exact only when also $`E_{01} = E_{10}`$); the tour's correlation-space step qualified for the June Munich run; Munich distance 398 m; Aria QPUs retired; entries for Storz 2023, Kulikov 2026, Hensen 2016, BBPSSW, DEJMPS, Hoeffding and Wilson; DOIs for five supporting sources; prior-art re-check dated 2026-10-11; D13 (considered and not built) |
 
@@ -204,7 +204,7 @@ which. The interface fixes and their checks are listed in
 
 Re-checked without changes: every row of the README's results table, recomputed from the saved
 counts with `scripts/record_runs.py`'s code; the demo-video values against
-`results/qollab/video_take_20261011.json`; the IonQ job times (22.8–26.9 s); the Munich values
+`results/qollab/video_take_20261011.json`; the Munich values
 ($`S = 2.2213 \pm 0.0332`$ and 2.0957 ± 0.0340, lower ends 2.113 and 1.987); the Liu 2026
 101 km rates (0.087 and −0.038); and the five tour runs on the IBM Fez noise model, re-run
 locally with Python 3.14.7, which reproduce the Qollab counts setting by setting.
