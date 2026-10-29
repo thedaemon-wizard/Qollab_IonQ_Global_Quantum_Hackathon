@@ -24,8 +24,8 @@ and published device-independent QKD experiments.
 - **On real data:** the open event files of the Munich loophole-free Bell test, read with the same
   estimator, give $`S = 2.2213 \pm 0.0332`$ for the April 2016 run; the paper gives 2.221 ± 0.033.
 - **On IonQ noise models:** all six settings run as one packed 25-qubit circuit with a bit-order
-  canary, because Qollab allows one IonQ job per run; at the 200-shot default the DI-key bound
-  does not survive the conservative end (see Results).
+  canary, because Qollab allows one IonQ job per run. Results from IonQ's noise-model simulators
+  are withheld for now (see the note under Results).
 - **Run it on Qollab:** Code → **Run Project** → **Run** → pick a free simulator (*Built-in
   simulator*) → **Run**; then start the guided tour.
 - The demo video is one continuous take on Qollab's free built-in simulator, with synthetic
@@ -54,7 +54,7 @@ different amount of evidence:
 The lab makes this ladder visible. Every run shows each certificate twice: at the **point
 estimate**, and at the **conservative end** ($`S`$ at the lower end of its interval, error rates at
 the upper ends of theirs; each interval is at 97.5 %, so every claim holds at 95 %). With 10,000
-shots per setting most claims survive; at the IonQ profile's default of 200 shots per setting,
+shots per setting most claims survive; at 200 shots per setting (the IonQ profile's default),
 the device-independent key does not — finite statistics are part of the lesson, not a footnote.
 
 **Terms used here.**
@@ -191,8 +191,7 @@ flowchart LR
   device), Braket (2,000 shots, plain gate basis), IonQ (200 shots, **one packed circuit**),
   quantum hardware (refused), anything else (a conservative default, named in the UI).
   IonQ defaults to 200 shots because its noise-model simulation runs one simulation per shot
-  ([IonQ docs](https://docs.ionq.com/features/simulation-with-noise-models)): a 200-shot packed
-  job took 22.8–26.9 s on Qollab (the `seconds` field in `results/qollab/*ionq*.json`). The Bell
+  ([IonQ docs](https://docs.ionq.com/features/simulation-with-noise-models)). The Bell
   Lab's *Shots per setting* field accepts 100–100,000 on every backend.
 - **On Qollab, the IonQ simulator accepts one circuit per job** (a job with several circuits
   was rejected when we tested it), so every setting gets its own qubits and classical register in a
@@ -245,13 +244,11 @@ inequalities. Full derivations and page-level sources: [docs/references.md](docs
 All runs below were made through this app — on Qollab, except the local reference row — and are stored in
 [`data/recorded_runs.json`](data/recorded_runs.json) (the analysis is recomputed from the
 captured counts by `scripts/record_runs.py`, with the same code the app runs). The counts were
-captured on 2026-10-10 between 00:40 and 03:54 UTC; the circuits and the decoding have not changed
+captured on 2026-10-10 between 00:49 and 01:11 UTC; the circuits and the decoding have not changed
 since (later commits changed run gating, input validation and the canary threshold, which every
 captured run passes: canary fraction 0.9725 on IBM Fez and 1 elsewhere, threshold 0.75). The
 saved Qollab runs (`results/qollab/`) also ship in the Qollab project, so judges can check them
 there.
-
-![S on each simulator, with intervals and the exact prediction; unequal shots per setting: 10,000 (local ideal), 2,000 (Braket, IBM Fez), 200 (IonQ)](docs/img/backends.png)
 
 | Backend (Qollab) | Experiment | Shots / setting | $`S`$ [97.5 % interval] | Exact prediction | $`Q_Z`$ | DI key rate, point → conservative |
 |---|---|---:|---|---:|---:|---|
@@ -259,35 +256,26 @@ there.
 | AWS Braket local (ideal) | Bell, 5 % depolarizing | 2,000 | 2.670 [2.538, 2.802] | 2.687 | 1.55 % | 0.566 → 0.343 |
 | IBM Fez noise model | Bell, 5 % depolarizing | 2,000 | 2.562 [2.430, 2.694] | 2.687 | 4.75 % | 0.256 → 0.053 |
 | IBM Fez noise model | Bell, no added noise | 2,000 | 2.670 [2.538, 2.802] | 2.828 | 2.90 % | 0.492 → 0.265 |
-| IonQ Aria 1 noise model | Bell, 5 % depolarizing | 200 | 2.570 [2.151, 2.989] | 2.687 | 4.00 % | 0.300 → none |
-| IonQ Forte 1 noise model | Bell, 5 % depolarizing | 200 | 2.570 [2.151, 2.989] | 2.687 | 4.50 % | 0.277 → none |
-| IonQ Forte Enterprise 1 noise model | Bell, 5 % depolarizing | 200 | 2.320 [1.901, 2.739] | 2.687 | 10.50 % | none |
-| IonQ Aria 1 noise model | 2-link swap, no added noise | 200 | 2.520 [2.101, 2.939] | 2.828 | 2.00 % | 0.339 → none |
 | IBM Fez noise model | 2-link swap, 5 % depolarizing | 2,000 | 2.264 [2.132, 2.396] | 2.553 | 9.25 % | none |
 | IBM Fez noise model | Bell, Eve at $`\varphi = 180^\circ`$ | 2,000 | 1.322 [1.190, 1.454] | 1.414 | 2.70 % | none ($`Q_X = 51.1\,\%`$) |
+
+> **Note:** Results from IonQ's noise-model simulators are withheld while I check with IonQ
+> whether they may be published (IonQ EULA, section 8.2). The lab still runs on those simulators.
 
 The demo video is one continuous take on Qollab (2026-10-11 07:45 UTC) with the free built-in
 simulator, which is BasicSimulator with the app's fixed seed: the Bell Lab run gives
 $`S = 2.708`$ [2.649, 2.767], the same as the local reference run in the first row, then the
 eavesdropper run 1.355, the 2-link chain 2.553 and purification 2.752 (57,107 of 60,000 rounds
-kept), as printed in Qollab's run console (`results/qollab/video_take_20261011.json`). One more
-IonQ Aria 1 noise-model run (2026-10-10 23:40 UTC, Bell, 5 % depolarizing, 200 shots, 22.8 s:
-$`S = 2.580`$ [2.161, 2.999], $`Q_Z = 3.00\,\%`$) was read off the screen; its counts were not
-exported, so it is not in the table (`results/qollab/video_run_20261010.json`).
+kept), as printed in Qollab's run console (`results/qollab/video_take_20261011.json`).
 
 What the table shows:
 
 - **Device noise adds to the channel noise.** On the noise-model backends $`S`$ falls below the
   channel-only prediction. Within one backend the swap loses more than the Bell test (IBM Fez:
-  0.29 against 0.13), since its circuits have more two-qubit gates; the 200-shot IonQ gaps are
-  within their intervals.
-- **Finite statistics decide the stronger claims.** At the IonQ default of 200 shots per setting
-  the interval on $`S`$ is about ±0.42. The Aria 1 and Forte 1 runs keep $`S`$ above 2 at the conservative
-  end, but the asymptotic DI-key bound turns negative there; the Forte Enterprise 1 run has
-  $`S`$ above 2 only at its point estimate ($`S = 2.320`$, lower end 1.901). One 200-shot run per
-  model cannot rank the models: its $`S`$ differs from the Forte 1 run's by 0.25, about 1.6 combined
-  standard errors. With 2,000–10,000 shots the DI-key bound for the same experiment stays
-  positive at the conservative end. (These are simulated counts; see Limits.)
+  0.29 against 0.13), since its circuits have more two-qubit gates.
+- **Finite statistics decide the stronger claims.** At 200 shots per setting (the IonQ profile's
+  default) the interval on $`S`$ is about ±0.42; with 2,000–10,000 shots the DI-key bound for the
+  same experiment stays positive at the conservative end. (These are simulated counts; see Limits.)
 - **The eavesdropper is caught by the second basis**: the key basis looks clean ($`Q_Z \approx 2.7\,\%`$,
   device noise only) while $`Q_X \approx 51\,\%`$ and $`S < 2`$.
 - **Reproducibility**: seeded IBM Fez runs on Qollab (Pyodide in the browser) and the same
@@ -332,7 +320,7 @@ its exact formula, so the lab reports the difference rather than claiming a repr
   circuits, literal data paths, upload limits, a single Python bridge in the browser code).
 - **On Qollab**: the full guided tour on the IBM Fez noise model; Bell runs on the built-in
   simulator (same seed and counts as the local reference row: $`S = 2.708`$), Braket, IBM Fez, IonQ Aria 1, IonQ Forte 1 and IonQ Forte Enterprise 1 simulators; a two-link
-  swap on IonQ Aria 1.
+  swap on IonQ Aria 1 (the IonQ results are withheld; see the note under Results).
 - Problems found on Qollab and fixed: a module-level name clashing with the injected
   `backend`; the Braket backend's name (`default`) and its loss of circuit names; a 25-qubit
   packed circuit too slow for Braket's state-vector simulator (now one circuit per setting).
@@ -375,9 +363,6 @@ widths); other reachable states were not all measured.
 - **WebGPU** is not exposed inside the project frame, so the 3D view uses WebGL 2 (D10);
   **JupyterLite and PyVista/VTK.wasm** cannot run under the frame's sandbox and file limits
   (D2, D3). **Downloads** from the frame are blocked, so exports go to Qollab's run console.
-- **At the default 200 shots per setting** (IonQ) the DI-key bound did not survive at the
-  conservative end, and on the Forte Enterprise 1 model $`S`$ was above 2 only at its point
-  estimate: the IonQ runs here illustrate finite statistics, not a device-independent key.
 
 ## Limits — what this lab does not claim
 
