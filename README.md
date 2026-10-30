@@ -414,8 +414,8 @@ The lab also handles the IonQ one-job constraint with a packed, self-checking ci
 accessible interface (keyboard tour, text alternatives for every chart and the 3D view).
 In the terms' categories, it is meant as "an original analytical or educational contribution"
 (a new way of showing what one Bell test can and cannot certify) and "a technical extension"
-(comparative benchmarking across ideal, IBM and IonQ noise-model simulators, with finite
-statistics).
+(the same experiment on ideal, IBM and IonQ noise-model simulators, with finite statistics;
+not a ranking of the machines).
 
 The author previously showed an E91/CHSH Werner-state model in a separate public demo
 (<https://qsmpc-qkd-qhe-ai-hybrid.daemons.jp/orchestration>, Parameters → QKD protocol
