@@ -62,7 +62,7 @@ would make us revisit it. Sources are in [references.md](references.md) unless l
   before anything is submitted.
 - **Shots (2026-10-11).** The IonQ profile defaults to 200 shots per setting. IonQ's noise-model
   simulation is shot-aware and runs one simulation per requested shot (IonQ docs, checked
-  2026-10-11). The
+  2026-10-11), and a 200-shot packed job took 22.8–26.9 s on Qollab (`results/qollab/`). The
   *Shots per setting* field accepts 100–100,000 on every backend, so more shots are one edit away;
   at 200 the DI-key bound does not survive the conservative end, which the README reports.
 
